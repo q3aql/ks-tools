@@ -1,0 +1,211 @@
+#!/bin/bash
+
+###############################################################
+# ks-vob-wrapper (ks-tools) - Wrapper for ks-vob              #
+# Date: 10-02-2021                                            #
+# Author: q3aql                                               #
+# Contact: q3aql@protonmail.ch                                #
+###############################################################
+VERSION="6.6"
+M_DATE="100221"
+
+# Conversion parameters
+ks_mp4_to_wrap="/usr/bin/ks-vob"
+p_ffmpeg="ffmpeg -i"
+p_ffmpeg_patched="-max_muxing_queue_size 9999"
+rel_size="720x480"
+
+# Check if ffmpeg is installed
+ffmpeg_test=$(ffmpeg --help 2>&1)
+error_ffmpeg=$?
+if [ ${error_ffmpeg} -ne 0 ] ; then
+  echo ""
+  echo "* ks-vob-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The 'ffmpeg' tool is not installed!"
+  echo ""
+  exit
+fi
+
+# Check if ks-vob is installed
+if [ -f ${ks_mp4_to_wrap} ] ; then
+  echo "ks-vob detected" > /dev/null
+else
+  echo ""
+  echo "* ks-vob-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The 'ks-vob' tool is not installed!"
+  echo ""
+  exit
+fi
+
+# Show info tracks of input video video file.
+# Sintax: showInfo <video_file>
+function showInfo() {
+  echo ""
+  echo "* Information of ${1}:"
+  echo ""
+  echo "+ Video Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+  echo ""
+  echo "+ Audio Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+  echo ""
+  exit
+}
+
+# Show the video track default
+# Sintax: showVideoDefault <video_file>
+function showVideoDefault() {
+  # Check de video track by default
+  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  if [ -z "${video_default}" ] ; then
+    video_default="0:0"
+  else
+    video_default_patch=$(echo ${video_default} | cut -c4)
+    if [ "${video_default_patch}" == ":" ] ; then
+      video_default=$(echo ${video_default} | cut -c1-3)
+    else
+      video_default="${video_default}"
+    fi
+  fi
+  echo "${video_default}"
+}
+
+# Show the audio track default
+# Sintax: showAudioDefault <video_file>
+function showAudioDefault() {
+  # Check the audio track by default
+  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  if [ -z "${audio_default}" ] ; then
+    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+    if [ -z "${audio_default}" ] ; then
+      audio_default="0:1"
+    else
+      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      if [ "${audio_default_patch}" == ":" ] ; then
+        audio_default=$(echo ${audio_default} | cut -c1-3)
+      else
+        audio_default="${audio_default}"
+      fi
+    fi
+  else
+    audio_default_patch=$(echo ${audio_default} | cut -c4)
+    if [ "${audio_default_patch}" == ":" ] ; then
+      audio_default=$(echo ${audio_default} | cut -c1-3)
+    else
+      audio_default="${audio_default}"
+    fi
+  fi
+  echo "${audio_default}"
+}
+
+# Show default resolution
+# Sintax: showResolutionDefault
+function showResolutionDefault() {
+  echo "${rel_size}"
+}
+
+# Show help
+function showHelp() {
+  echo ""
+  echo "* ks-vob-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Wrapper for ks-vob to create graphical interfaces"
+  echo ""
+  echo "+ Sintax:"
+  echo ""
+  echo " * TRACKS/CONFIG DETECT:"
+  echo ""
+  echo "  $ ks-vob-wrapper --show-info <video_file>"
+  echo "  $ ks-vob-wrapper --show-video-default <video_file>"
+  echo "  $ ks-vob-wrapper --show-audio-default <video_file>"
+  echo "  $ ks-vob-wrapper --show-resolution-default"
+  echo ""
+  echo " * CONVERT:"
+  echo ""
+  echo " $ ks-vob-wrapper --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> [patch]"
+  echo ""
+  echo " * CONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED):"
+  echo ""
+  echo " $ ks-vob-wrapper --conv </path/video_file> </path/output_prefix>"
+  echo ""
+  echo "* EXAMPLES:"
+  echo ""
+  echo " $ ks-vob-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 720x480"
+  echo " $ ks-vob-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 720x576 patch"
+  echo ""
+  echo "* Notes:"
+  echo ""
+  echo " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
+  echo " + If you specify a path or file with spaces, you must use quotes."
+  echo ""
+  exit
+}
+
+# Run the parameters
+if [ -z "${1}" ] ; then
+  showHelp
+elif [ "${1}" == "--show-info" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showInfo "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-video-default" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showVideoDefault "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-audio-default" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showAudioDefault "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-resolution-default" ] ; then
+  showResolutionDefault
+elif [ "${1}" == "--conv" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    if [ "${10}" == "patch" ] ; then
+      echo -e "${4}\n${5}\n${6}\ny\ny\n" | ks-vob "${2}" "${3}"
+    else
+      echo -e "${4}\n${5}\n${6}\nn\ny\n" | ks-vob "${2}" "${3}"
+    fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--conv-with-sub" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    if [ "${11}" == "patch" ] ; then
+      echo -e "${4}\n${5}\ny\n${6}\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-vob "${2}" "${3}"
+    else
+      echo -e "${4}\n${5}\ny\n${6}\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-vob "${2}" "${3}"
+    fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+else
+  showHelp
+fi

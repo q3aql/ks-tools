@@ -1,0 +1,369 @@
+#!/bin/bash
+
+###############################################################
+# ks-avi-wrapper (ks-tools) - Wrapper for ks-avi              #
+# Date: 10-02-2021                                            #
+# Author: q3aql                                               #
+# Contact: q3aql@protonmail.ch                                #
+###############################################################
+VERSION="6.6"
+M_DATE="100221"
+
+# Conversion parameters
+ks_mp4_to_wrap="/usr/bin/ks-avi"
+p_ffmpeg="ffmpeg -i"
+p_ffmpeg_patched="-max_muxing_queue_size 9999"
+rel_size="720x480"
+
+# Global parameters
+dirTemp="/tmp"
+listTemp="ks-tools.list"
+ksToolsTempFolder="/tmp/ks-tools"
+
+# Check if ffmpeg is installed
+ffmpeg_test=$(ffmpeg --help 2>&1)
+error_ffmpeg=$?
+if [ ${error_ffmpeg} -ne 0 ] ; then
+  echo ""
+  echo "* ks-avi-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The 'ffmpeg' tool is not installed!"
+  echo ""
+  exit
+fi
+
+# Check if ks-avi is installed
+if [ -f ${ks_mp4_to_wrap} ] ; then
+  echo "ks-avi detected" > /dev/null
+else
+  echo ""
+  echo "* ks-avi-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The 'ks-avi' tool is not installed!"
+  echo ""
+  exit
+fi
+
+# Funcion to show the name of file/folder from full path
+# Sintax: extractFolderOrFile <full/path/file.txt>
+function extractFolderOrFile() {
+  pathToExtract="${1}/"
+  findFolder=0
+  count=1
+  nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+  count=$(expr $count + 1)
+  while [ ${findFolder} -eq 0 ] ; do
+    nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+    if [ -z "${nameFolderTemp}" ] ; then
+      findFolder=1
+    else
+      nameFolder="${nameFolderTemp}"
+      count=$(expr $count + 1)
+    fi
+  done
+  echo "${nameFolder}"
+}
+
+# Function to remove extension from file
+# Sintax: removeExtension "<text>"
+function removeExtension() {
+  wordToConvert=${1}
+  ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
+  mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
+  echo "${wordToConvert}" > ${ksToolsSedFile}
+  # Remove extensions
+  sed -i 's/.avi//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mp4//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mkv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i "s/.mov//g" "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.vob//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mpg//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mpeg//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.wmv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.ogv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.webm//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.flv/g' "${ksToolsSedFile}" &> /dev/null
+  # Show file without extension
+  wordToConvert=$(cat ${ksToolsSedFile})
+  echo ${wordToConvert}
+}
+
+# Function to show files with spaces.
+# Sintax: showFileWithSpace <file number>
+function showFileWithSpace() {
+  echo "${1}" > ${dirTemp}/name.tmp
+  sed -i 's/_/ /g' ${dirTemp}/name.tmp
+  DisplayName=$(cat ${dirTemp}/name.tmp)
+  rm -rf ${dirTemp}/name.tmp
+  echo ${DisplayName}
+}
+
+# Show info tracks of input video video file.
+# Sintax: showInfo <video_file>
+function showInfo() {
+  echo ""
+  echo "* Information of ${1}:"
+  echo ""
+  echo "+ Video Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+  echo ""
+  echo "+ Audio Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+  echo ""
+  echo "+ Subtitle Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
+  echo ""
+  exit
+}
+
+# Show the video track default
+# Sintax: showVideoDefault <video_file>
+function showVideoDefault() {
+  # Check de video track by default
+  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  if [ -z "${video_default}" ] ; then
+    video_default="0:0"
+  else
+    video_default_patch=$(echo ${video_default} | cut -c4)
+    if [ "${video_default_patch}" == ":" ] ; then
+      video_default=$(echo ${video_default} | cut -c1-3)
+    else
+      video_default="${video_default}"
+    fi
+  fi
+  echo "${video_default}"
+}
+
+# Show the audio track default
+# Sintax: showAudioDefault <video_file>
+function showAudioDefault() {
+  # Check the audio track by default
+  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  if [ -z "${audio_default}" ] ; then
+    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+    if [ -z "${audio_default}" ] ; then
+      audio_default="0:1"
+    else
+      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      if [ "${audio_default_patch}" == ":" ] ; then
+        audio_default=$(echo ${audio_default} | cut -c1-3)
+      else
+        audio_default="${audio_default}"
+      fi
+    fi
+  else
+    audio_default_patch=$(echo ${audio_default} | cut -c4)
+    if [ "${audio_default_patch}" == ":" ] ; then
+      audio_default=$(echo ${audio_default} | cut -c1-3)
+    else
+      audio_default="${audio_default}"
+    fi
+  fi
+  echo "${audio_default}"
+}
+
+# Show the subtitle track default
+# Sintax: showSubtitleDefault <video_file>
+function showSubtitleDefault() {
+  # Check the subtitle track by default
+  subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  if [ -z "${subtitle_default}" ] ; then
+    subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+    if [ -z "${subtitle_default}" ] ; then
+      subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+      if [ -z "${subtitle_default}" ] ; then
+        subtitle_default="0:3"
+      else
+        subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+        if [ "${subtitle_default_patch}" == ":" ] ; then
+          subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+        else
+          subtitle_default="${subtitle_default}"
+        fi
+      fi
+    else
+      subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+      if [ "${subtitle_default_patch}" == ":" ] ; then
+        subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+      else
+        subtitle_default="${subtitle_default}"
+      fi
+    fi
+  else
+    subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+    if [ "${subtitle_default_patch}" == ":" ] ; then
+      subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+    else
+      subtitle_default="${subtitle_default}"
+    fi
+  fi
+  echo "${subtitle_default}"
+}
+
+# Show default resolution
+# Sintax: showResolutionDefault
+function showResolutionDefault() {
+  echo "${rel_size}"
+}
+
+# Show default year (METADATA)
+# Sintax: showResolutionDefault
+function showYearDefault() {
+  current_date=$(date +%Y)
+  echo "${current_date}"
+}
+
+# Show the name title default (MEDATA)
+# Sintax: showNameDefault <video_file>
+function showNameDefault() {
+  # Prepare name title by default
+  FullPath="${1}"
+  name_title_default=$(extractFolderOrFile "${FullPath}")
+  name_title_default=$(removeExtension "${name_title_default}")
+  name_title_default=$(showFileWithSpace "${name_title_default}")
+  echo "${name_title_default}"
+}
+
+# Show the genre default (MEDATA)
+# Sintax: showGenreDefault
+function showGenreDefault() {
+  echo "Unknown"
+}
+
+# Show help
+function showHelp() {
+  echo ""
+  echo "* ks-avi-wrapper (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Wrapper for ks-avi to create graphical interfaces"
+  echo ""
+  echo "+ Sintax:"
+  echo ""
+  echo " * TRACKS/CONFIG DETECT:"
+  echo ""
+  echo "  $ ks-avi-wrapper --show-info <video_file>"
+  echo "  $ ks-avi-wrapper --show-video-default <video_file>"
+  echo "  $ ks-avi-wrapper --show-audio-default <video_file>"
+  echo "  $ ks-avi-wrapper --show-subtitle-default <video_file>"
+  echo "  $ ks-avi-wrapper --show-resolution-default"
+  echo ""
+  echo " * METADATA DETECT:"
+  echo ""
+  echo "  $ ks-avi-wrapper --show-name-title-default <video_file>"
+  echo "  $ ks-avi-wrapper --show-year-default"
+  echo "  $ ks-avi-wrapper --show-genre-default"
+  echo ""
+  echo " * CONVERT:"
+  echo ""
+  echo " $ ks-avi-wrapper --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  echo " $ ks-avi-wrapper --conv-with-sub </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  echo ""
+  echo " * CONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED):"
+  echo ""
+  echo " $ ks-avi-wrapper --conv </path/video_file> </path/output_prefix>"
+  echo " $ ks-avi-wrapper --conv-with-sub </path/video_file> </path/output_prefix>"
+  echo ""
+  echo "* EXAMPLES:"
+  echo ""
+  echo " $ ks-avi-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 720x480 \"My video\" 2018 \"Comedy\""
+  echo " $ ks-avi-wrapper --conv-with-sub /tmp/video.mkv /tmp/output 0:0 0:1 0:3 720x404 \"My video\" 2018 \"Comedy\""
+  echo " $ ks-avi-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 720x404 \"My video\" 2018 \"Comedy\" patch"
+  echo ""
+  echo "* Notes:"
+  echo ""
+  echo " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
+  echo " + If you specify a path or file with spaces, you must use quotes."
+  echo ""
+  exit
+}
+
+# Run the parameters
+if [ -z "${1}" ] ; then
+  showHelp
+elif [ "${1}" == "--show-info" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showInfo "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-video-default" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showVideoDefault "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-audio-default" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showAudioDefault "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-subtitle-default" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showSubtitleDefault "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-resolution-default" ] ; then
+  showResolutionDefault
+elif [ "${1}" == "--show-name-title-default" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    showNameDefault "${2}"
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--show-year-default" ] ; then
+  showYearDefault
+elif [ "${1}" == "--show-genre-default" ] ; then
+  showGenreDefault
+elif [ "${1}" == "--conv" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    if [ "${10}" == "patch" ] ; then
+      echo -e "${4}\n${5}\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-avi "${2}" "${3}"
+    else
+      echo -e "${4}\n${5}\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-avi "${2}" "${3}"
+    fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--conv-with-sub" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    if [ "${11}" == "patch" ] ; then
+      echo -e "${4}\n${5}\ny\n${6}\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-avi "${2}" "${3}"
+    else
+      echo -e "${4}\n${5}\ny\n${6}\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-avi "${2}" "${3}"
+    fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+else
+  showHelp
+fi
