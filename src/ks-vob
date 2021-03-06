@@ -1,0 +1,234 @@
+#!/bin/bash
+
+###############################################################
+# ks-avi (ks-tools) - Convert video to VOB DVD Format         #
+# Date: 10-02-2021                                            #
+# Author: q3aql                                               #
+# Contact: q3aql@protonmail.ch                                #
+###############################################################
+VERSION="6.6"
+M_DATE="100221"
+
+# Basic parameters
+rel_size="720x480"
+vcodec="mpeg2video"
+b_vcodec="3500k"
+acodec="libtwolame"
+b_acodec="192k"
+default_lang_audio="spa"
+v_ext="vob"
+
+# Check if ffmpeg is installed
+ffmpeg_test=$(ffmpeg --help 2>&1)
+error_ffmpeg=$?
+if [ ${error_ffmpeg} -ne 0 ] ; then
+  echo ""
+  echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The 'ffmpeg' tool is not installed!"
+  echo ""
+  exit
+fi
+
+# Sintax: ks-vob -f </absolute/path/video.mp4> </path/prefix_name>
+if [ -z "${1}" ] ; then
+  echo ""
+  echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Convert video file(s) to compact and efficient VOB"
+	echo ""
+  echo "+ Config:"
+  echo ""
+  echo " - Resolution: ${rel_size}"
+  echo " - Video codec: ${vcodec}"
+  echo " - Bitrate video: ${b_vcodec}"
+  echo " - Audio codec: ${acodec} (stereo)"
+  echo " - Bitrate audio: ${b_acodec}"
+  echo " - Default Audio: ${default_lang_audio}"
+  echo " - Split: 30 minutes"
+  echo " - Container: ${v_ext}"
+  echo ""
+  echo "+ Sintax: "
+  echo ""
+  echo "  $ ks-vob </absolute/path/video.mkv> </path/prefix_name>"
+  echo
+  exit
+fi
+if [ -f "${1}" ] ; then
+  echo "detected" > /dev/null
+else
+  echo ""
+  echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "* The file '${1}' does not exist!"
+  echo ""
+  exit
+fi
+# Parametros de conversion
+p_ffmpeg="ffmpeg -i"
+p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+p_duracion=$(${p_ffmpeg} ${1} 2>&1 | grep Duration | tr -s " " | cut -f 3 -d ' ' | cut -f 1 -d ":")
+p_duracion_min=$(${p_ffmpeg} ${1} 2>&1 | grep Duration | tr -s " " | cut -f 3 -d ' ' | cut -f 2 -d ":")
+
+# Realizar conversion en base a la duracion del video
+if [ -z "${2}" ] ; then
+  echo ""
+  echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Convert video file(s) to compact and efficient VOB"
+	echo ""
+  echo "+ Config:"
+  echo ""
+  echo " - Resolution: ${rel_size}"
+  echo " - Video codec: ${vcodec}"
+  echo " - Bitrate video: ${b_vcodec}"
+  echo " - Audio codec: ${acodec} (stereo)"
+  echo " - Bitrate audio: ${b_acodec}"
+  echo " - Default Audio: ${default_lang_audio}"
+  echo " - Split: 30 minutes"
+  echo " - Container: ${v_ext}"
+  echo ""
+  echo "+ Sintax: "
+  echo ""
+  echo "  $ ks-vob </absolute/path/video.mkv> </path/prefix_name>"
+  echo
+  exit
+else
+  echo ""
+  echo "* Information of ${1}:"
+  echo ""
+  echo "+ Video Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+  echo ""
+  echo "+ Audio Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+  echo ""
+  # Check de video track by default
+  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  if [ -z "${video_default}" ] ; then
+    video_default="0:0"
+  else
+    video_default_patch=$(echo ${video_default} | cut -c4)
+    if [ "${video_default_patch}" == ":" ] ; then
+      video_default=$(echo ${video_default} | cut -c1-3)
+    else
+      video_default="${video_default}"
+    fi
+  fi
+  # Ask for video
+  echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+  if [ -z "${video_track}" ] ; then
+    video_track="${video_default}"
+  else
+    video_track="${video_track}"
+  fi
+  # Check the audio track by default
+  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  if [ -z "${audio_default}" ] ; then
+    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    if [ -z "${audio_default}" ] ; then
+      audio_default="0:1"
+    else
+      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      if [ "${audio_default_patch}" == ":" ] ; then
+        audio_default=$(echo ${audio_default} | cut -c1-3)
+      else
+        audio_default="${audio_default}"
+      fi
+    fi
+  else
+    audio_default_patch=$(echo ${audio_default} | cut -c4)
+    if [ "${audio_default_patch}" == ":" ] ; then
+      audio_default=$(echo ${audio_default} | cut -c1-3)
+    else
+      audio_default="${audio_default}"
+    fi
+  fi
+  # Ask for audio
+  echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+  if [ -z "${audio_track}" ] ; then
+    audio_track="${audio_default}"
+  else
+    audio_track="${audio_track}"
+  fi
+  # Define the resolution
+  echo -n "* (Default: ${rel_size}) Type the resolution: " ; read resolution
+  if [ -z "${resolution}" ] ; then
+    resolution="${rel_size}"
+  else
+    rel_size="${resolution}"
+    p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+  fi
+  echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
+  if [ "${patch_thread}" == "y" ] ; then
+    patch_thread="-max_muxing_queue_size 9999"
+  else
+    patch_thread=""
+  fi
+  # Check audio 5.1 or 7.1
+  audio_5_7_1=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
+  audio_5_7_1_2=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
+  audio_5_7_1="${audio_5_7_1}${audio_5_7_1_2}"
+  if [ -z "${audio_5_7_1}" ] ; then
+    stereo_params="-ac 2"
+  else
+    stereo_params="-ac 2 -clev 3dB -slev -6dB"
+  fi
+  # Execute commands for conversion
+  echo ""
+  echo "* CONFIGURATION THAT WILL BE APPLIED:"
+  echo ""
+  echo "  + Source file: ${1}"
+  echo "  + Destination: ${2}/VTS_01_*"
+  echo "  + Parameters: -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} ${patch_thread}"
+  echo ""
+  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    exit
+  else
+    if [ "${p_duracion}" == "00" ] ; then
+      mkdir -p "${2}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:00:00 -t 00:30:00 ${patch_thread} "${2}/VTS_01_1.${v_ext}"
+      if [ "${p_duracion_min}" -gt "30" ] ; then
+        ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:30:01 ${patch_thread} "${2}/VTS_01_2.${v_ext}"
+      fi
+    elif [ "${p_duracion}" == "01" ] ; then
+      mkdir -p "${2}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:00:00 -t 00:30:00 ${patch_thread} "${2}/VTS_01_1.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:30:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_2.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 01:00:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_3.${v_ext}"
+      if [ "${p_duracion_min}" -gt "30" ] ; then
+        ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 01:30:01 ${patch_thread} "${2}/VTS_01_4.${v_ext}"
+      fi
+    elif [ "${p_duracion}" == "02" ] ; then
+      mkdir -p "${2}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:00:00 -t 00:30:00 ${patch_thread} "${2}/VTS_01_1.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:30:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_2.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 01:00:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_3.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 01:30:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_4.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 02:00:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_5.${v_ext}"
+      if [ "${p_duracion_min}" -gt "30" ] ; then
+        ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 02:30:01 ${patch_thread} "${2}/VTS_01_6.${v_ext}"
+      fi
+    elif [ "${p_duracion}" == "03" ] ; then
+      mkdir -p "${2}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:00:00 -t 00:30:00 ${patch_thread} "${2}/VTS_01_1.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 00:30:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_2.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 01:00:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_3.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 01:30:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_4.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 02:00:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_5.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 02:30:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_6.${v_ext}"
+      ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 03:00:01 -t 00:29:59 ${patch_thread} "${2}/VTS_01_7.${v_ext}"
+      if [ "${p_duracion_min}" -gt "30" ] ; then
+        ${p_ffmpeg} "${1}" -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -ss 03:30:01 ${patch_thread} "${2}/VTS_01_8.${v_ext}"
+      fi
+    else
+      echo ""
+      echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
+      echo ""
+      echo "* The video must be less than 4h."
+      echo ""
+      exit
+    fi
+  fi
+fi

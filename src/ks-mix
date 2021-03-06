@@ -1,0 +1,536 @@
+#!/bin/bash
+
+#####################################################################
+# ks-mix (ks-tools) - Extract video/audio and mix video/audio files #
+# Date: 10-02-2021                                                  #
+# Author: q3aql                                                     #
+# Contact: q3aql@protonmail.ch                                      #
+#####################################################################
+VERSION="6.6"
+M_DATE="100221"
+
+# File(s) detection
+current_dir=$(pwd)
+video_file_dir="${current_dir}/video.mkv"
+audio_file_dir="${current_dir}/audio.mka"
+subs_file_dir="${current_dir}/subs.srt"
+output_file_dir="${current_dir}/output.mkv"
+
+# Language config
+default_lang_audio="spa"
+default_lang_subt="spa"
+
+# Check if ffmpeg is installed
+ffmpeg_test=$(ffmpeg --help 2>&1)
+error_ffmpeg=$?
+if [ ${error_ffmpeg} -ne 0 ] ; then
+	echo ""
+	echo "* ks-mix (ks-tools) v${VERSION} (${M_DATE})"
+	echo ""
+	echo "+ The 'ffmpeg' tool is not installed!"
+	echo ""
+	exit
+fi
+
+# Detect if video file exist
+if [ -f "${video_file_dir}" ] ; then
+	video_found="FOUND"
+else
+	video_found="NOT FOUND"
+fi
+# Detect if audio file exist
+if [ -f "${audio_file_dir}" ] ; then
+	audio_found="FOUND"
+else
+	audio_found="NOT FOUND"
+fi
+# Detect if audio file exist
+if [ -f "${subs_file_dir}" ] ; then
+	subs_found="FOUND"
+else
+	subs_found="NOT FOUND"
+fi
+
+# Function to show menu again when sintax is wrong
+function show_menu() {
+	echo ""
+	echo "* ks-mix (ks-tools) v${VERSION} (${M_DATE})"
+	echo ""
+	echo "- Extract video/audio and mix video/audio files"
+	echo ""
+	echo " + Current dir: ${current_dir}"
+	echo " + Video file: ${video_file_dir} (${video_found})"
+	echo " + Audio file: ${audio_file_dir} (${audio_found})"
+	echo " + Subs file: ${subs_file_dir} (${subs_found})"
+	echo ""
+	echo "+ Sintax: "
+	echo ""
+	echo "  $ ks-mix -evid <video-file>  --> Extract video track"
+	echo "  $ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (only for H264)"
+	echo "  $ ks-mix -evpf <video-file>  --> Extract video track & set fps (only for H264)"
+	echo "  $ ks-mix -eaud <video-file>  --> Extract audio track"
+	echo "  $ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)"
+	echo "  $ ks-mix -chec <video-file>  --> Analyze tracks of video file"
+	echo "  $ ks-mix -mixf               --> Mix video and audio file"
+	echo "  $ ks-mix -mixs               --> Mix video, audio and subtitle file"
+	echo ""
+	echo " + Examples: "
+	echo "    ks-mix -evid /data/movies/Example.mkv"
+	echo "    ks-mix -eaud /data/movies/Example.avi"
+	echo ""
+	exit
+}
+
+# Show menu and sintax
+if [ -z "${1}" ] ; then
+	show_menu
+elif [ "${1}" == "-evid" ] ; then
+	# Run commands for -evid parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		echo ""
+		echo "+ Video Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+		echo ""
+		# Check de video track by default
+		video_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${video_default}" ] ; then
+			video_default="0:0"
+		else
+			video_default_patch=$(echo ${video_default} | cut -c4)
+			if [ "${video_default_patch}" == ":" ] ; then
+				video_default=$(echo ${video_default} | cut -c1-3)
+			else
+				video_default="${video_default}"
+			fi
+		fi
+		# Ask for video
+		echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+		if [ -z "${video_track}" ] ; then
+			video_track="${video_default}"
+		else
+			video_track="${video_track}"
+		fi
+		echo ""
+		echo -n "* Starting extract video track (${2}) "
+		sleep 3
+		ffmpeg -y -i "${2}" -map ${video_track} -c:v copy "${current_dir}/seeing.mp4"
+		ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+		echo ""
+		echo -n "* Extracted video into ${video_file_dir}"
+		sleep 2
+		rm -rf "${current_dir}/seeing.mp4"
+		echo "" && echo ""
+		exit
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+elif [ "${1}" == "-ev25" ] ; then
+	# Run commands for -ev25 parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		echo ""
+		echo -n "* Starting extract video track and change to 25 fps (${2}) "
+		sleep 3
+		echo "" && echo ""
+		ffmpeg -y -i "${2}" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+		ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+		ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+		echo ""
+		echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+		sleep 2
+		rm -rf "${current_dir}/seeing_noaudio.h264"
+		rm -rf "${current_dir}/seeing.mp4"
+		echo "" && echo ""
+		exit
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+elif [ "${1}" == "-evpf" ] ; then
+	# Run commands for -evfp parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		frames_default="25"
+		echo ""
+		echo -n "[Default: ${frames_default}] Set fps to change: " ; read frames_change
+		if [ -z "${frames_change}" ] ; then
+			frames_default=${frames_default}
+		else
+			frames_default=${frames_change}
+		fi
+		echo ""
+		echo -n "* Starting extract video track and change to ${frames_default} fps (${2}) "
+		sleep 3
+		echo "" && echo ""
+		ffmpeg -y -i "${2}" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+		ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+		ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+		echo ""
+		echo -n "* Extracted video into ${video_file_dir} (${frames_default} fps)"
+		sleep 2
+		rm -rf "${current_dir}/seeing_noaudio.h264"
+		rm -rf "${current_dir}/seeing.mp4"
+		echo "" && echo ""
+		exit
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+elif [ "${1}" == "-eaud" ] ; then
+	# Run commands for -eaud parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		echo ""
+		echo "+ Audio Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+		echo ""
+		# Check the audio track by default
+		audio_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${audio_default}" ] ; then
+			audio_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+			if [ -z "${audio_default}" ] ; then
+				audio_default="0:1"
+			else
+				audio_default_patch=$(echo ${audio_default} | cut -c4)
+				if [ "${audio_default_patch}" == ":" ] ; then
+					audio_default=$(echo ${audio_default} | cut -c1-3)
+				else
+					audio_default="${audio_default}"
+				fi
+			fi
+		else
+			audio_default_patch=$(echo ${audio_default} | cut -c4)
+			if [ "${audio_default_patch}" == ":" ] ; then
+				audio_default=$(echo ${audio_default} | cut -c1-3)
+			else
+				audio_default="${audio_default}"
+			fi
+		fi
+		# Ask for audio
+		echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+		if [ -z "${audio_track}" ] ; then
+			audio_track="${audio_default}"
+		else
+			audio_track="${audio_track}"
+		fi
+		echo ""
+		echo -n "* Starting extract audio track (${2}) "
+		sleep 3
+		ffmpeg -y -i "${2}" -map ${audio_track} -c:a copy "${audio_file_dir}"
+		echo ""
+		echo -n "* Extracted audio into ${audio_file_dir}"
+		sleep 2
+		echo "" && echo ""
+		exit
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+elif [ "${1}" == "-esub" ] ; then
+	# Run commands for -esub parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		echo ""
+		echo "+ Subtitle Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
+		echo ""
+		# Check the subtitle track by default
+		subtitle_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${subtitle_default}" ] ; then
+			subtitle_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+			if [ -z "${subtitle_default}" ] ; then
+				subtitle_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+				if [ -z "${subtitle_default}" ] ; then
+					subtitle_default="0:3"
+				else
+					subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+					if [ "${subtitle_default_patch}" == ":" ] ; then
+						subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+					else
+						subtitle_default="${subtitle_default}"
+					fi
+				fi
+			else
+				subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+				if [ "${subtitle_default_patch}" == ":" ] ; then
+					subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+				else
+					subtitle_default="${subtitle_default}"
+				fi
+			fi
+		else
+			subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+			if [ "${subtitle_default_patch}" == ":" ] ; then
+				subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+			else
+				subtitle_default="${subtitle_default}"
+			fi
+		fi
+		# Ask for subtitle
+		echo -n "* (Default: ${subtitle_default}) Type the number of subtitle track: " ; read subtitle_track
+		if [ -z "${subtitle_track}" ] ; then
+			subtitle_track="${subtitle_default}"
+		else
+			subtitle_track="${subtitle_track}"
+		fi
+		echo ""
+		echo -n "* Starting extract subtitles track (${2}) "
+		sleep 3
+		ffmpeg -y -i "${2}" -map ${subtitle_track} -c:s copy "${subs_file_dir}"
+		echo ""
+		echo -n "* Extracted subtitles into ${subs_file_dir}"
+		sleep 2
+		echo "" && echo ""
+		exit
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+elif [ "${1}" == "-chec" ] ; then
+	# Run commands for -chec parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		echo ""
+		echo "* Information of ${2}:"
+		echo ""
+		echo "+ Video Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:"
+		echo ""
+		echo "+ Audio Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:"
+		echo ""
+		echo "+ Subtitle Tracks:"
+		ffmpeg -i "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:"
+		echo ""
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+elif [ "${1}" == "-mixf" ] ; then
+	# Run commands for -mixf parameter
+	if [ "${video_found}" == "FOUND" ] ; then
+		echo null > /dev/null
+	else
+		echo ""
+		echo "* File '${video_file_dir}' not found!"
+		echo ""
+		echo "* Aborted mix"
+		echo ""
+		exit
+	fi
+	if [ "${audio_found}" == "FOUND" ] ; then
+		echo null > /dev/null
+	else
+		echo ""
+		echo "* File '${audio_file_dir}' not found!"
+		echo ""
+		echo "* Aborted mix"
+		echo ""
+		exit
+	fi
+	cut_video=0
+	cut_audio=0
+	# Set the secons to cut on video/audio
+	echo ""
+	echo -n "* [Default: ${cut_video}] Set the seconds to cut in the video (0-59): " ; read seconds_video
+	if [ -z "${seconds_video}" ] ; then
+		seconds_video=${cut_video}
+	else
+		seconds_video=${seconds_video}
+	fi
+	echo -n "* [Default: ${cut_audio}] Set the seconds to cut in the audio (0-59): " ; read seconds_audio
+	if [ -z "${seconds_audio}" ] ; then
+		seconds_audio=${cut_audio}
+	else
+		seconds_audio=${seconds_audio}
+	fi
+	# Set if you want -shortest mode
+	echo -n "* [Default: n] Finish the mix when one of the two (video or audio) finishes first? (y/n): " ; read finish_mix
+	if [ -z "${finish_mix}" ] ; then
+		finish_mix=n
+	elif [ "${finish_mix}" == "y" ] ; then
+		finish_mix=y
+	else
+		finish_mix=n
+	fi
+	# Cut video
+	if [ ${seconds_video} -eq 0 ] ; then
+		video_input_stream=${video_file_dir}
+		remove_video_input=${current_dir}/video-cut.mkv
+	else
+		if [ ${seconds_video} -le 9 ] ; then
+			ffmpeg -y -i ${video_file_dir} -ss 00:00:0${seconds_video} -c:v copy ${current_dir}/video-cut.mkv
+			video_input_stream=${current_dir}/video-cut.mkv
+			remove_video_input=${current_dir}/video-cut.mkv
+		else
+			ffmpeg -y -i ${video_file_dir} -ss 00:00:${seconds_video} -c:v copy ${current_dir}/video-cut.mkv
+			video_input_stream=${current_dir}/video-cut.mkv
+			remove_video_input=${current_dir}/video-cut.mkv
+		fi
+	fi
+	# Cut audio
+	if [ ${seconds_audio} -eq 0 ] ; then
+		audio_input_stream=${audio_file_dir}
+		remove_audio_input=${current_dir}/audio-cut.mka
+	else
+		if [ ${seconds_audio} -le 9 ] ; then
+			ffmpeg -y -i ${audio_file_dir} -ss 00:00:0${seconds_audio} -c:a copy ${current_dir}/audio-cut.mka
+			audio_input_stream=${current_dir}/audio-cut.mka
+			remove_audio_input=${current_dir}/audio-cut.mka
+		else
+			ffmpeg -y -i ${audio_file_dir} -ss 00:00:${seconds_audio} -c:a copy ${current_dir}/audio-cut.mka
+			audio_input_stream=${current_dir}/audio-cut.mka
+			remove_audio_input=${current_dir}/audio-cut.mka
+		fi
+	fi
+	echo ""
+	echo "* Starting mix of:"
+	echo "  - Video: ${video_file_dir}"
+	echo "  - Audio: ${audio_file_dir}"
+	echo ""
+	echo -n "  Output file: ${output_file_dir} "
+	sleep 3
+	echo "" && echo ""
+	if [ "${finish_mix}" == "y" ] ; then
+		ffmpeg -y -i "${video_input_stream}" -i "${audio_input_stream}" -c:v copy -c:a copy -shortest "${output_file_dir}"
+	else
+		ffmpeg -y -i "${video_input_stream}" -i "${audio_input_stream}" -c:v copy -c:a copy "${output_file_dir}"
+	fi
+	echo ""
+	echo -n "* Mixed video/audio into ${output_file_dir}"
+	rm -rf ${remove_video_input}
+	rm -rf ${remove_audio_input}
+	sleep 2
+	echo "" && echo ""
+	exit
+elif [ "${1}" == "-mixs" ] ; then
+	# Run commands for -mixs parameter
+	if [ "${video_found}" == "FOUND" ] ; then
+		echo null > /dev/null
+	else
+		echo ""
+		echo "* File '${video_file_dir}' not found!"
+		echo ""
+		echo "* Aborted mix"
+		echo ""
+		exit
+	fi
+	if [ "${audio_found}" == "FOUND" ] ; then
+		echo null > /dev/null
+	else
+		echo ""
+		echo "* File '${audio_file_dir}' not found!"
+		echo ""
+		echo "* Aborted mix"
+		echo ""
+		exit
+	fi
+	if [ "${subs_found}" == "FOUND" ] ; then
+		echo null > /dev/null
+	else
+		echo ""
+		echo "* File '${subs_file_dir}' not found!"
+		echo ""
+		echo "* Aborted mix"
+		echo ""
+		exit
+	fi
+	cut_video=0
+	cut_audio=0
+	# Set the secons to cut on video/audio
+	echo ""
+	echo -n "* [Default: ${cut_video}] Set the seconds to cut in the video (0-59): " ; read seconds_video
+	if [ -z "${seconds_video}" ] ; then
+		seconds_video=${cut_video}
+	else
+		seconds_video=${seconds_video}
+	fi
+	echo -n "* [Default: ${cut_audio}] Set the seconds to cut in the audio (0-59): " ; read seconds_audio
+	if [ -z "${seconds_audio}" ] ; then
+		seconds_audio=${cut_audio}
+	else
+		seconds_audio=${seconds_audio}
+	fi
+	# Set if you want -shortest mode
+	echo -n "* [Default: n] Finish the mix when one of the three (video, audio or subs) finishes first? (y/n): " ; read finish_mix
+	if [ -z "${finish_mix}" ] ; then
+		finish_mix=n
+	elif [ "${finish_mix}" == "y" ] ; then
+		finish_mix=y
+	else
+		finish_mix=n
+	fi
+	# Cut video
+	if [ ${seconds_video} -eq 0 ] ; then
+		video_input_stream=${video_file_dir}
+		remove_video_input=${current_dir}/video-cut.mkv
+	else
+		if [ ${seconds_video} -le 9 ] ; then
+			ffmpeg -y -i ${video_file_dir} -ss 00:00:0${seconds_video} -c:v copy ${current_dir}/video-cut.mkv
+			video_input_stream=${current_dir}/video-cut.mkv
+			remove_video_input=${current_dir}/video-cut.mkv
+		else
+			ffmpeg -y -i ${video_file_dir} -ss 00:00:${seconds_video} -c:v copy ${current_dir}/video-cut.mkv
+			video_input_stream=${current_dir}/video-cut.mkv
+			remove_video_input=${current_dir}/video-cut.mkv
+		fi
+	fi
+	# Cut audio
+	if [ ${seconds_audio} -eq 0 ] ; then
+		audio_input_stream=${audio_file_dir}
+		remove_audio_input=${current_dir}/audio-cut.mka
+	else
+		if [ ${seconds_audio} -le 9 ] ; then
+			ffmpeg -y -i ${audio_file_dir} -ss 00:00:0${seconds_audio} -c:a copy ${current_dir}/audio-cut.mka
+			audio_input_stream=${current_dir}/audio-cut.mka
+			remove_audio_input=${current_dir}/audio-cut.mka
+		else
+			ffmpeg -y -i ${audio_file_dir} -ss 00:00:${seconds_audio} -c:a copy ${current_dir}/audio-cut.mka
+			audio_input_stream=${current_dir}/audio-cut.mka
+			remove_audio_input=${current_dir}/audio-cut.mka
+		fi
+	fi
+	echo ""
+	echo "* Starting mix of:"
+	echo "  - Video: ${video_file_dir}"
+	echo "  - Audio: ${audio_file_dir}"
+	echo "  - Subs: ${subs_file_dir}"
+	echo ""
+	echo -n "  Output file: ${output_file_dir} "
+	sleep 3
+	echo "" && echo ""
+	if [ "${finish_mix}" == "y" ] ; then
+		ffmpeg -y -i "${video_input_stream}" -i "${audio_input_stream}" -i "${subs_file_dir}" -c:v copy -c:a copy -c:s copy -shortest "${output_file_dir}"
+	else
+		ffmpeg -y -i "${video_input_stream}" -i "${audio_input_stream}" -i "${subs_file_dir}" -c:v copy -c:a copy -c:s copy "${output_file_dir}"
+	fi
+	echo ""
+	echo -n "* Mixed video/audio/subs into ${output_file_dir}"
+	rm -rf ${remove_video_input}
+	rm -rf ${remove_audio_input}
+	sleep 2
+	echo "" && echo ""
+	exit
+else
+	show_menu
+fi
