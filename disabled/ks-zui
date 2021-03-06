@@ -1,0 +1,377 @@
+#!/bin/bash
+
+#################################################################
+# ks-zui (ks-tools) - Simple zenity user interface for ks-tools #
+# Date: 10-02-2021                                              #
+# Author: q3aql                                                 #
+# Contact: q3aql@protonmail.ch                                  #
+#################################################################
+VERSION="6.5 (BETA)"
+M_DATE="100221"
+
+# Function to show about
+function showAbout() {
+  zenity --title "About" --info --width=330 \
+  --text "Software: ks-zui (ks-tools) ${VERSION} \
+  (${M_DATE})\nAuthor: q3aql\nContact: q3aql@protonmail.ch\nLicense: GPL v2.0"
+}
+
+# Function to show information of video file
+# Sintax: showVideoInfo
+function showVideoInfo() {
+  videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
+  | Select the video file" --file-selection)
+  # Enable in Cygwin
+  #videoFile=$(cygwin-path -c "${videoFile}")
+  ks-mp4-wrapper --show-info "${videoFile}"
+  echo -n "Press ENTER to continue " ; read null
+}
+
+# Function to convert MP4 with subs
+# Sintax: convertMP4WithSub
+function convertMP4WithSub() {
+  videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
+  | Select the video file" --file-selection)
+  # Enable in Cygwin
+  #videoFile=$(cygwin-path -c "${videoFile}")
+  # Detect configuration
+  if [ -z "${videoFile}" ] ; then
+    echo null > /dev/null
+  else
+    videoTrackDefault=$(ks-mp4-wrapper --show-video-default "${videoFile}")
+    audioTrackDefault=$(ks-mp4-wrapper --show-audio-default "${videoFile}")
+    subtitleTrackDefault=$(ks-mp4-wrapper --show-subtitle-default "${videoFile}")
+    resolutionDefault=$(ks-mp4-wrapper --show-resolution-default)
+    nameDefault=$(ks-mp4-wrapper --show-name-title-default "${videoFile}")
+    yearDefault=$(ks-mp4-wrapper --show-year-default)
+    genreDefault=$(ks-mp4-wrapper --show-genre-default)
+    # Ask the configuration
+    videoTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the video track to map:     " --entry-text "${videoTrackDefault}")
+    audioTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the audio track to map:     " --entry-text "${audioTrackDefault}")
+    subtitleTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the subtitle track to map:  " --entry-text "${subtitleTrackDefault}")
+    resolution=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the resolution:             " --entry-text "${resolutionDefault}")
+    nameVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the name title:       " --entry-text "${nameDefault}")
+    yearVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the year:             " --entry-text "${yearDefault}")
+    genreVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the genre:            " --entry-text "${genreDefault}")
+    # Disable on Cygwin
+    mkdir -p ${HOME}/Conv
+    outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the path of ouput file prefix:       " --entry-text "${HOME}/Conv/Default")
+    # Enable on Cygwin
+    #mkdir -p /cygdrive/c/Conv
+    #outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    #  --text "Enter the ouput file prefix:" --entry-text "/cygdrive/c/Conv/Default")
+    zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+    --ok-label="Yes" --width=320 --text "Do you want apply '-thread_queue_size 2048' patch?"
+    outputPath=$?
+    if [ ${outputPath} -eq 0 ] ; then
+      ks-mp4-wrapper --conv-with-sub "${videoFile}" "${outputFile}" ${videoTrack} ${audioTrack} \
+      ${subtitleTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo} patch
+    else
+      ks-mp4-wrapper --conv-with-sub "${videoFile}" "${outputFile}" ${videoTrack} ${audioTrack} \
+      ${subtitleTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo}
+    fi
+    echo ""
+    echo -n "Press ENTER to continue " ; read null
+  fi
+}
+
+# Function to convert MP4
+# Sintax: convertMP4
+function convertMP4() {
+  videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
+  | Select the video file" --file-selection)
+  # Enable in Cygwin
+  #videoFile=$(cygwin-path -c "${videoFile}")
+  # Detect configuration
+  if [ -z "${videoFile}" ] ; then
+    echo null > /dev/null
+  else
+    videoTrackDefault=$(ks-mp4-wrapper --show-video-default "${videoFile}")
+    audioTrackDefault=$(ks-mp4-wrapper --show-audio-default "${videoFile}")
+    resolutionDefault=$(ks-mp4-wrapper --show-resolution-default)
+    nameDefault=$(ks-mp4-wrapper --show-name-title-default "${videoFile}")
+    yearDefault=$(ks-mp4-wrapper --show-year-default)
+    genreDefault=$(ks-mp4-wrapper --show-genre-default)
+    # Ask the configuration
+    videoTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the video track to map:     " --entry-text "${videoTrackDefault}")
+    audioTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the audio track to map:     " --entry-text "${audioTrackDefault}")
+    resolution=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the resolution:             " --entry-text "${resolutionDefault}")
+    nameVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the name title:       " --entry-text "${nameDefault}")
+    yearVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the year:             " --entry-text "${yearDefault}")
+    genreVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the genre:            " --entry-text "${genreDefault}")
+    # Disable on Cygwin
+    mkdir -p ${HOME}/Conv
+    outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the path of ouput file prefix:       " --entry-text "${HOME}/Conv/Default")
+    # Enable on Cygwin
+    #mkdir -p /cygdrive/c/Conv
+    #outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    #  --text "Enter the ouput file prefix:" --entry-text "/cygdrive/c/Conv/Default")
+    zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+    --ok-label="Yes" --width=320 --text "Do you want apply '-thread_queue_size 2048' patch?"
+    outputPath=$?
+    if [ ${outputPath} -eq 0 ] ; then
+      ks-mp4-wrapper --conv "${videoFile}" "${outputFile}" ${videoTrack} \
+      ${audioTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo} patch
+    else
+      ks-mp4-wrapper --conv "${videoFile}" "${outputFile}" ${videoTrack} \
+      ${audioTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo}
+    fi
+    echo ""
+    echo -n "Press ENTER to continue " ; read null
+  fi
+}
+
+# Function to convert AVI with subs
+# Sintax: convertAVIWithSub
+function convertAVIWithSub() {
+  videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
+  | Select the video file" --file-selection)
+  # Enable in Cygwin
+  #videoFile=$(cygwin-path -c "${videoFile}")
+  # Detect configuration
+  if [ -z "${videoFile}" ] ; then
+    echo null > /dev/null
+  else
+    videoTrackDefault=$(ks-avi-wrapper --show-video-default "${videoFile}")
+    audioTrackDefault=$(ks-avi-wrapper --show-audio-default "${videoFile}")
+    subtitleTrackDefault=$(ks-avi-wrapper --show-subtitle-default "${videoFile}")
+    resolutionDefault=$(ks-avi-wrapper --show-resolution-default)
+    nameDefault=$(ks-avi-wrapper --show-name-title-default "${videoFile}")
+    yearDefault=$(ks-avi-wrapper --show-year-default)
+    genreDefault=$(ks-avi-wrapper --show-genre-default)
+    # Ask the configuration
+    videoTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the video track to map:     " --entry-text "${videoTrackDefault}")
+    audioTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the audio track to map:     " --entry-text "${audioTrackDefault}")
+    subtitleTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the subtitle track to map:  " --entry-text "${subtitleTrackDefault}")
+    resolution=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the resolution:             " --entry-text "${resolutionDefault}")
+    nameVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the name title:       " --entry-text "${nameDefault}")
+    yearVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the year:             " --entry-text "${yearDefault}")
+    genreVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the genre:            " --entry-text "${genreDefault}")
+    # Disable on Cygwin
+    mkdir -p ${HOME}/Conv
+    outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the path of ouput file prefix:       " --entry-text "${HOME}/Conv/Default")
+    # Enable on Cygwin
+    #mkdir -p /cygdrive/c/Conv
+    #outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    #  --text "Enter the ouput file prefix:" --entry-text "/cygdrive/c/Conv/Default")
+    zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+    --ok-label="Yes" --width=320 --text "Do you want apply '-thread_queue_size 2048' patch?"
+    outputPath=$?
+    if [ ${outputPath} -eq 0 ] ; then
+      ks-avi-wrapper --conv-with-sub "${videoFile}" "${outputFile}" ${videoTrack} ${audioTrack} \
+      ${subtitleTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo} patch
+    else
+      ks-avi-wrapper --conv-with-sub "${videoFile}" "${outputFile}" ${videoTrack} ${audioTrack} \
+      ${subtitleTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo}
+    fi
+    echo ""
+    echo -n "Press ENTER to continue " ; read null
+  fi
+}
+
+# Function to convert AVI
+# Sintax: convertAVIW
+function convertAVI() {
+  videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
+  | Select the video file" --file-selection)
+  # Enable in Cygwin
+  #videoFile=$(cygwin-path -c "${videoFile}")
+  # Detect configuration
+  if [ -z "${videoFile}" ] ; then
+    echo null > /dev/null
+  else
+    videoTrackDefault=$(ks-avi-wrapper --show-video-default "${videoFile}")
+    audioTrackDefault=$(ks-avi-wrapper --show-audio-default "${videoFile}")
+    resolutionDefault=$(ks-avi-wrapper --show-resolution-default)
+    nameDefault=$(ks-avi-wrapper --show-name-title-default "${videoFile}")
+    yearDefault=$(ks-avi-wrapper --show-year-default)
+    genreDefault=$(ks-avi-wrapper --show-genre-default)
+    # Ask the configuration
+    videoTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the video track to map:     " --entry-text "${videoTrackDefault}")
+    audioTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the audio track to map:     " --entry-text "${audioTrackDefault}")
+    resolution=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the resolution:             " --entry-text "${resolutionDefault}")
+    nameVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the name title:       " --entry-text "${nameDefault}")
+    yearVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the year:             " --entry-text "${yearDefault}")
+    genreVideo=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "[METADATA] Enter the genre:            " --entry-text "${genreDefault}")
+    # Disable on Cygwin
+    mkdir -p ${HOME}/Conv
+    outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the path of ouput file prefix:       " --entry-text "${HOME}/Conv/Default")
+    # Enable on Cygwin
+    #mkdir -p /cygdrive/c/Conv
+    #outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    #  --text "Enter the ouput file prefix:" --entry-text "/cygdrive/c/Conv/Default")
+    zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+    --ok-label="Yes" --width=320 --text "Do you want apply '-thread_queue_size 2048' patch?"
+    outputPath=$?
+    if [ ${outputPath} -eq 0 ] ; then
+      ks-avi-wrapper --conv "${videoFile}" "${outputFile}" ${videoTrack} \
+      ${audioTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo} patch
+    else
+      ks-avi-wrapper --conv "${videoFile}" "${outputFile}" ${videoTrack} \
+      ${audioTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo}
+    fi
+    echo ""
+    echo -n "Press ENTER to continue " ; read null
+  fi
+}
+
+# Function to convert VOB
+# Sintax: convertVOB
+function convertVOB() {
+  videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
+  | Select the video file" --file-selection)
+  # Enable in Cygwin
+  #videoFile=$(cygwin-path -c "${videoFile}")
+  # Detect configuration
+  if [ -z "${videoFile}" ] ; then
+    echo null > /dev/null
+  else
+    videoTrackDefault=$(ks-vob-wrapper --show-video-default "${videoFile}")
+    audioTrackDefault=$(ks-vob-wrapper --show-audio-default "${videoFile}")
+    resolutionDefault=$(ks-vob-wrapper --show-resolution-default)
+    # Ask the configuration
+    videoTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the video track to map:     " --entry-text "${videoTrackDefault}")
+    audioTrack=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the audio track to map:     " --entry-text "${audioTrackDefault}")
+    resolution=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the resolution:             " --entry-text "${resolutionDefault}")
+    # Disable on Cygwin
+    mkdir -p ${HOME}/Conv
+    outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    --text "Enter the path of ouput file prefix:       " --entry-text "${HOME}/Conv/Default")
+    # Enable on Cygwin
+    #mkdir -p /cygdrive/c/Conv
+    #outputFile=$(zenity --entry --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" \
+    #  --text "Enter the ouput file prefix:" --entry-text "/cygdrive/c/Conv/Default")
+    zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+    --ok-label="Yes" --width=320 --text "Do you want apply '-thread_queue_size 2048' patch?"
+    outputPath=$?
+    if [ ${outputPath} -eq 0 ] ; then
+      ks-vob-wrapper --conv "${videoFile}" "${outputFile}" ${videoTrack} \
+      ${audioTrack} ${resolution} patch
+    else
+      ks-vob-wrapper --conv "${videoFile}" "${outputFile}" ${videoTrack} \
+      ${audioTrack} ${resolution} "${nameVideo}" ${yearVideo} ${genreVideo}
+    fi
+    echo ""
+    echo -n "Press ENTER to continue " ; read null
+  fi
+}
+
+# Choose subtitles in MP4 convert
+function subtitlesMP4() {
+  zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+  --ok-label="Yes" --width=320 --text "Do you want enable subtitles?"
+  outputPath=$?
+  if [ ${outputPath} -eq 0 ] ; then
+    convertMP4WithSub
+  else
+    convertMP4
+  fi
+}
+
+# Choose subtitles in AVI convert
+function subtitlesAVI() {
+  zenity --question --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --cancel-label="No" \
+  --ok-label="Yes" --width=320 --text "Do you want enable subtitles?"
+  outputPath=$?
+  if [ ${outputPath} -eq 0 ] ; then
+    convertAVIWithSub
+  else
+    convertAVI
+  fi
+}
+
+# Show main menu
+echo ""
+echo "* Starting ks-zui (ks-tools) ${VERSION} (${M_DATE})"
+echo ""
+showMenu=0
+while [ ${showMenu} -eq 0 ] ; do
+  clear
+  opcion=$(zenity --width=420 --height=560 --list --title "ks-zui (ks-tools) ${VERSION} ($M_DATE)" \
+  --column "Available options:" "### CONVERSION OPTIONS ###" "Show video file information" \
+  "Convert video file to MP4" "Convert video file to AVI" "Convert video file to VOB" \
+  "########################" "### UPLOAD OPTIONS ###" "Upload videos file(s) to server" \
+  "Upload audio file(s) to server" "Upload common file(s) to server" "Upload recursively file(s) to server"\
+  "Remove configuration" "Show configuration" "Edit configuration" \
+  "About" "Exit")
+  if [ "${opcion}" == "### CONVERSION OPTIONS ###" ] ; then
+    echo null > /dev/null
+  elif [ "${opcion}" == "Show video file information" ] ; then
+    showVideoInfo
+  elif [ "${opcion}" == "Convert video file to MP4" ] ; then
+    subtitlesMP4
+  elif [ "${opcion}" == "Convert video file to AVI" ] ; then
+    subtitlesAVI
+  elif [ "${opcion}" == "Convert video file to VOB" ] ; then
+    convertVOB
+  elif [ "${opcion}" == "########################" ] ; then
+    echo null > /dev/null
+  elif [ "${opcion}" == "### UPLOAD OPTIONS ###" ] ; then
+    echo null > /dev/null
+  elif [ "${opcion}" == "Upload videos file(s) to server" ] ; then
+    ks-upv -i
+    zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --info --width=300 \
+    --text "File(s) upload is complete!"
+  elif [ "${opcion}" == "Upload audio file(s) to server" ] ; then
+    ks-upa -i
+    zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --info --width=300 \
+    --text "File(s) upload is complete!"
+  elif [ "${opcion}" == "Upload common file(s) to server" ] ; then
+    ks-upf -i
+    zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --info --width=300 \
+    --text "File(s) upload is complete!"
+  elif [ "${opcion}" == "Upload recursively file(s) to server" ] ; then
+    ks-upr -i
+    zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --info --width=300 \
+    --text "File(s) upload is complete!"
+  elif [ "${opcion}" == "Remove configuration" ] ; then
+    ks-upf -r
+    zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --info --width=300 \
+    --text "The configuration has been removed!"
+  elif [ "${opcion}" == "Show configuration" ] ; then
+    ks-upf -c
+    echo -n "Press ENTER to continue " ; read null
+  elif [ "${opcion}" == "Edit configuration" ] ; then
+    ks-upf -e
+  elif [ "${opcion}" == "About" ] ; then
+    showAbout
+  elif [ "${opcion}" == "Exit" ] ; then
+    showMenu=1
+  else
+    zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE})" --warning --width=300 \
+    --text "Choose one of the menu options"
+  fi
+done
