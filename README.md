@@ -5,7 +5,7 @@ ks-tools - Tools for upload, convert and mix video/audio files.
   * *Tools for upload:*
 
     * [ks-upv](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upv.md) - Upload video file(s) to server with rsync+ssh.
-    * [ks-upa](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upa.md) - Upload audio file(s) to server with rsync+ssh
+    * [ks-upa](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upa.md) - Upload audio file(s) to server with rsync+ssh.
     * [ks-upf](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upf.md) - Upload common file(s) to server with rsync+ssh.
     * [ks-upr](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upr.md) - Upload recursively file(s) to server with rsync+ssh.
   
@@ -39,10 +39,10 @@ ks-tools - Tools for upload, convert and mix video/audio files.
     
 ### Downloads:
   * [ks-tools-6.6-100221-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-Linux-en.tar.gz) - Unix/Linux package.
-  * [ks-tools-6.6-100221-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-Windows-en.zip) - Windows package (with cygwin)
+  * [ks-tools-6.6-100221-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-Windows-en.zip) - Windows package (with cygwin).
   * [ks-tools-6.6-100221-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-en-all.deb) - Debian based package.
  
-_Dependences: bash, coreutils, xterm, openssh-server, openssh-client, sshpass, rsync, ffmpeg, grep_
+_Dependencies: bash, coreutils, xterm, openssh-server, openssh-client, sshpass, rsync, ffmpeg, grep_
 
 ### Installation:
 
