@@ -1,0 +1,139 @@
+#!/bin/bash
+
+####################################################################
+# cygwin-path - Convert Windows paths in Cywin paths & vice versa  #
+# Date: 28-03-2020                                                 #
+# Author: q3aql                                                    #
+# Contact: q3aql@protonmail.ch                                     #
+####################################################################
+VERSION="1.0"
+M_DATE="280320"
+
+# Global parameters
+dirTemp="/tmp"
+CygPathTempFolder="/tmp/cygwin-path"
+
+# Function to convert Windows path to Cygwin path
+# Sintax: convertCygwin "<text>"
+function convertCygwin() {
+	wordToConvert=${1}
+	CygPathSedFile="${CygPathTempFolder}/cygwin-path-${RANDOM}.txt"
+	mkdir -p ${CygPathTempFolder} && chmod 777 -R ${CygPathTempFolder} 2> /dev/null
+	echo "${wordToConvert}" > ${CygPathSedFile}
+	# Apply changes
+	sed -i 's/\\/\//g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/A:/\/cygdrive\/a/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/B:/\/cygdrive\/b/g' "${CygPathSedFile}" &> /dev/null
+	sed -i 's/C:/\/cygdrive\/c/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/D:/\/cygdrive\/d/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/E:/\/cygdrive\/e/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/F:/\/cygdrive\/f/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/G:/\/cygdrive\/g/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/H:/\/cygdrive\/h/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/I:/\/cygdrive\/i/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/J:/\/cygdrive\/j/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/K:/\/cygdrive\/k/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/L:/\/cygdrive\/l/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/M:/\/cygdrive\/m/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/N:/\/cygdrive\/n/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/O:/\/cygdrive\/o/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/P:/\/cygdrive\/p/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/Q:/\/cygdrive\/q/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/R:/\/cygdrive\/r/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/S:/\/cygdrive\/s/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/T:/\/cygdrive\/t/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/U:/\/cygdrive\/u/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/V:/\/cygdrive\/v/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/W:/\/cygdrive\/w/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/X:/\/cygdrive\/x/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/Y:/\/cygdrive\/y/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/Z:/\/cygdrive\/z/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/ / /g' "${CygPathSedFile}" &> /dev/null
+	# Show file without extension
+	wordToConvert=$(cat ${CygPathSedFile})
+	echo "\"${wordToConvert}\""
+}
+
+# Function to convert Cygwin path to Windows path
+# Sintax: convertWindows "<text>"
+function convertWindows() {
+	wordToConvert=${1}
+	CygPathSedFile="${CygPathTempFolder}/cygwin-path-${RANDOM}.txt"
+	mkdir -p ${CygPathTempFolder} && chmod 777 -R ${CygPathTempFolder} 2> /dev/null
+	echo "${wordToConvert}" > ${CygPathSedFile}
+	# Apply changes
+  sed -i 's/\/cygdrive\/a/A:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/b/B:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/c/C:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/d/D:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/e/E:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/f/F:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/g/G:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/h/H:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/i/I:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/j/J:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/k/K:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/l/L:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/m/M:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/n/N:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/o/O:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/p/P:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/q/Q:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/r/R:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/s/S:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/t/T:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/u/U:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/v/V:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/w/W:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/y/Y:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\/cygdrive\/z/Z:/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\//\\/g' "${CygPathSedFile}" &> /dev/null
+  sed -i 's/\\ / /g' "${CygPathSedFile}" &> /dev/null
+	# Show file without extension
+	wordToConvert=$(cat ${CygPathSedFile})
+	echo "\"${wordToConvert}\""
+}
+
+# Show help
+if [ -z "${1}" ] ; then
+	echo ""
+	echo "* cygwin-path v${VERSION} (${M_DATE})"
+	echo ""
+	echo "* Convert Windows paths in Cywin paths & vice versa"
+  echo ""
+	echo "+ Sintax: "
+	echo ""
+	echo "  $ cygwin-path -c \"<Windows path>\" --> Convert Windows path to Cygwin path"
+  echo "  $ cygwin-path -w \"<Cygwin path>\" --> Convert Cygwin path to Windows path"
+	echo ""
+	echo "+ Examples: "
+  echo ""
+  echo "    $ cygwin-path -c \"C:\\Users\\test\Desktop\\my-notes.txt\""
+  echo "    $ cygwin-path -w \"/cygdrive/c/Users/test/Desktop/my-notes.txt\""
+	echo ""
+	exit
+else
+  if [ "${1}" == "-c" ] ; then
+    convertCygwin "${2}"
+  elif [ "${1}" == "-w" ] ; then
+    convertWindows "${2}"
+  else
+    # Show help if sintax is wrong
+    echo ""
+    echo "* cygwin-path v${VERSION} (${M_DATE})"
+    echo ""
+    echo "* Convert Windows paths in Cywin paths & vice versa"
+    echo ""
+    echo "+ Sintax: "
+    echo ""
+    echo "  $ cygwin-path -c \"<Windows path>\" --> Convert Windows path to Cygwin path"
+    echo "  $ cygwin-path -w \"<Cygwin path>\" --> Convert Cygwin path to Windows path"
+    echo ""
+    echo "+ Examples: "
+    echo ""
+    echo "    $ cygwin-path -c \"C:\\Users\\test\Desktop\\my-notes.txt\""
+    echo "    $ cygwin-path -w \"/cygdrive/c/Users/test/Desktop/my-notes.txt\""
+    echo ""
+    exit
+  fi
+fi
