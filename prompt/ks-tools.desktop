@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ks-tools
+GenericName=ks-tools
+X-GNOME-FullName=ks-tools
+Comment=Upload video/audio/common file(s) & convert videos to MP4/AVI/VOB.
+Exec=/usr/share/ks-tools/ks-tools
+Icon=/usr/share/ks-tools/ks-tools.svg
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Network;FileTransfer;Utility;

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+###############################################################
+# ks-tools - Initialize the ks-tools terminal (using xterm)   #
+# Date: 10-02-2021                                            #
+# Author: q3aql                                               #
+# Contact: q3aql@protonmail.ch                                #
+###############################################################
+VERSION="6.6"
+M_DATE="100221"
+
+# Variables
+name_terminal="ks-tools v${VERSION} (${M_DATE})"
+term="xterm"
+font="Monospace"
+size_font="11"
+color_b="black"
+color_f="white"
+rcfile="/usr/share/ks-tools/ks-tools-rc"
+command="bash --rcfile ${rcfile}"
+
+# Command to run
+${term} -T "${name_terminal}" -fa ${font} -fs ${size_font} -bg ${color_b} \
+-fg ${color_f} -e ${command}

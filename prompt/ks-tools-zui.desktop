@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ks-tools (ZUI)
+GenericName=ks-tools (ZUI)
+X-GNOME-FullName=ks-tools (ZUI)
+Comment=Simple zenity user interface for ks-tools
+Exec=/usr/share/ks-tools/ks-tools-zui
+Icon=/usr/share/ks-tools/ks-tools.svg
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Network;FileTransfer;Utility;
