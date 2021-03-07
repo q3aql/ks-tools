@@ -4,38 +4,38 @@ ks-tools - Tools for upload, convert and mix video/audio files.
 ### Documentation:
   * *Tools for upload:*
 
-    * [ks-upv](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upv.md) - Upload video file(s) to server with rsync+ssh.
-    * [ks-upa](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upa.md) - Upload audio file(s) to server with rsync+ssh.
-    * [ks-upf](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upf.md) - Upload common file(s) to server with rsync+ssh.
-    * [ks-upr](https://github.com/q3aql/ks-tools/blob/master/doc/ks-upr.md) - Upload recursively file(s) to server with rsync+ssh.
+    * [ks-upv](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upv.md) - Upload video file(s) to server with rsync+ssh.
+    * [ks-upa](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upa.md) - Upload audio file(s) to server with rsync+ssh.
+    * [ks-upf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upf.md) - Upload common file(s) to server with rsync+ssh.
+    * [ks-upr](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upr.md) - Upload recursively file(s) to server with rsync+ssh.
   
   * *Tools for convert video:*
 
-    * [ks-mp4](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4.md) - Convert video file(s) to compact and efficient MP4 (libx264 + aac).
-    * [ks-mp4k](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4k.md) - Convert video file(s) to compact and efficient MP4 (4K).
-    * [ks-mp4s](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4s.md) - Convert video file(s) to compact and efficient MP4 (Series).
-    * [ks-mp4s-folder](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4s-folder.md) - Convert videos from folder to MP4 format (Series).
-    * [ks-avi](https://github.com/q3aql/ks-tools/blob/master/doc/ks-avi.md) - Convert video file(s) to compact and efficient AVI (libxvid + mp3).
-    * [ks-vob](https://github.com/q3aql/ks-tools/blob/master/doc/ks-vob.md) - Convert videos to VOB (DVD splitet) format.
+    * [ks-mp4](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4.md) - Convert video file(s) to compact and efficient MP4 (libx264 + aac).
+    * [ks-mp4k](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4k.md) - Convert video file(s) to compact and efficient MP4 (4K).
+    * [ks-mp4s](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s.md) - Convert video file(s) to compact and efficient MP4 (Series).
+    * [ks-mp4s-folder](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s-folder.md) - Convert videos from folder to MP4 format (Series).
+    * [ks-avi](https://github.com/q3aql/ks-tools/blob/main/doc/ks-avi.md) - Convert video file(s) to compact and efficient AVI (libxvid + mp3).
+    * [ks-vob](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob.md) - Convert videos to VOB (DVD splitet) format.
   
   * *Tools for convert audio:*
 
-    * [ks-oga](https://github.com/q3aql/ks-tools/blob/master/doc/ks-oga.md) - Convert video/audio file(s) to OGA (OGG Audio) Format.
-    * [ks-oga-album](https://github.com/q3aql/ks-tools/blob/master/doc/ks-oga-album.md) - Convert folder album to OGA (OGG Audio) Format.
-    * [ks-mp3](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp3.md) - Convert video/audio file(s) to MP3 Audio Format.
-    * [ks-mp3-album](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp3-album.md) - Convert folder album to MP3 Audio Format.
+    * [ks-oga](https://github.com/q3aql/ks-tools/blob/main/doc/ks-oga.md) - Convert video/audio file(s) to OGA (OGG Audio) Format.
+    * [ks-oga-album](https://github.com/q3aql/ks-tools/blob/main/doc/ks-oga-album.md) - Convert folder album to OGA (OGG Audio) Format.
+    * [ks-mp3](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3.md) - Convert video/audio file(s) to MP3 Audio Format.
+    * [ks-mp3-album](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3-album.md) - Convert folder album to MP3 Audio Format.
   
   * *Tool for mix video/audio:*
 
-    * [ks-mix](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mix.md) - Extract video/audio and mix video/audio files.
+    * [ks-mix](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mix.md) - Extract video/audio and mix video/audio files.
   
   * *Wrappers:*
 
-    * [ks-mp4-wrapper](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4-wrapper.md) - Wrapper for ks-mp4 to create graphical interfaces.
-    * [ks-mp4k-wrapper](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4k-wrapper.md) - Wrapper for ks-mp4k to create graphical interfaces.
-    * [ks-mp4s-wrapper](https://github.com/q3aql/ks-tools/blob/master/doc/ks-mp4s-wrapper.md) - Wrapper for ks-mp4s to create graphical interfaces.
-    * [ks-avi-wrapper](https://github.com/q3aql/ks-tools/blob/master/doc/ks-avi-wrapper.md) - Wrapper for ks-avi to create graphical interfaces.
-    * [ks-vob-wrapper](https://github.com/q3aql/ks-tools/blob/master/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
+    * [ks-mp4-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4-wrapper.md) - Wrapper for ks-mp4 to create graphical interfaces.
+    * [ks-mp4k-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4k-wrapper.md) - Wrapper for ks-mp4k to create graphical interfaces.
+    * [ks-mp4s-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s-wrapper.md) - Wrapper for ks-mp4s to create graphical interfaces.
+    * [ks-avi-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-avi-wrapper.md) - Wrapper for ks-avi to create graphical interfaces.
+    * [ks-vob-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
     
 ### Downloads:
   * [ks-tools-6.6-100221-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-Linux-en.tar.gz) - Unix/Linux package.
