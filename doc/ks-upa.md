@@ -3,18 +3,18 @@ ks-upa - Upload audio file(s) to server with rsync+ssh.
 
 ### Sintax:
 
-  * `ks-upa -i  - Start upload`
-  * `ks-upa -r  - Remove configuration`
-  * `ks-upa -c  - Show configuration`
-  * `ks-upa -e  - Edit configuration`
-  * `ks-upa -v  - Show version`
-  * `ks-upa -h  - Show help`
+  * `$ ks-upa -i  - Start upload`
+  * `$ ks-upa -r  - Remove configuration`
+  * `$ ks-upa -c  - Show configuration`
+  * `$ ks-upa -e  - Edit configuration`
+  * `$ ks-upa -v  - Show version`
+  * `$ ks-upa -h  - Show help`
 
 ### Initialize audio file(s) upload:
 
   * For initialize audio file(s) upload only run the following command:
   
-    * `ks-upa -i`
+    * `$ ks-upa -i`
     
   * The first time you run the command, you will be asked for the necessary connection information:
 
@@ -30,13 +30,13 @@ ks-upa - Upload audio file(s) to server with rsync+ssh.
 
   * If you want to clear the connection settings, you just need to run the following command:
   
-    * `ks-upa -r`
+    * `$ ks-upa -r`
     
 ### Show configuration:
 
   * You can check the configuration with the following command:
   
-    * `ks-upa -c`
+    * `$ ks-upa -c`
     
   * When consulting the configuration, we will see something like this:
 
@@ -50,7 +50,7 @@ ks-upa - Upload audio file(s) to server with rsync+ssh.
 
   * To edit any section of the configuration, the following command would be executed:
 
-    * `ks-upa -e`
+    * `$ ks-upa -e`
     
   * After its execution, we will see a menu like the following one to be able to edit the desired section:
 
@@ -68,7 +68,7 @@ ks-upa - Upload audio file(s) to server with rsync+ssh.
 
   * You can check the version with the command:
    
-    * `ks-upa -v`
+    * `$ ks-upa -v`
     
 ### Back to README.md
     

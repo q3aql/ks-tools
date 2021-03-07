@@ -3,18 +3,18 @@ ks-upv - Upload videos file(s) to server with rynsc+ssh.
 
 ### Sintax:
 
-  * `ks-upv -i  - Start upload`
-  * `ks-upv -r  - Remove configuration`
-  * `ks-upv -c  - Show configuration`
-  * `ks-upv -e  - Edit configuration`
-  * `ks-upv -v  - Show version`
-  * `ks-upv -h  - Show help`
+  * `$ ks-upv -i  - Start upload`
+  * `$ ks-upv -r  - Remove configuration`
+  * `$ ks-upv -c  - Show configuration`
+  * `$ ks-upv -e  - Edit configuration`
+  * `$ ks-upv -v  - Show version`
+  * `$ ks-upv -h  - Show help`
 
 ### Initialize video file(s) upload:
 
   * For initialize video file(s) upload only un the following command:
   
-    * `ks-upv -i`
+    * `$ ks-upv -i`
     
   * The first time you run the command, you will be asked for the necessary connection information:
 
@@ -30,13 +30,13 @@ ks-upv - Upload videos file(s) to server with rynsc+ssh.
 
   * If you want to clear the connection settings, you just need to run the following command:
   
-    * `ks-upv -r`
+    * `$ ks-upv -r`
     
 ### Show configuration:
 
   * You can check the configuration with the following command:
   
-    * `ks-upv -c`
+    * `$ ks-upv -c`
     
   * When consulting the configuration, we will see something like this:
 
@@ -50,7 +50,7 @@ ks-upv - Upload videos file(s) to server with rynsc+ssh.
 
   * To edit any section of the configuration, the following command would be executed:
 
-    * `ks-upv -e`
+    * `$ ks-upv -e`
     
   * After its execution, we will see a menu like the following one to be able to edit the desired section:
 
@@ -68,7 +68,7 @@ ks-upv - Upload videos file(s) to server with rynsc+ssh.
 
   * You can check the version with the command:
    
-    * `ks-upv -v`
+    * `$ ks-upv -v`
     
 ### Back to README.md
     

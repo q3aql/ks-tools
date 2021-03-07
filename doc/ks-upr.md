@@ -3,18 +3,18 @@ ks-upr - Upload recursively file(s) to server with rsync+ssh.
 
 ### Sintax:
 
-  * `ks-upr -i  - Start upload`
-  * `ks-upr -r  - Remove configuration`
-  * `ks-upr -c  - Show configuration`
-  * `ks-upr -e  - Edit configuration`
-  * `ks-upr -v  - Show version`
-  * `ks-upr -h  - Show help`
+  * `$ ks-upr -i  - Start upload`
+  * `$ ks-upr -r  - Remove configuration`
+  * `$ ks-upr -c  - Show configuration`
+  * `$ ks-upr -e  - Edit configuration`
+  * `$ ks-upr -v  - Show version`
+  * `$ ks-upr -h  - Show help`
 
 ### Initialize common file(s) upload:
 
   * For initialize recursively upload only un the following command:
   
-    * `ks-upr -i`
+    * `$ ks-upr -i`
     
   * The first time you run the command, you will be asked for the necessary connection information:
 
@@ -30,13 +30,13 @@ ks-upr - Upload recursively file(s) to server with rsync+ssh.
 
   * If you want to clear the connection settings, you just need to run the following command:
   
-    * `ks-upr -r`
+    * `$ ks-upr -r`
     
 ### Show configuration:
 
   * You can check the configuration with the following command:
   
-    * `ks-upr -c`
+    * `$ ks-upr -c`
     
   * When consulting the configuration, we will see something like this:
 
@@ -50,7 +50,7 @@ ks-upr - Upload recursively file(s) to server with rsync+ssh.
 
   * To edit any section of the configuration, the following command would be executed:
 
-    * `ks-upr -e`
+    * `$ ks-upr -e`
     
   * After its execution, we will see a menu like the following one to be able to edit the desired section:
 
@@ -68,7 +68,7 @@ ks-upr - Upload recursively file(s) to server with rsync+ssh.
 
   * You can check the version with the command:
    
-    * `ks-upr -v`
+    * `$ ks-upr -v`
     
 ### Back to README.md
     

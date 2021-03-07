@@ -3,18 +3,18 @@ ks-upf - Upload common file(s) to server with rsync+ssh.
 
 ### Sintax:
 
-  * `ks-upf -i  - Start upload`
-  * `ks-upf -r  - Remove configuration`
-  * `ks-upf -c  - Show configuration`
-  * `ks-upf -e  - Edit configuration`
-  * `ks-upf -v  - Show version`
-  * `ks-upf -h  - Show help`
+  * `$ ks-upf -i  - Start upload`
+  * `$ ks-upf -r  - Remove configuration`
+  * `$ ks-upf -c  - Show configuration`
+  * `$ ks-upf -e  - Edit configuration`
+  * `$ ks-upf -v  - Show version`
+  * `$ ks-upf -h  - Show help`
 
 ### Initialize common file(s) upload:
 
   * For initialize file(s) upload only un the following command:
   
-    * `ks-upf -i`
+    * `$ ks-upf -i`
     
   * The first time you run the command, you will be asked for the necessary connection information:
 
@@ -30,13 +30,13 @@ ks-upf - Upload common file(s) to server with rsync+ssh.
 
   * If you want to clear the connection settings, you just need to run the following command:
   
-    * `ks-upf -r`
+    * `$ ks-upf -r`
     
 ### Show configuration:
 
   * You can check the configuration with the following command:
   
-    * `ks-upf -c`
+    * `$ ks-upf -c`
     
   * When consulting the configuration, we will see something like this:
 
@@ -50,7 +50,7 @@ ks-upf - Upload common file(s) to server with rsync+ssh.
 
   * To edit any section of the configuration, the following command would be executed:
 
-    * `ks-upf -e`
+    * `$ ks-upf -e`
     
   * After its execution, we will see a menu like the following one to be able to edit the desired section:
 
@@ -68,7 +68,7 @@ ks-upf - Upload common file(s) to server with rsync+ssh.
 
   * You can check the version with the command:
    
-    * `ks-upf -v`
+    * `$ ks-upf -v`
     
 ### Back to README.md
     
