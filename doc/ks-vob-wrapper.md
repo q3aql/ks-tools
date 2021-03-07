@@ -1,7 +1,7 @@
 ks-vob-wrapper - Wrapper for ks-vob to create graphical interfaces.
 ===================================================================
 
-### TRACKS/CONFIG DETECT::
+### TRACKS/CONFIG DETECT:
 
   * `$ ks-vob-wrapper --show-info <video_file>`
   * `$ ks-vob-wrapper --show-video-default <video_file>`

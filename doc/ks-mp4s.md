@@ -1,35 +1,35 @@
-ks-mp4 - Convert video file(s) to compact and efficient MP4.
-============================================================
+ks-mp4s - Convert video file(s) to compact and efficient MP4 (Series).
+=====================================================================
 
 ### Sintax:
 
-  * `$ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>`
+  * `$ ks-mp4s </absolute/path/video.mkv> </path/prefix_name>`
 
 ### Default configuration:
 
-  * The script `ks-mp4` use by default the following configuration:
+  * The script `ks-mp4s` use by default the following configuration:
   
-    * `- Resolution: 1280x534`
+    * `- Resolution: 720x480`
     * `- Video codec: libx264`
-    * `- Bitrate video: 2400k`
+    * `- Bitrate video: 950k`
     * `- Preset: medium`
     * `- Audio codec: aac (stereo)`
-    * `- Bitrate audio: 256k`
+    * `- Bitrate audio: 128k`
     * `- Default Audio: spa`
     * `- Default Subtitle: spa (forced)`
     * `- Container: mp4`
     
-  * If you want to change the settings, you need to edit the `ks-mp4` file and change the following variables:
+  * If you want to change the settings, you need to edit the `ks-mp4s` file and change the following variables:
 
     * `# Basic parameters`
-    * `rel_size="1280x534"`
+    * `rel_size="720x480"`
     * `vcodec="libx264"`
-    * `b_vcodec="2400k"`
+    * `b_vcodec="950k"`
     * `# Presets: ultrafast, superfast, veryfast, faster,`
     * `#  fast, medium (default), slow, slower, veryslow`
     * `v_preset="medium"`
     * `acodec="aac"`
-    * `b_acodec="256k"`
+    * `b_acodec="128k"`
     * `default_lang_audio="spa"`
     * `default_lang_subt="spa"`
     * `v_ext="mp4"`
@@ -38,7 +38,7 @@ ks-mp4 - Convert video file(s) to compact and efficient MP4.
 
   * An example of use would be the following:
   
-    * `$ ks-mp4 /data/movies/Example.mkv /data/converted/Example`
+    * `$ ks-mp4s /data/movies/Example.mkv /data/converted/Example`
     
   * Executing the command, the file will be analyzed and a wizard will be shown to select the tracks, choose the settings and define the metadata:
 
@@ -61,7 +61,7 @@ ks-mp4 - Convert video file(s) to compact and efficient MP4.
     * `* (Default: 0:1) Type the number of audio track: `
     * `* (Default: n) Do you want include subtitles? (y/n): y`
     * `* (Default: 0:3) Type the number of subtitle track: 0:5`
-    * `* (Default: 1280x534) Type the resolution: `
+    * `* (Default: 720x480) Type the resolution: `
     * `* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): n`
     * `.`
     * `* METADATA configuration:`
@@ -76,7 +76,7 @@ ks-mp4 - Convert video file(s) to compact and efficient MP4.
     * `  ffmpeg -i "Example.mkv" -map 0:5 "Example.srt"`
     * `.`
     * `  # Convert the file 'Example.mkv' to MP4`
-    * `  ffmpeg -i "Example.mkv" -vsync 1 -async 1 -map 0:0 -map 0:1 -vf subtitles="..srt" -s 1280x534 -c:v libx264 -profile:v high -b:v 2400k -preset medium -c:a aac -b:a 256k -ac 2 -clev 3dB -slev -6dB -metadata title="Example (2016)" -metadata date="2016" -metadata genre="Thriller" -metadata:s:v:0 title="Example (2016)" -metadata:s:a:0 title="aac Stereo Audio (256k)" "Example.mp4"`
+    * `  ffmpeg -i "Example.mkv" -vsync 1 -async 1 -map 0:0 -map 0:1 -vf subtitles="..srt" -s 720x480 -c:v libx264 -profile:v high -b:v 950k -preset medium -c:a aac -b:a 128k -ac 2 -clev 3dB -slev -6dB -metadata title="Example" -metadata date="2016" -metadata genre="Thriller" -metadata:s:v:0 title="Example" -metadata:s:a:0 title="aac Stereo Audio (128k)" "Example.mp4"`
     * `.`
     * `* (Default: y) Do you want run the conversion? (y/n): n`
     

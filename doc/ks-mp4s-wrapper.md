@@ -1,7 +1,7 @@
 ks-mp4s-wrapper - Wrapper for ks-mp4s to create graphical interfaces.
 ===================================================================
 
-### TRACKS/CONFIG DETECT::
+### TRACKS/CONFIG DETECT:
 
   * `$ ks-mp4s-wrapper --show-info <video_file>`
   * `$ ks-mp4s-wrapper --show-video-default <video_file>`
