@@ -210,7 +210,7 @@ else
     convert_files=$(expr ${convert_files} + 1)
   done
   echo ""
-  echo "* The output folder will be '${1}/to-oga'"
+  echo "* The output folder will be '${1}/to-mp3'"
   # Execute commands for conversion
   echo ""
   echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
@@ -218,7 +218,7 @@ else
     exit
   else
     convert_files=1
-    cd "${1}" && mkdir -p to-oga && rm -rf to-oga/*
+    cd "${1}" && mkdir -p to-mp3 && rm -rf to-mp3/*
     while [ ${convert_files} -le ${num_files} ] ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
       fname=$(echo "${show_file}" | cut -d "." -f 1)
@@ -285,7 +285,7 @@ else
 					artist_title="${artist_file}"
 					artist_init="${artist_file}"
 				fi
-			ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-oga/${fname}.${v_ext}"
+			ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-mp3/${fname}.${v_ext}"
        # Increment variables
 			convert_files=$(expr ${convert_files} + 1)
 			track_init=$(expr ${track_num} + 1)
