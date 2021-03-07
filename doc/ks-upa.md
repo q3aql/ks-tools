@@ -66,7 +66,7 @@ ks-upa - Upload audio file(s) to server with rsync+ssh.
     
 ### Show version:
 
-   * You can check the version with the command:
+  * You can check the version with the command:
    
     * `ks-upa -v`
     
