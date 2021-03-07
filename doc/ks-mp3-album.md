@@ -29,7 +29,7 @@ ks-mp3-album - Convert folder album to MP3 Audio Format.
     
   * Executing the command, the folder will be analized and you can see the following wizard:
 
-    * `* Scanning /home/q3aql/.torrent/Conv/matrix-soundtrack` 
+    * `* Scanning /data/albums/matrix-soundtrack` 
     * `+ Video file(s) in .mp4 found!`
     * `.`
     * `* Common METADATA configuration:`
