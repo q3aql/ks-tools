@@ -34,7 +34,7 @@ ks-mix - Extract video/audio and mix video/audio files.
     
     * `$ ks-mix -evpf /data/movies/Example.mkv`
     
-_Note: Extracted video will be named `video.mkv` and extracted audio will be named `audio.mka`
+_Note: Extracted video will be named `video.mkv` and extracted audio will be named `audio.mka`_
     
 ### Examples (Mix video/audio):
 
