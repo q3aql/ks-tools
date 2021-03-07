@@ -69,4 +69,8 @@ ks-upr - Upload recursively file(s) to server with rsync+ssh.
    * You can check the version with the command:
    
     * `ks-upr -v`
+    
+### Back to README.md
+    
+* [Go back](https://github.com/q3aql/ks-tools/blob/main/README.md)
   

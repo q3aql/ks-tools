@@ -69,4 +69,8 @@ ks-upa - Upload audio file(s) to server with rsync+ssh.
    * You can check the version with the command:
    
     * `ks-upa -v`
+    
+### Back to README.md
+    
+* [Go back](https://github.com/q3aql/ks-tools/blob/main/README.md)
   

@@ -69,4 +69,8 @@ ks-upv - Upload videos file(s) to server with rynsc+ssh.
    * You can check the version with the command:
    
     * `ks-upv -v`
+    
+### Back to README.md
+    
+* [Go back](https://github.com/q3aql/ks-tools/blob/main/README.md)
   
