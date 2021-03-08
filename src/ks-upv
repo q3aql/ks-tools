@@ -74,13 +74,13 @@ function listArchives() {
 			echo "null" > /dev/null
 		else
 			find "${1}"/*.${format} &>> ${dirTemp}/${listCompTemp}
-			echo "Video file(s) in .${format} found!"
+			echo "+ Video file(s) in .${format} found!"
 			cd "${1}" && ls -1 *.${format} &>> ${dirTemp}/${listTemp}
 			fail=0
 		fi
 	done
 	if [ ${fail} -eq 1 ] ; then
-		echo "No video file(s) found!"
+		echo "+ No video file(s) found!"
 		echo ""
 		exit
 	else
@@ -178,35 +178,35 @@ function checkChecksum() {
 function showConfig() {
 	configAvailable=0
 	echo ""
-	echo "ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+	echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
 	echo ""
 	if [ -f ${dirConfig}/USER ] ; then
 		showUser=$(cat ${dirConfig}/USER)
-		echo "Server User: ${showUser}"
+		echo "- Server User: ${showUser}"
 		configAvailable=1
 	fi
 	if [ -f ${dirConfig}/PASS ] ; then
 		showPassword=$(cat ${dirConfig}/PASS)
-		echo "Server Password: ${showPassword}"
+		echo "- Server Password: ${showPassword}"
 		configAvailable=1
 	fi
 	if [ -f ${dirConfig}/SERVER ] ; then
 		showServer=$(cat ${dirConfig}/SERVER)
-		echo "URL (or IP) Server: ${showServer}"
+		echo "- URL (or IP) Server: ${showServer}"
 		configAvailable=1
 	fi
 	if [ -f ${dirConfig}/DIR_SERVER ] ; then
 		showDirServer=$(cat ${dirConfig}/DIR_SERVER)
-		echo "Destination Path (Server): ${showDirServer}"
+		echo "- Destination Path (Server): ${showDirServer}"
 		configAvailable=1
 	fi
 	if [ -f ${dirConfig}/DIR ] ; then
 		showDirLocal=$(cat ${dirConfig}/DIR)
-		echo "Scan Path (Local): ${showDirLocal}"
+		echo "- Scan Path (Local): ${showDirLocal}"
 		configAvailable=1
 	fi
 	if [ ${configAvailable} -eq 0 ] ; then
-		echo "The configuration file does not exist!"
+		echo "* The configuration file does not exist!"
 	fi
 	echo ""
 	exit
@@ -223,43 +223,43 @@ function editConfig() {
 		editDirServer=$(cat ${dirConfig}/DIR_SERVER 2> /dev/null)
 		editDirLocal=$(cat ${dirConfig}/DIR 2> /dev/null)
 		echo ""
-		echo "ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+		echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
 		echo ""
-		echo "1 - Edit User (${editUser})"
-		echo "2 - Edit Password (${editPassword})"
-		echo "3 - Edit Server (${editServer})"
-		echo "4 - Edit Dest. Path (${editDirServer})"
-		echo "5 - Edit Local Path (${editDirLocal})"
+		echo " 1 - Edit User (${editUser})"
+		echo " 2 - Edit Password (${editPassword})"
+		echo " 3 - Edit Server (${editServer})"
+		echo " 4 - Edit Dest. Path (${editDirServer})"
+		echo " 5 - Edit Local Path (${editDirLocal})"
 		echo ""
-		echo "6 - Exit"
+		echo " 6 - Exit"
 		echo ""
-		echo -n "Choose an option: " ; read EDIT
+		echo -n "* Choose an option: " ; read EDIT
 		echo ""
 		if [ "${EDIT}" == "1" ] ; then
-			echo -n "Enter the server user: " ; read USER
+			echo -n "* Enter the server user: " ; read USER
 			user=${USER}
 			echo ${user} > ${dirConfig}/USER
 		elif [ "${EDIT}" == "2" ] ; then
-			echo -n "Enter the server key: " ; read PASS
+			echo -n "* Enter the server key: " ; read PASS
 			password=${PASS}
 			echo ${password} > ${dirConfig}/PASS
 		elif [ "${EDIT}" == "3" ] ; then
-			echo -n "Enter the server URL: " ; read SERVER
+			echo -n "* Enter the server URL: " ; read SERVER
 			server=${SERVER}
 			echo ${server} > ${dirConfig}/SERVER
 		elif [ "${EDIT}" == "4" ] ; then
-			echo -n "Enter the path on the server: " ; read DIR_SERVER
+			echo -n "* Enter the path on the server: " ; read DIR_SERVER
 			dirServer=${DIR_SERVER}
 			echo ${dirServer} > ${dirConfig}/DIR_SERVER
 		elif [ "${EDIT}" == "5" ] ; then
-			echo -n "Enter the local path to scan: " ; read DIR
+			echo -n "* Enter the local path to scan: " ; read DIR
 			dirLocal=${DIR}
 			echo ${dirLocal} > ${dirConfig}/DIR
 		elif [ "${EDIT}" == "6" ] ; then
 			editConfig=1
 		else
-			echo "Invalid option!"
-			echo -n "Press ENTER to continue " ; read CONTINUE
+			echo "+ Invalid option!"
+			echo -n "- Press ENTER to continue " ; read CONTINUE
 		fi
 	done
 	exit
@@ -268,7 +268,7 @@ function editConfig() {
 # Function to show version
 function showVersion() {
 	echo ""
-	echo "ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+	echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
 	echo ""
 	exit
 }
@@ -276,18 +276,18 @@ function showVersion() {
 # Function to show help
 function showHelp() {
 	echo ""
-	echo "ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+	echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
 	echo ""
-	echo "Upload videos file(s) to server with rynsc+ssh"
+	echo "- Upload videos file(s) to server with rynsc+ssh"
 	echo ""
-	echo "Sintax:"
+	echo "+ Sintax:"
 	echo ""
-	echo "ks-upv -i  - Start upload"
-	echo "ks-upv -r  - Remove configuration"
-	echo "ks-upv -c  - Show configuration"
-	echo "ks-upv -e  - Edit configuration"
-	echo "ks-upv -v  - Show version"
-	echo "ks-upv -h  - Show help"
+	echo " $ ks-upv -i  - Start upload"
+	echo " $ ks-upv -r  - Remove configuration"
+	echo " $ ks-upv -c  - Show configuration"
+	echo " $ ks-upv -e  - Edit configuration"
+	echo " $ ks-upv -v  - Show version"
+	echo " $ ks-upv -h  - Show help"
 	echo ""
 	exit
 }
@@ -296,40 +296,40 @@ function showHelp() {
 # for the execution are installed.
 function checkDependencies() {
 	dependence=0
-	echo -n "Checking necessary tools... "
+	echo -n "* Checking necessary tools... "
 	sleep 3 && echo ""
 	sshpass -h &> /dev/null
 	OUTPUT=$?
 	if [ ${OUTPUT} -ne 0 ] ; then
-		echo "The 'sshpass' tool is not installed!"
+		echo "* The 'sshpass' tool is not installed!"
 		dependence=1
 	fi
 	md5sum --help &> /dev/null
 	OUTPUT=$?
 	if [ ${OUTPUT} -ne 0 ] ; then
-		echo "The 'md5sum' tool is not installed!"
+		echo "* The 'md5sum' tool is not installed!"
 		dependence=1
 	fi
 	rsync --version &> /dev/null
 	OUTPUT=$?
 	if [ ${OUTPUT} -ne 0 ] ; then
-		echo "The 'rsync' tool is not installed!"
+		echo "* The 'rsync' tool is not installed!"
 		dependence=1
 	fi
 	if [ -f /usr/bin/scp ] ; then
 		echo "OK" > /dev/null
 	else
-		echo "The 'scp' tool is not installed!"
+		echo "* The 'scp' tool is not installed!"
 		dependence=1
 	fi
 	if [ -f /usr/bin/ssh ] ; then
 		echo "OK" > /dev/null
 	else
-		echo "The 'ssh' tool is not installed!"
+		echo "* The 'ssh' tool is not installed!"
 		dependence=1
 	fi
 	if [ ${dependence} -eq 0 ] ; then
-		echo "Necessary tools installed!"
+		echo "* Necessary tools installed!"
 		echo ""
 	else
 		echo ""
@@ -371,14 +371,14 @@ elif [ "$1" == "-i" ] ; then
 	# Start script
 	clear
 	echo ""
-	echo "ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+	echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
 	echo ""
 	checkDependencies
 	# Ask the user and if it exists, read it from the config.
 	if [ -f ${dirConfig}/USER ] ; then
 		user=$(cat ${dirConfig}/USER)
 	else
-		echo -n "Enter the server user: " ; read USER
+		echo -n "* Enter the server user: " ; read USER
 		user=${USER}
 		echo ${user} > ${dirConfig}/USER
 	fi
@@ -386,7 +386,7 @@ elif [ "$1" == "-i" ] ; then
 	if [ -f ${dirConfig}/PASS ] ; then
 		password=$(cat ${dirConfig}/PASS)
 	else
-		echo -n "Enter the server key: " ; read PASS
+		echo -n "* Enter the server key: " ; read PASS
 		password=${PASS}
 		echo ${password} > ${dirConfig}/PASS
 	fi
@@ -394,7 +394,7 @@ elif [ "$1" == "-i" ] ; then
 	if [ -f ${dirConfig}/SERVER ] ; then
 		server=$(cat ${dirConfig}/SERVER)
 	else
-		echo -n "Enter the server URL: " ; read SERVER
+		echo -n "* Enter the server URL: " ; read SERVER
 		server=${SERVER}
 		echo ${server} > ${dirConfig}/SERVER
 	fi
@@ -402,7 +402,7 @@ elif [ "$1" == "-i" ] ; then
 	if [ -f ${dirConfig}/DIR_SERVER ] ; then
 		dirServer=$(cat ${dirConfig}/DIR_SERVER)
 	else
-		echo -n "Enter the path on the server: " ; read DIR_SERVER
+		echo -n "* Enter the path on the server: " ; read DIR_SERVER
 		dirServer=${DIR_SERVER}
 		echo ${dirServer} > ${dirConfig}/DIR_SERVER
 	fi
@@ -410,19 +410,19 @@ elif [ "$1" == "-i" ] ; then
 	if [ -f ${dirConfig}/DIR ] ; then
 		dirLocal=$(cat ${dirConfig}/DIR)
 	else
-		echo -n "Enter the local path to scan: " ; read DIR
+		echo -n "* Enter the local path to scan: " ; read DIR
 		dirLocal=${DIR}
 		echo ${dirLocal} > ${dirConfig}/DIR
 	fi
 
 	# Call the functions to perform the whole process.
-	echo -n "Scanning ${dirLocal} " && sleep 4
+	echo -n "* Scanning ${dirLocal} " && sleep 4
 	echo ""
 	if [ -d ${dirLocal} ] ; then
 		listArchives "${dirLocal}"
 		totalFiles=$(countArchives)
 		count=1
-		echo "${totalFiles} video file(s) found!"
+		echo "+ ${totalFiles} video file(s) found!"
 		echo ""
 		while [ ${count} -le ${totalFiles} ] ; do
 			fullNameFile=$(showFile ${count})
@@ -434,7 +434,7 @@ elif [ "$1" == "-i" ] ; then
 			count=$(expr ${count} + 1)
 		done
 	else
-		echo "Directory ${dirLocal} does not exist!"
+		echo "* Directory ${dirLocal} does not exist!"
 		echo ""
 		exit
 	fi
