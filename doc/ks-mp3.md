@@ -48,7 +48,7 @@ ks-mp3 - Convert video/audio file(s) to MP3 (Audio) Format.
     * `.`
     * `* COMMANDS THAT WILL BE EXECUTED:`
     * `.`
-    * `  # Convert the file 'Example.mkv' to OGG Audio`
+    * `  # Convert the file 'Example.mkv' to MP3 Audio`
     * `  ffmpeg -i "Example.mkv" -map 0:1 -c:a libmp3lame -b:a 128k -metadata title="My song" -metadata date="2016" -metadata genre="Rap" -metadata album="My personal album" -metadata artist="q3aql" -metadata track="2" "Example.mp3"`
     * `.`
     * `* (Default: y) Do you want run the conversion? (y/n): n`
