@@ -12,7 +12,7 @@ M_DATE="100221"
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"
 tempFileTest="/tmp/ks-mp4s-folder-test.txt"
-formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob"
+formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
 
 # Show help when folder is empty
 if [ -z "${1}" ] ; then
