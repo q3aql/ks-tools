@@ -295,7 +295,7 @@ else
 				stereo_params="-ac 2 -clev 3dB -slev -6dB"
 			fi
 			ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-mp3/${fname}.${v_ext}"
-       # Increment variables
+			# Increment variables
 			convert_files=$(expr ${convert_files} + 1)
 			track_init=$(expr ${track_num} + 1)
     done
