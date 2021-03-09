@@ -105,7 +105,7 @@ if [ -z "${1}" ] ; then
   echo " - Resolution: ${rel_size}"
   echo " - Video codec: ${vcodec}"
   echo " - Bitrate video: ${b_vcodec}"
-	echo " - Preset: ${v_preset}"
+  echo " - Preset: ${v_preset}"
   echo " - Audio codec: ${acodec} (stereo)"
   echo " - Bitrate audio: ${b_acodec}"
   echo " - Default Audio: ${default_lang_audio}"
@@ -159,7 +159,7 @@ if [ -z "${2}" ] ; then
   echo " - Resolution: ${rel_size}"
   echo " - Video codec: ${vcodec}"
   echo " - Bitrate video: ${b_vcodec}"
-	echo " - Preset: ${v_preset}"
+  echo " - Preset: ${v_preset}"
   echo " - Audio codec: ${acodec} (stereo)"
   echo " - Bitrate audio: ${b_acodec}"
   echo " - Default Audio: ${default_lang_audio}"
@@ -281,11 +281,11 @@ else
     resolution="${rel_size}"
   else
     rel_size="${resolution}"
-		if [ -z "${codec_h265_hevc}" ] ; then
+    if [ -z "${codec_h265_hevc}" ] ; then
 			p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-		else
+    else
 			p_conversion="-s ${rel_size} -c:v ${vcodec} -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-		fi
+    fi
   fi
   echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
   if [ "${patch_thread}" == "y" ] ; then

@@ -76,7 +76,7 @@ ks-avi - Convert video file(s) to compact and efficient AVI.
     * `  ffmpeg -i "Example.mkv" -map 0:5 "Example.srt"`
     * `.`
     * `  # Convert the file 'Example.mkv' to AVI`
-    * `  ffmpeg -i "Example.mkv" -map 0:0 -map 0:1 -vf subtitles="Example.srt" -s 720x480 -c:v libxvid -b:v 3000k -c:a libmp3lame -b:a 192k -ac 2 -clev 3dB -slev -6dB -metadata title="Example (2016)" -metadata date="2016" -metadata genre="Thriller" -metadata:s:v:0 title="Example (2016)" -metadata:s:a:0 title="libmp3lame Stereo Audio (192k)" "Example.avi"`
+    * `  ffmpeg -i "Example.mkv" -map 0:0 -map 0:1 -vf subtitles="Example.srt" -s 720x480 -c:v libxvid -b:v 3000k -preset slow -c:a libmp3lame -b:a 192k -ac 2 -clev 3dB -slev -6dB -metadata title="Example (2016)" -metadata date="2016" -metadata genre="Thriller" -metadata:s:v:0 title="Example (2016)" -metadata:s:a:0 title="libmp3lame Stereo Audio (192k)" "Example.avi"`
     * `.`
     * `* (Default: y) Do you want run the conversion? (y/n): n`
     
