@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-avi (ks-tools) - Convert video to AVI format             #
-# Date: 10-02-2021                                            #
+# Date: 10-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.6"
-M_DATE="100221"
+VERSION="6.7"
+M_DATE="100321"
 
 # Global parameters
 dirTemp="/tmp"
