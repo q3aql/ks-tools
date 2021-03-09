@@ -49,7 +49,7 @@ function convertText() {
 function listArchives() {
 	fail=1
 	formatFiles=""
-	videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob"
+	videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
 	formatFiles="${formatFiles} ${videoFiles}"
 	audioFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka"
 	formatFiles="${formatFiles} ${audioFiles}"
