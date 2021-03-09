@@ -12,6 +12,7 @@ ks-avi - Convert video file(s) to compact and efficient AVI.
     * `- Resolution: 720x480`
     * `- Video codec: libxvid`
     * `- Bitrate video: 3000k`
+    * `- Preset: slow`
     * `- Audio codec: libmp3lame (stereo)`
     * `- Bitrate audio: 192k`
     * `- Default Audio: spa`
@@ -24,6 +25,9 @@ ks-avi - Convert video file(s) to compact and efficient AVI.
     * `rel_size="720x480"`
     * `vcodec="libxvid"`
     * `b_vcodec="3000k"`
+    * `# Presets: ultrafast, superfast, veryfast, faster,`
+    * `#  fast, medium (default), slow, slower, veryslow`
+    * `v_preset="slow"`
     * `acodec="libmp3lame"`
     * `b_acodec="192k"`
     * `default_lang_audio="spa"`
