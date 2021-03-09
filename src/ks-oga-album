@@ -285,7 +285,16 @@ else
 					artist_title="${artist_file}"
 					artist_init="${artist_file}"
 				fi
-			ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-oga/${fname}.${v_ext}"
+			# Check audio 5.1 or 7.1
+			audio_5_7_1=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
+			audio_5_7_1_2=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
+			audio_5_7_1="${audio_5_7_1}${audio_5_7_1_2}"
+			if [ -z "${audio_5_7_1}" ] ; then
+				stereo_params="-ac 2"
+			else
+				stereo_params="-ac 2 -clev 3dB -slev -6dB"
+			fi
+			ffmpeg -i "${show_file}" -map ${audio_track} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_num}" -metadata genre="${genre_file}" -metadata album="${album_title}" -metadata artist="${artist_title}" -metadata track="${track_num}" "to-oga/${fname}.${v_ext}"
        # Increment variables
 			convert_files=$(expr ${convert_files} + 1)
 			track_init=$(expr ${track_num} + 1)
