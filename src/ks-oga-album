@@ -108,6 +108,9 @@ function removeExtension() {
 	sed -i 's/.ogg//g' "${ksToolsSedFile}" &> /dev/null
 	sed -i 's/.ac3//g' "${ksToolsSedFile}" &> /dev/null
 	sed -i 's/.aac//g' "${ksToolsSedFile}" &> /dev/null
+	sed -i 's/.flac//g' "${ksToolsSedFile}" &> /dev/null
+	sed -i 's/.wav//g' "${ksToolsSedFile}" &> /dev/null
+	sed -i 's/.opus//g' "${ksToolsSedFile}" &> /dev/null
 	# Show file without extension
 	wordToConvert=$(cat ${ksToolsSedFile})
 	echo ${wordToConvert}
