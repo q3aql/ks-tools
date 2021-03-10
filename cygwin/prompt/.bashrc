@@ -116,7 +116,7 @@ alias all-commands='ls /bin | grep ".exe" | cut -d "." -f 1'
 
 echo ""
 echo " #####################################"
-echo " # ks-tools 6.6 (for Windows/Cygwin) #"
+echo " # ks-tools 6.7 (for Windows/Cygwin) #"
 echo " #####################################"
 echo ""
 echo " * Note:"
