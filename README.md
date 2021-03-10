@@ -41,6 +41,7 @@ ks-tools - Tools for upload, convert and mix video/audio files.
   * [ks-tools-6.7-100321-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-Linux-en.tar.gz) - Unix/Linux package.
   * [ks-tools-6.7-100321-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-Windows-en.zip) - Windows package (with cygwin).
   * [ks-tools-6.7-100321-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-en-all.deb) - Debian based package.
+  * [ks-tools-6.7-100321-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-en-all.rpm) - Red Hat based package.
  
 _Dependencies: bash, coreutils, xterm, openssh-server, openssh-client, sshpass, rsync, ffmpeg, grep_
 
