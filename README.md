@@ -38,9 +38,9 @@ ks-tools - Tools for upload, convert and mix video/audio files.
     * [ks-vob-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
     
 ### Downloads:
-  * [ks-tools-6.6-100221-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-Linux-en.tar.gz) - Unix/Linux package.
-  * [ks-tools-6.6-100221-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-Windows-en.zip) - Windows package (with cygwin).
-  * [ks-tools-6.6-100221-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v6.6/ks-tools-6.6-100221-en-all.deb) - Debian based package.
+  * [ks-tools-6.7-100321-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-Linux-en.tar.gz) - Unix/Linux package.
+  * [ks-tools-6.7-100321-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-Windows-en.zip) - Windows package (with cygwin).
+  * [ks-tools-6.7-100321-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v6.7/ks-tools-6.7-100321-en-all.deb) - Debian based package.
  
 _Dependencies: bash, coreutils, xterm, openssh-server, openssh-client, sshpass, rsync, ffmpeg, grep_
 
@@ -48,7 +48,7 @@ _Dependencies: bash, coreutils, xterm, openssh-server, openssh-client, sshpass, 
 
   * **Unix/Linux instructions:**
     * Open the terminal.
-    * Type the command: `tar zxvf ks-tools-6.6-100221-Linux-en.tar.gz`
+    * Type the command: `tar zxvf ks-tools-6.7-100321-Linux-en.tar.gz`
     * Change the directory: `cd ks-tools`
     * Finally, install the scripts (as root): `make install`
 
