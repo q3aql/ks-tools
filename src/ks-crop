@@ -199,6 +199,12 @@ function crop_video() {
 	else
 		b_vcodec="${bitrate_video}"
 	fi
+	# Reload p_conversion variable
+	if [ -z "${codec_h265_hevc}" ] ; then
+		p_conversion="-c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+	else
+		p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+	fi
 	# Ask for patched
 	echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
 	if [ "${patch_thread}" == "y" ] ; then
