@@ -66,7 +66,7 @@ function show_menu() {
 	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mix -evid <video-file>  --> Extract video track"
-	echo "  $ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (only for H264)"
+	echo "  $ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (H264/5 & MPEG4)"
 	echo "  $ ks-mix -evpf <video-file>  --> Extract video track & set fps (only for H264)"
 	echo "  $ ks-mix -eaud <video-file>  --> Extract audio track"
 	echo "  $ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)"
@@ -134,20 +134,90 @@ elif [ "${1}" == "-ev25" ] ; then
 	if [ -z "${2}" ] ; then
 		show_menu
 	elif [ -f "${2}" ] ; then
+	  echo ""
+		echo "+ Video Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+		echo ""
+		# Check de video track by default
+		video_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${video_default}" ] ; then
+			video_default="0:0"
+		else
+			video_default_patch=$(echo ${video_default} | cut -c4)
+			if [ "${video_default_patch}" == ":" ] ; then
+				video_default=$(echo ${video_default} | cut -c1-3)
+			else
+				video_default="${video_default}"
+			fi
+		fi
+		# Ask for video
+		echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+		if [ -z "${video_track}" ] ; then
+			video_track="${video_default}"
+		else
+			video_track="${video_track}"
+		fi
 		echo ""
 		echo -n "* Starting extract video track and change to 25 fps (${2}) "
 		sleep 3
 		echo "" && echo ""
-		ffmpeg -y -i "${2}" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
-		ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-		ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
-		echo ""
-		echo -n "* Extracted video into ${video_file_dir} (25 fps)"
-		sleep 2
-		rm -rf "${current_dir}/seeing_noaudio.h264"
-		rm -rf "${current_dir}/seeing.mp4"
-		echo "" && echo ""
-		exit
+		# Check if video input uses H265 (HEVC)
+		codec_h265=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
+		codec_hevc=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
+		yuv420p10le=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
+		codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
+		# Check if video input uses MPEG4/XVID
+		codec_mpeg4=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "mpeg4")
+		codec_xvid=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "xvid")
+		codec_mpeg4_xvid="${codec_mpeg4}${codec_xvid}"
+		if [ -z "${codec_h265_hevc}" ] ; then
+			if [ -z "${codec_mpeg4_xvid}" ] ; then
+				codec_encoded="h264_encoded"
+			else
+				codec_encoded="mpeg4_encoded"
+			fi
+		else
+			codec_encoded="h265_encoded"
+		fi
+		# Extract video with diferent codecs
+		if [ "${codec_encoded}" == "h264_encoded" ] ; then
+			ffmpeg -y -i "${2}" -map ${video_track} -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+			ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+			sleep 2
+			rm -rf "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		elif [ "${codec_encoded}" == "h265_encoded" ] ; then
+			ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+			ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/temp-h265.mkv"
+			ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+			sleep 2
+			rm -rf "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		elif [ "${codec_encoded}" == "mpeg4_encoded" ] ; then
+			ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -b:v 4000k -preset medium "${current_dir}/temp-mpeg4.mkv"
+			ffmpeg -y -i "${current_dir}/temp-mpeg4.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/temp-mpeg4.mkv"
+			ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+			sleep 2
+			rm -rf "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		fi
 	else
 		echo ""
 		echo "* The file '${2}' does not exist"
@@ -159,9 +229,31 @@ elif [ "${1}" == "-evpf" ] ; then
 	if [ -z "${2}" ] ; then
 		show_menu
 	elif [ -f "${2}" ] ; then
-		frames_default="25"
 		echo ""
-		echo -n "[Default: ${frames_default}] Set fps to change: " ; read frames_change
+		echo "+ Video Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+		echo ""
+		# Check de video track by default
+		video_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${video_default}" ] ; then
+			video_default="0:0"
+		else
+			video_default_patch=$(echo ${video_default} | cut -c4)
+			if [ "${video_default_patch}" == ":" ] ; then
+				video_default=$(echo ${video_default} | cut -c1-3)
+			else
+				video_default="${video_default}"
+			fi
+		fi
+		# Ask for video
+		echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+		if [ -z "${video_track}" ] ; then
+			video_track="${video_default}"
+		else
+			video_track="${video_track}"
+		fi
+		frames_default="25"
+		echo -n "* [Default: ${frames_default}] Set fps to change: " ; read frames_change
 		if [ -z "${frames_change}" ] ; then
 			frames_default=${frames_default}
 		else
@@ -171,16 +263,63 @@ elif [ "${1}" == "-evpf" ] ; then
 		echo -n "* Starting extract video track and change to ${frames_default} fps (${2}) "
 		sleep 3
 		echo "" && echo ""
-		ffmpeg -y -i "${2}" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
-		ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-		ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
-		echo ""
-		echo -n "* Extracted video into ${video_file_dir} (${frames_default} fps)"
-		sleep 2
-		rm -rf "${current_dir}/seeing_noaudio.h264"
-		rm -rf "${current_dir}/seeing.mp4"
-		echo "" && echo ""
-		exit
+		# Check if video input uses H265 (HEVC)
+		codec_h265=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
+		codec_hevc=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
+		yuv420p10le=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
+		codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
+		# Check if video input uses MPEG4/XVID
+		codec_mpeg4=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "mpeg4")
+		codec_xvid=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "xvid")
+		codec_mpeg4_xvid="${codec_mpeg4}${codec_xvid}"
+		if [ -z "${codec_h265_hevc}" ] ; then
+			if [ -z "${codec_mpeg4_xvid}" ] ; then
+				codec_encoded="h264_encoded"
+			else
+				codec_encoded="mpeg4_encoded"
+			fi
+		else
+			codec_encoded="h265_encoded"
+		fi
+		# Extract video with diferent codecs
+		if [ "${codec_encoded}" == "h264_encoded" ] ; then
+			ffmpeg -y -i "${2}" -map ${video_track} -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+			ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+			sleep 2
+			rm -rf "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		elif [ "${codec_encoded}" == "h265_encoded" ] ; then
+			ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+			ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/temp-h265.mkv"
+			ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+			sleep 2
+			rm -rf "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		elif [ "${codec_encoded}" == "mpeg4_encoded" ] ; then
+			ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -b:v 4000k -preset medium "${current_dir}/temp-mpeg4.mkv"
+			ffmpeg -y -i "${current_dir}/temp-mpeg4.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/temp-mpeg4.mkv"
+			ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+			sleep 2
+			rm -rf "${current_dir}/seeing_noaudio.h264"
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		fi
 	else
 		echo ""
 		echo "* The file '${2}' does not exist"
