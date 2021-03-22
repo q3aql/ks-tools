@@ -25,9 +25,10 @@ ks-tools - Tools for upload, convert and mix video/audio files.
     * [ks-mp3](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3.md) - Convert video/audio file(s) to MP3 Audio Format.
     * [ks-mp3-album](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3-album.md) - Convert folder album to MP3 Audio Format.
   
-  * *Tool for mix video/audio:*
+  * *Tools for crop/mix video/audio:*
 
     * [ks-mix](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mix.md) - Extract video/audio and mix video/audio files.
+    * [ks-crop](https://github.com/q3aql/ks-tools/blob/main/doc/ks-crop.md) - Crop or change aspect ratio of a video.
   
   * *Wrappers:*
 
