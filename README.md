@@ -1,5 +1,5 @@
-ks-tools - Tools for upload, convert and mix video/audio files.
-===============================================================
+ks-tools - Tools for upload, convert and crop/mix video/audio files.
+====================================================================
 
 ### Documentation:
   * *Tools for upload:*
