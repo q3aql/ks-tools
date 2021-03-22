@@ -1,6 +1,6 @@
 @echo off
 
-set VERSION=6.7
+set VERSION=6.8
 echo.
 echo  #####################################
 echo  # Welcome to ks-tools installer %VERSION% #

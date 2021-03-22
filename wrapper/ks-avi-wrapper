@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-avi-wrapper (ks-tools) - Wrapper for ks-avi              #
-# Date: 10-03-2021                                            #
+# Date: 22-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Conversion parameters
 ks_mp4_to_wrap="/usr/bin/ks-avi"
@@ -45,7 +45,7 @@ else
 fi
 
 # Funcion to show the name of file/folder from full path
-# Sintax: extractFolderOrFile <full/path/file.txt>
+# Syntax: extractFolderOrFile <full/path/file.txt>
 function extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
@@ -65,7 +65,7 @@ function extractFolderOrFile() {
 }
 
 # Function to remove extension from file
-# Sintax: removeExtension "<text>"
+# Syntax: removeExtension "<text>"
 function removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
@@ -89,7 +89,7 @@ function removeExtension() {
 }
 
 # Function to show files with spaces.
-# Sintax: showFileWithSpace <file number>
+# Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp
@@ -99,7 +99,7 @@ function showFileWithSpace() {
 }
 
 # Show info tracks of input video video file.
-# Sintax: showInfo <video_file>
+# Syntax: showInfo <video_file>
 function showInfo() {
   echo ""
   echo "* Information of ${1}:"
@@ -117,7 +117,7 @@ function showInfo() {
 }
 
 # Show the video track default
-# Sintax: showVideoDefault <video_file>
+# Syntax: showVideoDefault <video_file>
 function showVideoDefault() {
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
@@ -135,7 +135,7 @@ function showVideoDefault() {
 }
 
 # Show the audio track default
-# Sintax: showAudioDefault <video_file>
+# Syntax: showAudioDefault <video_file>
 function showAudioDefault() {
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
@@ -163,7 +163,7 @@ function showAudioDefault() {
 }
 
 # Show the subtitle track default
-# Sintax: showSubtitleDefault <video_file>
+# Syntax: showSubtitleDefault <video_file>
 function showSubtitleDefault() {
   # Check the subtitle track by default
   subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
@@ -201,20 +201,20 @@ function showSubtitleDefault() {
 }
 
 # Show default resolution
-# Sintax: showResolutionDefault
+# Syntax: showResolutionDefault
 function showResolutionDefault() {
   echo "${rel_size}"
 }
 
 # Show default year (METADATA)
-# Sintax: showResolutionDefault
+# Syntax: showResolutionDefault
 function showYearDefault() {
   current_date=$(date +%Y)
   echo "${current_date}"
 }
 
 # Show the name title default (MEDATA)
-# Sintax: showNameDefault <video_file>
+# Syntax: showNameDefault <video_file>
 function showNameDefault() {
   # Prepare name title by default
   FullPath="${1}"
@@ -225,7 +225,7 @@ function showNameDefault() {
 }
 
 # Show the genre default (MEDATA)
-# Sintax: showGenreDefault
+# Syntax: showGenreDefault
 function showGenreDefault() {
   echo "Unknown"
 }
@@ -237,7 +237,7 @@ function showHelp() {
   echo ""
   echo "- Wrapper for ks-avi to create graphical interfaces"
   echo ""
-  echo "+ Sintax:"
+  echo "+ Syntax:"
   echo ""
   echo " * TRACKS/CONFIG DETECT:"
   echo ""

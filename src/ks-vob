@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-avi (ks-tools) - Convert video to VOB DVD Format         #
-# Date: 10-03-2021                                            #
+# Date: 22-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Basic parameters
 rel_size="720x480"
@@ -30,13 +30,13 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
   exit
 fi
 
-# Sintax: ks-vob -f </absolute/path/video.mp4> </path/prefix_name>
+# Syntax: ks-vob -f </absolute/path/video.mp4> </path/prefix_name>
 if [ -z "${1}" ] ; then
   echo ""
   echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
   echo "- Convert video file(s) to compact and efficient VOB"
-	echo ""
+  echo ""
   echo "+ Config:"
   echo ""
   echo " - Resolution: ${rel_size}"
@@ -48,7 +48,7 @@ if [ -z "${1}" ] ; then
   echo " - Split: 30 minutes"
   echo " - Container: ${v_ext}"
   echo ""
-  echo "+ Sintax: "
+  echo "+ Syntax: "
   echo ""
   echo "  $ ks-vob </absolute/path/video.mkv> </path/prefix_name>"
   echo
@@ -76,7 +76,7 @@ if [ -z "${2}" ] ; then
   echo "* ks-vob (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
   echo "- Convert video file(s) to compact and efficient VOB"
-	echo ""
+  echo ""
   echo "+ Config:"
   echo ""
   echo " - Resolution: ${rel_size}"
@@ -88,7 +88,7 @@ if [ -z "${2}" ] ; then
   echo " - Split: 30 minutes"
   echo " - Container: ${v_ext}"
   echo ""
-  echo "+ Sintax: "
+  echo "+ Syntax: "
   echo ""
   echo "  $ ks-vob </absolute/path/video.mkv> </path/prefix_name>"
   echo

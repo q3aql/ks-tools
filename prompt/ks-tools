@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-tools - Initialize the ks-tools terminal (using xterm)   #
-# Date: 10-03-2021                                            #
+# Date: 22-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Variables
 name_terminal="ks-tools v${VERSION} (${M_DATE})"

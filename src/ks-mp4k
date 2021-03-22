@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4k (ks-tools) - Convert video to MP4 format (4K)       #
-# Date: 10-03-2021                                            #
+# Date: 22-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Global parameters
 dirTemp="/tmp"
@@ -40,7 +40,7 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Funcion to show the name of file/folder from full path
-# Sintax: extractFolderOrFile <full/path/file.txt>
+# Syntax: extractFolderOrFile <full/path/file.txt>
 function extractFolderOrFile() {
 	pathToExtract="${1}/"
 	findFolder=0
@@ -60,7 +60,7 @@ function extractFolderOrFile() {
 }
 
 # Function to remove extension from file
-# Sintax: removeExtension "<text>"
+# Syntax: removeExtension "<text>"
 function removeExtension() {
 	wordToConvert=${1}
 	ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
@@ -84,7 +84,7 @@ function removeExtension() {
 }
 
 # Function to show files with spaces.
-# Sintax: showFileWithSpace <file number>
+# Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
 	echo "${1}" > ${dirTemp}/name.tmp
 	sed -i 's/_/ /g' ${dirTemp}/name.tmp
@@ -93,7 +93,7 @@ function showFileWithSpace() {
 	echo ${DisplayName}
 }
 
-# Sintax: ks-mp4k </absolute/path/video.mkv> </path/prefix_name>
+# Syntax: ks-mp4k </absolute/path/video.mkv> </path/prefix_name>
 if [ -z "${1}" ] ; then
 	echo ""
 	echo "* ks-mp4k (ks-tools) v${VERSION} (${M_DATE})"
@@ -112,7 +112,7 @@ if [ -z "${1}" ] ; then
 	echo " - Default Subtitle: ${default_lang_subt} (forced)"
 	echo " - Container: ${v_ext}"
 	echo ""
-	echo "+ Sintax: "
+	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mp4k </absolute/path/video.mkv> </path/prefix_name>"
 	echo ""
@@ -166,7 +166,7 @@ if [ -z "${2}" ] ; then
 	echo " - Default Subtitle: ${default_lang_subt} (forced)"
 	echo " - Container: ${v_ext}"
 	echo ""
-	echo "+ Sintax: "
+	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mp4k </absolute/path/video.mkv> </path/prefix_name>"
 	echo ""

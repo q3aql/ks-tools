@@ -2,12 +2,12 @@
 
 #########################################################################
 # ks-mp3 (ks-tools) - Convert video/audio file(s) to MP3 (Audio) Format #
-# Date: 10-03-2021                                                      #
+# Date: 22-03-2021                                                      #
 # Author: q3aql                                                         #
 # Contact: q3aql@protonmail.ch                                          #
 #########################################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Global parameters
 dirTemp="/tmp"
@@ -33,7 +33,7 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Funcion to show the name of file/folder from full path
-# Sintax: extractFolderOrFile <full/path/file.txt>
+# Syntax: extractFolderOrFile <full/path/file.txt>
 function extractFolderOrFile() {
 	pathToExtract="${1}/"
 	findFolder=0
@@ -53,7 +53,7 @@ function extractFolderOrFile() {
 }
 
 # Function to remove extension from file
-# Sintax: removeExtension "<text>"
+# Syntax: removeExtension "<text>"
 function removeExtension() {
 	wordToConvert=${1}
 	ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
@@ -86,7 +86,7 @@ function removeExtension() {
 }
 
 # Function to show files with spaces.
-# Sintax: showFileWithSpace <file number>
+# Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
 	echo "${1}" > ${dirTemp}/name.tmp
 	sed -i 's/_/ /g' ${dirTemp}/name.tmp
@@ -105,11 +105,11 @@ function showFileWithSpace() {
 				DisplayName=$(echo ${DisplayName} | cut -c4-100)
 			fi
 		fi
-	fi		
+	fi
 	echo ${DisplayName}
 }
 
-# Sintax: ks-mp3 </absolute/path/song.ogg> </path/prefix_name>
+# Syntax: ks-mp3 </absolute/path/song.ogg> </path/prefix_name>
 if [ -z "${1}" ] ; then
 	echo ""
 	echo "* ks-mp3 (ks-tools) v${VERSION} (${M_DATE})"
@@ -122,7 +122,7 @@ if [ -z "${1}" ] ; then
 	echo " - Bitrate audio: ${b_acodec}"
 	echo " - Container: ${v_ext}"
 	echo ""
-	echo "+ Sintax: "
+	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>"
 	echo ""
@@ -158,7 +158,7 @@ if [ -z "${2}" ] ; then
 	echo " - Bitrate audio: ${b_acodec}"
 	echo " - Container: ${v_ext}"
 	echo ""
-	echo "+ Sintax: "
+	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>"
 	echo ""
@@ -249,7 +249,7 @@ else
 	else
 		genre_file="${genre_file}"
 	fi
-	
+
 	# Check audio 5.1 or 7.1
 	audio_5_7_1=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
 	audio_5_7_1_2=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")

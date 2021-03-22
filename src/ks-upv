@@ -2,12 +2,12 @@
 
 ######################################################################
 # ks-upv (ks-tools) - Upload videos file(s) to server with rynsc+ssh #
-# Date: 10-03-2021                                                   #
+# Date: 22-03-2021                                                   #
 # Author: q3aql                                                      #
 # Contact: q3aql@protonmail.ch                                       #
 ######################################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Global parameters.
 dirTemp="/tmp"
@@ -18,7 +18,7 @@ dirConfig="$HOME/.ks-tools"
 ksToolsTempFolder="/tmp/ks-tools"
 
 # Function to remove spaces and symbols
-# Sintaxis: convertText "<text>"
+# Syntax: convertText "<text>"
 function convertText() {
 	wordToConvert=${1}
 	ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
@@ -45,7 +45,7 @@ function convertText() {
 }
 
 # Function to list the files of a directory.
-# Sintax: listArchives <directory>
+# Syntax: listArchives <directory>
 function listArchives() {
 	fail=1
 	formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
@@ -95,7 +95,7 @@ function countArchives() {
 }
 
 # Function to show files with spaces.
-# Sintax: showFileWithSpace <file number>
+# Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
 	FileName=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
 	FileNoExtension=$(echo $FileName | cut -d "." -f 1)
@@ -107,21 +107,21 @@ function showFileWithSpace() {
 }
 
 # Function to show the name of the file.
-# Sintax: showFile <file number>
+# Syntax: showFile <file number>
 function showFile() {
 	archive=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
 	echo ${archive}
 }
 
 # Function to show full file path.
-# Sintax: showPathFile <file number>
+# Syntax: showPathFile <file number>
 function showPathFile() {
 	pathFile=$(cat ${dirTemp}/${listCompTemp} | head -${1} | tail -1)
 	echo ${pathFile}
 }
 
 # Function to send file to server.
-# Sintax: sendFile <password> <file path> <user> <server> <server path> [file name]
+# Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
 function sendFile() {
 	correct=0
 	countSend=0
@@ -148,7 +148,7 @@ function sendFile() {
 }
 
 # Function to check local and server checksum.
-# Sintax: checkChecksum <password> <local file path> <user> <server> <server file path>
+# Syntax: checkChecksum <password> <local file path> <user> <server> <server file path>
 function checkChecksum() {
 	correct=0
 	countChecksum=0
@@ -280,7 +280,7 @@ function showHelp() {
 	echo ""
 	echo "- Upload videos file(s) to server with rynsc+ssh"
 	echo ""
-	echo "+ Sintax:"
+	echo "+ Syntax:"
 	echo ""
 	echo " $ ks-upv -i  - Start upload"
 	echo " $ ks-upv -r  - Remove configuration"

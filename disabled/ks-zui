@@ -2,12 +2,12 @@
 
 #################################################################
 # ks-zui (ks-tools) - Simple zenity user interface for ks-tools #
-# Date: 10-03-2021                                              #
+# Date: 22-03-2021                                              #
 # Author: q3aql                                                 #
 # Contact: q3aql@protonmail.ch                                  #
 #################################################################
-VERSION="6.7 (BETA)"
-M_DATE="100321"
+VERSION="6.8 (BETA)"
+M_DATE="220321"
 
 # Function to show about
 function showAbout() {
@@ -17,7 +17,7 @@ function showAbout() {
 }
 
 # Function to show information of video file
-# Sintax: showVideoInfo
+# Syntax: showVideoInfo
 function showVideoInfo() {
   videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
   | Select the video file" --file-selection)
@@ -28,7 +28,7 @@ function showVideoInfo() {
 }
 
 # Function to convert MP4 with subs
-# Sintax: convertMP4WithSub
+# Syntax: convertMP4WithSub
 function convertMP4WithSub() {
   videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
   | Select the video file" --file-selection)
@@ -84,7 +84,7 @@ function convertMP4WithSub() {
 }
 
 # Function to convert MP4
-# Sintax: convertMP4
+# Syntax: convertMP4
 function convertMP4() {
   videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
   | Select the video file" --file-selection)
@@ -137,7 +137,7 @@ function convertMP4() {
 }
 
 # Function to convert AVI with subs
-# Sintax: convertAVIWithSub
+# Syntax: convertAVIWithSub
 function convertAVIWithSub() {
   videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
   | Select the video file" --file-selection)
@@ -193,7 +193,7 @@ function convertAVIWithSub() {
 }
 
 # Function to convert AVI
-# Sintax: convertAVIW
+# Syntax: convertAVIW
 function convertAVI() {
   videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
   | Select the video file" --file-selection)
@@ -246,7 +246,7 @@ function convertAVI() {
 }
 
 # Function to convert VOB
-# Sintax: convertVOB
+# Syntax: convertVOB
 function convertVOB() {
   videoFile=$(zenity --title "ks-zui (ks-tools) ${VERSION} (${M_DATE}) \
   | Select the video file" --file-selection)

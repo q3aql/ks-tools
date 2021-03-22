@@ -2,12 +2,12 @@
 
 ######################################################################
 # ks-mp3-album (ks-tools) - Convert folder album to MP3 Audio Format #
-# Date: 10-03-2021                                                   #
+# Date: 22-03-2021                                                   #
 # Author: q3aql                                                      #
 # Contact: q3aql@protonmail.ch                                       #
 ######################################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"
@@ -40,7 +40,7 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Funcion to show the name of file/folder from full path
-# Sintax: extractFolderOrFile <full/path/file.txt>
+# Syntax: extractFolderOrFile <full/path/file.txt>
 function extractFolderOrFile() {
 	pathToExtract="${1}/"
 	findFolder=0
@@ -60,7 +60,7 @@ function extractFolderOrFile() {
 }
 
 # Function to show files with spaces.
-# Sintax: showFileWithSpace <file number>
+# Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
 	echo "${1}" > ${dirTemp}/name.tmp
 	sed -i 's/_/ /g' ${dirTemp}/name.tmp
@@ -79,12 +79,12 @@ function showFileWithSpace() {
 				DisplayName=$(echo ${DisplayName} | cut -c4-100)
 			fi
 		fi
-	fi		
+	fi
 	echo ${DisplayName}
 }
 
 # Function to remove extension from file
-# Sintax: removeExtension "<text>"
+# Syntax: removeExtension "<text>"
 function removeExtension() {
 	wordToConvert=${1}
 	ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
@@ -116,7 +116,7 @@ function removeExtension() {
 	echo ${wordToConvert}
 }
 
-# Sintax: ks-mp3-album </absolute/path/album/
+# Syntax: ks-mp3-album </absolute/path/album/
 if [ -z "${1}" ] ; then
 	echo ""
 	echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
@@ -129,7 +129,7 @@ if [ -z "${1}" ] ; then
 	echo " - Bitrate audio: ${b_acodec}"
 	echo " - Container: ${v_ext}"
 	echo ""
-	echo "+ Sintax: "
+	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mp3 </absolute/path/album>"
 	echo ""
@@ -140,14 +140,14 @@ fi
 
 # Check if folder exist
 if [ -d "${1}" ] ; then
-  echo null > /dev/null
+	echo null > /dev/null
 else
-  echo ""
-  echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  echo "+ The folder '${1}' does not exist!"
-  echo ""
-  exit
+	echo ""
+	echo "* ks-mp3-album (ks-tools) v${VERSION} (${M_DATE})"
+	echo ""
+	echo "+ The folder '${1}' does not exist!"
+	echo ""
+	exit
 fi
 
 # Scan videos/audio files format
@@ -161,14 +161,14 @@ echo -n "* Scanning ${1} " && sleep 4
 echo ""
 rm -rf ${tempFile} && touch ${tempFile}
 for format in ${formatFiles} ; do
-  find "${1}"/*.${format} &> ${tempFileTest}
-  if [ $? -ne 0 ] ; then
-    echo "null" > /dev/null
-  else
-    echo "+ Video file(s) in .${format} found!"
-    cd "${1}" && ls -1 *.${format} &>> ${tempFile}
-    fail=0
-  fi
+	find "${1}"/*.${format} &> ${tempFileTest}
+	if [ $? -ne 0 ] ; then
+		echo "null" > /dev/null
+	else
+		echo "+ Video file(s) in .${format} found!"
+		cd "${1}" && ls -1 *.${format} &>> ${tempFile}
+		fail=0
+	fi
 done
 
 # Set the global metadata album
@@ -199,34 +199,34 @@ fi
 convert_files=1
 num_files=$(cat ${tempFile} | wc -l)
 if [ ${num_files} -eq 0 ] ; then
-  echo ""
-  echo "+ No video/audio file(s) found in folder '${1}"
-  echo ""
-  exit
+	echo ""
+	echo "+ No video/audio file(s) found in folder '${1}"
+	echo ""
+	exit
 else
 	echo ""
 	echo "* List of files:"
 	echo ""
-  while [ ${convert_files} -le ${num_files} ] ; do
-    show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-    echo "  + ${show_file}"
-    convert_files=$(expr ${convert_files} + 1)
-  done
-  echo ""
-  echo "* The output folder will be '${1}/to-mp3'"
-  # Execute commands for conversion
-  echo ""
-  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-  if [ "${run_commands_ffmpeg}" == "n" ] ; then
-    exit
-  else
-    convert_files=1
-    cd "${1}" && mkdir -p to-mp3 && rm -rf to-mp3/*
-    while [ ${convert_files} -le ${num_files} ] ; do
-      show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
-      fname=$(echo "${show_file}" | cut -d "." -f 1)
-      name_title_default=$(removeExtension "${show_file}")
-      name_title_default=$(showFileWithSpace "${name_title_default}")
+	while [ ${convert_files} -le ${num_files} ] ; do
+		show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+		echo "  + ${show_file}"
+		convert_files=$(expr ${convert_files} + 1)
+	done
+	echo ""
+	echo "* The output folder will be '${1}/to-mp3'"
+	# Execute commands for conversion
+	echo ""
+	echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+	if [ "${run_commands_ffmpeg}" == "n" ] ; then
+		exit
+	else
+		convert_files=1
+		cd "${1}" && mkdir -p to-mp3 && rm -rf to-mp3/*
+		while [ ${convert_files} -le ${num_files} ] ; do
+			show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+			fname=$(echo "${show_file}" | cut -d "." -f 1)
+			name_title_default=$(removeExtension "${show_file}")
+			name_title_default=$(showFileWithSpace "${name_title_default}")
 			echo ""
 			echo "* METADATA for '${show_file}'"
 			echo ""
@@ -270,24 +270,24 @@ else
 				audio_track="${audio_track}"
 			fi
 			echo -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
-				if [ -z "${name_title}" ] ; then
-					name_title="${name_title_default}"
-				else
-					name_title="${name_title}"
-				fi
+			if [ -z "${name_title}" ] ; then
+				name_title="${name_title_default}"
+			else
+				name_title="${name_title}"
+			fi
 			echo -n "* (Default: ${track_init}) Type number of track: " ; read track_file
-				if [ -z "${track_file}" ] ; then
-					track_num="${track_init}"
-				else
-					track_num="${track_file}"
-				fi
+			if [ -z "${track_file}" ] ; then
+				track_num="${track_init}"
+			else
+				track_num="${track_file}"
+			fi
 			echo -n "* (Default: ${artist_init}) Type name of artist: " ; read artist_file
-				if [ -z "${artist_file}" ] ; then
-					artist_title="${artist_init}"
-				else
-					artist_title="${artist_file}"
-					artist_init="${artist_file}"
-				fi
+			if [ -z "${artist_file}" ] ; then
+				artist_title="${artist_init}"
+			else
+				artist_title="${artist_file}"
+				artist_init="${artist_file}"
+			fi
 			# Check audio 5.1 or 7.1
 			audio_5_7_1=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
 			audio_5_7_1_2=$(${p_ffmpeg} "${show_file}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
@@ -301,6 +301,6 @@ else
 			# Increment variables
 			convert_files=$(expr ${convert_files} + 1)
 			track_init=$(expr ${track_num} + 1)
-    done
-  fi
+		done
+	fi
 fi

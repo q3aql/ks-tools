@@ -2,12 +2,12 @@
 
 #####################################################################
 # ks-mix (ks-tools) - Extract video/audio and mix video/audio files #
-# Date: 10-03-2021                                                  #
+# Date: 22-03-2021                                                  #
 # Author: q3aql                                                     #
 # Contact: q3aql@protonmail.ch                                      #
 #####################################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # File(s) detection
 current_dir=$(pwd)
@@ -51,7 +51,7 @@ else
 	subs_found="NOT FOUND"
 fi
 
-# Function to show menu again when sintax is wrong
+# Function to show menu again when Syntax is wrong
 function show_menu() {
 	echo ""
 	echo "* ks-mix (ks-tools) v${VERSION} (${M_DATE})"
@@ -63,7 +63,7 @@ function show_menu() {
 	echo " + Audio file: ${audio_file_dir} (${audio_found})"
 	echo " + Subs file: ${subs_file_dir} (${subs_found})"
 	echo ""
-	echo "+ Sintax: "
+	echo "+ Syntax: "
 	echo ""
 	echo "  $ ks-mix -evid <video-file>  --> Extract video track"
 	echo "  $ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (only for H264)"
@@ -81,7 +81,7 @@ function show_menu() {
 	exit
 }
 
-# Show menu and sintax
+# Show menu and Syntax
 if [ -z "${1}" ] ; then
 	show_menu
 elif [ "${1}" == "-evid" ] ; then

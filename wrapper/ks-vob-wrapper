@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-vob-wrapper (ks-tools) - Wrapper for ks-vob              #
-# Date: 10-03-2021                                            #
+# Date: 22-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Conversion parameters
 ks_mp4_to_wrap="/usr/bin/ks-vob"
@@ -40,7 +40,7 @@ else
 fi
 
 # Show info tracks of input video video file.
-# Sintax: showInfo <video_file>
+# Syntax: showInfo <video_file>
 function showInfo() {
   echo ""
   echo "* Information of ${1}:"
@@ -55,7 +55,7 @@ function showInfo() {
 }
 
 # Show the video track default
-# Sintax: showVideoDefault <video_file>
+# Syntax: showVideoDefault <video_file>
 function showVideoDefault() {
   # Check de video track by default
   video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
@@ -73,7 +73,7 @@ function showVideoDefault() {
 }
 
 # Show the audio track default
-# Sintax: showAudioDefault <video_file>
+# Syntax: showAudioDefault <video_file>
 function showAudioDefault() {
   # Check the audio track by default
   audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
@@ -101,7 +101,7 @@ function showAudioDefault() {
 }
 
 # Show default resolution
-# Sintax: showResolutionDefault
+# Syntax: showResolutionDefault
 function showResolutionDefault() {
   echo "${rel_size}"
 }
@@ -113,7 +113,7 @@ function showHelp() {
   echo ""
   echo "- Wrapper for ks-vob to create graphical interfaces"
   echo ""
-  echo "+ Sintax:"
+  echo "+ Syntax:"
   echo ""
   echo " * TRACKS/CONFIG DETECT:"
   echo ""

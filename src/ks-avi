@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-avi (ks-tools) - Convert video to AVI format             #
-# Date: 10-03-2021                                            #
+# Date: 22-03-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="6.7"
-M_DATE="100321"
+VERSION="6.8"
+M_DATE="220321"
 
 # Global parameters
 dirTemp="/tmp"
@@ -40,7 +40,7 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Funcion to show the name of file/folder from full path
-# Sintax: extractFolderOrFile <full/path/file.txt>
+# Syntax: extractFolderOrFile <full/path/file.txt>
 function extractFolderOrFile() {
   pathToExtract="${1}/"
   findFolder=0
@@ -60,7 +60,7 @@ function extractFolderOrFile() {
 }
 
 # Function to remove extension from file
-# Sintax: removeExtension "<text>"
+# Syntax: removeExtension "<text>"
 function removeExtension() {
   wordToConvert=${1}
   ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
@@ -84,7 +84,7 @@ function removeExtension() {
 }
 
 # Function to show files with spaces.
-# Sintax: showFileWithSpace <file number>
+# Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
   sed -i 's/_/ /g' ${dirTemp}/name.tmp
@@ -93,7 +93,7 @@ function showFileWithSpace() {
   echo ${DisplayName}
 }
 
-# Sintax: ks-avi </absolute/path/video.mkv> </path/prefix_name>
+# Syntax: ks-avi </absolute/path/video.mkv> </path/prefix_name>
 if [ -z "${1}" ] ; then
   echo ""
   echo "* ks-avi (ks-tools) v${VERSION} (${M_DATE})"
@@ -112,7 +112,7 @@ if [ -z "${1}" ] ; then
   echo " - Default Subtitle: ${default_lang_subt} (forced)"
   echo " - Container: ${v_ext}"
   echo ""
-  echo "+ Sintax: "
+  echo "+ Syntax: "
   echo ""
   echo "  $ ks-avi </absolute/path/video.mkv> </path/prefix_name>"
   echo ""
@@ -141,9 +141,9 @@ codec_hevc=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" |
 yuv420p10le=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
 codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
 if [ -z "${codec_h265_hevc}" ] ; then
-	p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+  p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
 else
-	p_conversion="-s ${rel_size} -c:v ${vcodec} -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+  p_conversion="-s ${rel_size} -c:v ${vcodec} -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
 fi
 
 # Init conversion file
@@ -166,7 +166,7 @@ if [ -z "${2}" ] ; then
   echo " - Default Subtitle: ${default_lang_subt} (forced)"
   echo " - Container: ${v_ext}"
   echo ""
-  echo "+ Sintax: "
+  echo "+ Syntax: "
   echo ""
   echo "  $ ks-avi </absolute/path/video.mkv> </path/prefix_name>"
   echo ""
@@ -282,9 +282,9 @@ else
   else
     rel_size="${resolution}"
     if [ -z "${codec_h265_hevc}" ] ; then
-			p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+      p_conversion="-s ${rel_size} -c:v ${vcodec} -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
     else
-			p_conversion="-s ${rel_size} -c:v ${vcodec} -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+      p_conversion="-s ${rel_size} -c:v ${vcodec} -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
     fi
   fi
   echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
