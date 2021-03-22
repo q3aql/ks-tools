@@ -35,6 +35,8 @@ install:
 	chmod +x $(PREFIX)/bin/ks-mp3-album
 	cp -rf src/ks-mix $(PREFIX)/bin/ks-mix
 	chmod +x $(PREFIX)/bin/ks-mix
+	cp -rf src/ks-crop $(PREFIX)/bin/ks-crop
+	chmod +x $(PREFIX)/bin/ks-crop
 	cp -rf wrapper/ks-mp4-wrapper $(PREFIX)/bin/ks-mp4-wrapper
 	chmod +x $(PREFIX)/bin/ks-mp4-wrapper
 	cp -rf wrapper/ks-mp4k-wrapper $(PREFIX)/bin/ks-mp4k-wrapper
@@ -74,6 +76,7 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mp3
 	rm -rf $(PREFIX)/bin/ks-mp3-album
 	rm -rf $(PREFIX)/bin/ks-mix
+	rm -rf $(PREFIX)/bin/ks-crop
 	rm -rf $(PREFIX)/bin/ks-mp4-wrapper
 	rm -rf $(PREFIX)/bin/ks-mp4k-wrapper
 	rm -rf $(PREFIX)/bin/ks-mp4s-wrapper
