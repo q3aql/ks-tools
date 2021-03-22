@@ -460,5 +460,5 @@ elif [ "${1}" == "-5:4-aspect" ] ; then
 	resolution="${to5_4}"
 	crop_video
 else
-	show menu
+	show_menu
 fi
