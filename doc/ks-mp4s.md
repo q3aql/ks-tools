@@ -1,7 +1,7 @@
 ks-mp4s - Convert video file(s) to compact and efficient MP4 (Series).
 =====================================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-mp4s </absolute/path/video.mkv> </path/prefix_name>`
 

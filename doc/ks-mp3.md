@@ -1,7 +1,7 @@
 ks-mp3 - Convert video/audio file(s) to MP3 (Audio) Format.
 ===========================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>`
 

@@ -1,7 +1,7 @@
 ks-mp3-album - Convert folder album to MP3 Audio Format.
 ========================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-mp3-album </absolute/path/album>`
 

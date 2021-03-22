@@ -1,7 +1,7 @@
 ks-upa - Upload audio file(s) to server with rsync+ssh.
 =======================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-upa -i  - Start upload`
   * `$ ks-upa -r  - Remove configuration`

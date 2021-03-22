@@ -1,7 +1,7 @@
 ks-oga - Convert video/audio file(s) to OGA (OGG Audio) Format.
 ===============================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-oga </absolute/path/song.mp3> </path/prefix_name>`
 

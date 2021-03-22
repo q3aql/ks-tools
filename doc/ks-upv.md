@@ -1,7 +1,7 @@
 ks-upv - Upload videos file(s) to server with rynsc+ssh.
 ========================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-upv -i  - Start upload`
   * `$ ks-upv -r  - Remove configuration`

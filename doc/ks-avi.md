@@ -1,7 +1,7 @@
 ks-avi - Convert video file(s) to compact and efficient AVI.
 ============================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-avi </absolute/path/video.mkv> </path/prefix_name>`
 

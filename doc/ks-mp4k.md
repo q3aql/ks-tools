@@ -1,7 +1,7 @@
 ks-mp4k - Convert video file(s) to compact and efficient MP4 (4K).
 =================================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-mp4k </absolute/path/video.mkv> </path/prefix_name>`
 

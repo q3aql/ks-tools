@@ -1,7 +1,7 @@
 ks-vob - Convert video file(s) to compact and efficient VOB.
 ============================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-vob </absolute/path/video.mkv> </path/prefix_name>`
 

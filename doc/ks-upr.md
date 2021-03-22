@@ -1,7 +1,7 @@
 ks-upr - Upload recursively file(s) to server with rsync+ssh.
 =============================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-upr -i  - Start upload`
   * `$ ks-upr -r  - Remove configuration`

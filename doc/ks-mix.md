@@ -1,7 +1,7 @@
 ks-mix - Extract video/audio and mix video/audio files.
 =======================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-mix -evid <video-file>  --> Extract video track`
   * `$ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (only for H264)`

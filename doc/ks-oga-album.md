@@ -1,7 +1,7 @@
 ks-oga-album - Convert folder album to OGA (OGG Audio) Format.
 ==============================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-oga-album </absolute/path/album>`
 

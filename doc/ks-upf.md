@@ -1,7 +1,7 @@
 ks-upf - Upload common file(s) to server with rsync+ssh.
 ========================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-upf -i  - Start upload`
   * `$ ks-upf -r  - Remove configuration`

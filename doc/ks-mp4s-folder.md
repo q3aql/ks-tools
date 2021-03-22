@@ -1,7 +1,7 @@
 ks-mp4s-folder - Convert videos from folder to MP4 format (Series).
 ===================================================================
 
-### Sintax:
+### Syntax:
 
   * `$ ks-mp4s-folder </path/folder> [subs]`
 
