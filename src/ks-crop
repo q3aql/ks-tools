@@ -132,6 +132,87 @@ else
 	p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
 fi
 
+# Show menu with bad syntax
+if [ "${1}" == "-16:9-crop" ] ; then
+	echo > /dev/null
+elif [ "${1}" == "-4:3-crop" ] ; then
+	echo > /dev/null
+elif [ "${1}" == "-5:4-crop" ] ; then
+	echo > /dev/null
+elif [ "${1}" == "-imax-crop" ] ; then
+	echo > /dev/null
+elif [ "${1}" == "-16:9-aspect" ] ; then
+	echo > /dev/null
+elif [ "${1}" == "-4:3-aspect" ] ; then
+	echo > /dev/null
+elif [ "${1}" == "-5:4-aspect" ] ; then
+	echo > /dev/null
+else
+	show_menu
+fi
+
+# Detect resolution of video file
+detect_2=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 2 | cut -d "[" -f 1 | tr -s " " | grep x)
+detect_3=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 3 | cut -d "[" -f 1 | tr -s " " | grep x)
+detect_4=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 4 | cut -d "[" -f 1 | tr -s " " | grep x)
+detect_5=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 5 | cut -d "[" -f 1 | tr -s " " | grep x)
+resolution_detected="${detect_2}${detect_3}${detect_4}${detect_5}"
+resolution_first=$(echo ${resolution_detected} | cut -d "x" -f 1)
+
+# Set size crop to 16:9 (ih)
+ih_size="240"
+if [ ${resolution_first} == "1920" ] ; then
+	ih_size="360"
+fi
+if [ ${resolution_first} == "1600" ] ; then
+	ih_size="310"
+fi
+if [ ${resolution_first} == "1280" ] ; then
+	ih_size="240"
+fi
+if [ ${resolution_first} == "720" ] ; then
+	ih_size="140"
+fi
+if [ ${resolution_detected} == "1920x1080" ] ; then
+	ih_size="360"
+fi
+if [ ${resolution_detected} == "1920x1040" ] ; then
+	ih_size="260"
+fi
+if [ ${resolution_detected} == "1920x1440" ] ; then
+	ih_size="360"
+fi
+if [ ${resolution_detected} == "1920x960" ] ; then
+	ih_size="240"
+fi
+if [ ${resolution_detected} == "1600x1200" ] ; then
+	ih_size="300"
+fi
+if [ ${resolution_detected} == "1600x1280" ] ; then
+	ih_size="320"
+fi
+if [ ${resolution_detected} == "1280x960" ] ; then
+	ih_size="240"
+fi
+if [ ${resolution_detected} == "1280x720" ] ; then
+	ih_size="180"
+fi
+if [ ${resolution_detected} == "1280x1024" ] ; then
+	ih_size="255"
+fi
+if [ ${resolution_detected} == "1280x534" ] ; then
+	ih_size="132"
+fi
+if [ ${resolution_detected} == "1280x536" ] ; then
+	ih_size="133"
+fi
+if [ ${resolution_detected} == "720x480" ] ; then
+	ih_size="120"
+fi
+if [ ${resolution_detected} == "720x576" ] ; then
+	ih_size="142"
+fi
+
 # Function to crop videos
 function crop_video() {
 	echo ""
@@ -222,9 +303,9 @@ function crop_video() {
 		echo ""
 		echo "  # Crop '${inputFile}' from 4:3/IMAX to 16:9 (1.77:1)"
 		if [ "${patch_thread}" == "y" ] ; then
-			echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-240\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
+			echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
 		else
-			echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-240\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
+			echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
 		fi
 		# Execute commands for conversion
 		echo ""
@@ -233,9 +314,9 @@ function crop_video() {
 			exit
 		else
 			if [ "${patch_thread}" == "y" ] ; then
-				${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-240" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
+				${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
 			else
-				${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-240" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
+				${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
 			fi
 		fi
 	elif [ "${modeCrop}" == "4:3-crop" ] ; then
