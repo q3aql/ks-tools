@@ -10,7 +10,7 @@ VERSION="6.9"
 M_DATE="230321"
 
 # Conversion parameters
-ks_mp4_to_wrap="/usr/bin/ks-mp4s"
+ks_mp4s_to_wrap="/usr/bin/ks-mp4s"
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
 rel_size="720x404"
@@ -33,7 +33,7 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Check if ks-mp4s is installed
-if [ -f ${ks_mp4_to_wrap} ] ; then
+if [ -f ${ks_mp4s_to_wrap} ] ; then
   echo "ks-mp4s detected" > /dev/null
 else
   echo ""

@@ -10,7 +10,7 @@ VERSION="6.9"
 M_DATE="230321"
 
 # Conversion parameters
-ks_mp4_to_wrap="/usr/bin/ks-avi"
+ks_avi_to_wrap="/usr/bin/ks-avi"
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
 rel_size="720x480"
@@ -33,7 +33,7 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Check if ks-avi is installed
-if [ -f ${ks_mp4_to_wrap} ] ; then
+if [ -f ${ks_avi_to_wrap} ] ; then
   echo "ks-avi detected" > /dev/null
 else
   echo ""
