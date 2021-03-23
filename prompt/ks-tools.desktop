@@ -2,10 +2,10 @@
 Name=ks-tools
 GenericName=ks-tools
 X-GNOME-FullName=ks-tools
-Comment=Upload video/audio/common file(s) & convert videos to MP4/AVI/VOB.
+Comment=Tools for upload, convert and crop/mix video/audio files.
 Exec=/usr/share/ks-tools/ks-tools
 Icon=/usr/share/ks-tools/ks-tools.svg
-Terminal=false
+Terminal=true
 Type=Application
 StartupNotify=true
 Categories=Network;FileTransfer;Utility;
