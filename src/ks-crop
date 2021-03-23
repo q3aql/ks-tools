@@ -116,6 +116,17 @@ function show_menu() {
 	exit
 }
 
+# Function to show error reading file
+# Syntax: errorReadingFile <file>
+function errorReadingFile() {
+	echo ""
+	echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
+	echo ""
+	echo "* The file '${1}' does not exist!"
+	echo ""
+	exit
+}
+
 # Conversion parameters
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
@@ -148,6 +159,11 @@ elif [ "${1}" == "-5:4-aspect" ] ; then
 	echo > /dev/null
 else
 	show_menu
+fi
+if [ -f "${2}" ] ; then
+	echo "detected" > /dev/null
+else
+	errorReadingFile "${2}"
 fi
 
 # Detect resolution of video file
@@ -664,51 +680,13 @@ function crop_video() {
 
 # Syntax: ks-crop <option> </absolute/path/video.mkv>
 if [ -z "${1}" ] ; then
-	echo ""
-	echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "- Crop or change aspect ratio of a video"
-	echo ""
-	echo "+ Config:"
-	echo ""
-	echo " - Resolutions: "
-	echo "    + ${to4_3} (4:3)"
-	echo "    + ${to16_9} (16:9)"
-	echo "    + ${to5_4} (5:4)"
-	echo "    + ${toImax} (IMAX)"
-	echo " - Video codec: ${vcodec}"
-	echo " - Bitrate video: ${b_vcodec}"
-	echo " - Preset: ${v_preset}"
-	echo " - Audio codec: ${acodec}"
-	echo " - Default Audio: ${default_lang_audio}"
-	echo " - Container: ${v_ext}"
-	echo ""
-	echo "+ Syntax: "
-	echo ""
-	echo "  $ ks-crop -16:9-crop <video-file>   --> Crop from 4:3/IMAX to 16:9 (1.77:1)"
-	echo "  $ ks-crop -4:3-crop <video-file>    --> Crop from 16:9 to 4:3 (1.33:1)"
-	echo "  $ ks-crop -5:4-crop <video-file>    --> Crop from 16:9 to 5:4 (1.25:1)"
-	echo "  $ ks-crop -imax-crop <video-file>   --> Crop from 16:9 to IMAX (1.43:1)"
-	echo ""
-	echo "  $ ks-crop -16:9-aspect <video-file> --> Change aspect to 16:9 (stretched)"
-	echo "  $ ks-crop -4:3-aspect <video-file>  --> Change aspect to 4:3 (stretched)"
-	echo "  $ ks-crop -5:4-aspect <video-file>  --> Change aspect to 5:4 (stretched)"
-	echo ""
-	echo " + Examples: "
-	echo "    ks-mix -16:9-crop /data/movies/Example.mkv"
-	echo "    ks-mix -4:3-aspect /data/movies/Video.avi"
-	echo ""
+	show_menu
 	exit
 fi
 if [ -f "${2}" ] ; then
 	echo "detected" > /dev/null
 else
-	echo ""
-	echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "* The file '${2}' does not exist!"
-	echo ""
-	exit
+	errorReadingFile "${2}"
 fi
 
 # Define variables for crop_video function
