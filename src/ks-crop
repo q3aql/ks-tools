@@ -178,7 +178,7 @@ if [ ${resolution_first} == "2048" ] ; then
 	ih_size="380"
 fi
 if [ ${resolution_first} == "1920" ] ; then
-	ih_size="360"
+	ih_size="270"
 fi
 if [ ${resolution_first} == "1680" ] ; then
 	ih_size="250"
@@ -240,7 +240,7 @@ if [ ${resolution_second} == "1200" ] ; then
 	ih_size="300"
 fi
 if [ ${resolution_second} == "1080" ] ; then
-	ih_size="360"
+	ih_size="270"
 fi
 if [ ${resolution_second} == "1050" ] ; then
 	ih_size="250"
@@ -323,7 +323,7 @@ if [ ${resolution_detected} == "1920x1540" ] ; then
 	ih_size="380"
 fi
 if [ ${resolution_detected} == "1920x1080" ] ; then
-	ih_size="360"
+	ih_size="270"
 fi
 if [ ${resolution_detected} == "1920x1040" ] ; then
 	ih_size="260"
