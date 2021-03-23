@@ -2,12 +2,12 @@
 
 #####################################################################
 # ks-mix (ks-tools) - Extract video/audio and mix video/audio files #
-# Date: 22-03-2021                                                  #
+# Date: 23-03-2021                                                  #
 # Author: q3aql                                                     #
 # Contact: q3aql@protonmail.ch                                      #
 #####################################################################
-VERSION="6.8"
-M_DATE="220321"
+VERSION="6.9"
+M_DATE="230321"
 
 # File(s) detection
 current_dir="$(pwd)"
