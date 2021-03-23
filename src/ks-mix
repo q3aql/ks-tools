@@ -10,7 +10,7 @@ VERSION="6.8"
 M_DATE="220321"
 
 # File(s) detection
-current_dir=$(pwd)
+current_dir="$(pwd)"
 video_file_dir="${current_dir}/video.mkv"
 audio_file_dir="${current_dir}/audio.mka"
 subs_file_dir="${current_dir}/subs.srt"
