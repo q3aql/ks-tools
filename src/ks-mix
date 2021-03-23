@@ -67,7 +67,7 @@ function show_menu() {
 	echo ""
 	echo "  $ ks-mix -evid <video-file>  --> Extract video track"
 	echo "  $ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (H264/5 & MPEG4)"
-	echo "  $ ks-mix -evpf <video-file>  --> Extract video track & set fps (only for H264)"
+	echo "  $ ks-mix -evpf <video-file>  --> Extract video track & set fps (H264/5 & MPEG4)"
 	echo "  $ ks-mix -eaud <video-file>  --> Extract audio track"
 	echo "  $ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)"
 	echo "  $ ks-mix -chec <video-file>  --> Analyze tracks of video file"
@@ -134,7 +134,7 @@ elif [ "${1}" == "-ev25" ] ; then
 	if [ -z "${2}" ] ; then
 		show_menu
 	elif [ -f "${2}" ] ; then
-	  echo ""
+		echo ""
 		echo "+ Video Tracks:"
 		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
 		echo ""
