@@ -4,8 +4,8 @@ ks-mix - Extract video/audio and mix video/audio files.
 ### Syntax:
 
   * `$ ks-mix -evid <video-file>  --> Extract video track`
-  * `$ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (only for H264)`
-  * `$ ks-mix -evpf <video-file>  --> Extract video track & set fps (only for H264)`
+  * `$ ks-mix -ev25 <video-file>  --> Extract video track to 25 fps (H264/5 & MPEG4)`
+  * `$ ks-mix -evpf <video-file>  --> Extract video track & set fps (H264/5 & MPEG4)`
   * `$ ks-mix -eaud <video-file>  --> Extract audio track`
   * `$ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)`
   * `$ ks-mix -chec <video-file>  --> Analyze tracks of video file`
