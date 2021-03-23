@@ -96,7 +96,6 @@ function show_menu() {
 	echo " - Preset: ${v_preset}"
 	echo " - Audio codec: ${acodec}"
 	echo " - Default Audio: ${default_lang_audio}"
-	echo " - Default Subtitle: ${default_lang_subt} (forced)"
 	echo " - Container: ${v_ext}"
 	echo ""
 	echo "+ Syntax: "
@@ -158,20 +157,170 @@ detect_4=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -
 detect_5=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 5 | cut -d "[" -f 1 | tr -s " " | grep x)
 resolution_detected="${detect_2}${detect_3}${detect_4}${detect_5}"
 resolution_first=$(echo ${resolution_detected} | cut -d "x" -f 1)
+resolution_second=$(echo ${resolution_detected} | cut -d "x" -f 2)
 
 # Set size crop to 16:9 (ih)
 ih_size="240"
+# Detect by width size
+if [ ${resolution_first} == "6400" ] ; then
+	ih_size="1100"
+fi
+if [ ${resolution_first} == "3840" ] ; then
+	ih_size="540"
+fi
+if [ ${resolution_first} == "3200" ] ; then
+	ih_size="540"
+fi
+if [ ${resolution_first} == "2560" ] ; then
+	ih_size="380"
+fi
+if [ ${resolution_first} == "2048" ] ; then
+	ih_size="380"
+fi
 if [ ${resolution_first} == "1920" ] ; then
 	ih_size="360"
+fi
+if [ ${resolution_first} == "1680" ] ; then
+	ih_size="250"
 fi
 if [ ${resolution_first} == "1600" ] ; then
 	ih_size="310"
 fi
+if [ ${resolution_first} == "1366" ] ; then
+	ih_size="185"
+fi
 if [ ${resolution_first} == "1280" ] ; then
 	ih_size="240"
 fi
+if [ ${resolution_first} == "1024" ] ; then
+	ih_size="180"
+fi
+if [ ${resolution_first} == "800" ] ; then
+	ih_size="150"
+fi
 if [ ${resolution_first} == "720" ] ; then
 	ih_size="140"
+fi
+if [ ${resolution_first} == "640" ] ; then
+	ih_size="120"
+fi
+if [ ${resolution_first} == "426" ] ; then
+	ih_size="60"
+fi
+
+# Detect by height size
+if [ ${resolution_second} == "4800" ] ; then
+	ih_size="1190"
+fi
+if [ ${resolution_second} == "2400" ] ; then
+	ih_size="595"
+fi
+if [ ${resolution_second} == "2160" ] ; then
+	ih_size="540"
+fi
+if [ ${resolution_second} == "2048" ] ; then
+	ih_size="510"
+fi
+if [ ${resolution_second} == "1600" ] ; then
+	ih_size="400"
+fi
+if [ ${resolution_second} == "1540" ] ; then
+	ih_size="380"
+fi
+if [ ${resolution_second} == "1536" ] ; then
+	ih_size="383"
+fi
+if [ ${resolution_second} == "1440" ] ; then
+	ih_size="360"
+fi
+if [ ${resolution_second} == "1280" ] ; then
+	ih_size="320"
+fi
+if [ ${resolution_second} == "1200" ] ; then
+	ih_size="300"
+fi
+if [ ${resolution_second} == "1080" ] ; then
+	ih_size="360"
+fi
+if [ ${resolution_second} == "1050" ] ; then
+	ih_size="250"
+fi
+if [ ${resolution_second} == "1040" ] ; then
+	ih_size="260"
+fi
+if [ ${resolution_second} == "1024" ] ; then
+	ih_size="255"
+fi
+if [ ${resolution_second} == "960" ] ; then
+	ih_size="240"
+fi
+if [ ${resolution_second} == "900" ] ; then
+	ih_size="222"
+fi
+if [ ${resolution_second} == "864" ] ; then
+	ih_size="215"
+fi
+if [ ${resolution_second} == "800" ] ; then
+	ih_size="200"
+fi
+if [ ${resolution_second} == "768" ] ; then
+	ih_size="190"
+fi
+if [ ${resolution_second} == "760" ] ; then
+	ih_size="187"
+fi
+if [ ${resolution_second} == "720" ] ; then
+	ih_size="180"
+fi
+if [ ${resolution_second} == "600" ] ; then
+	ih_size="150"
+fi
+if [ ${resolution_second} == "576" ] ; then
+	ih_size="142"
+fi
+if [ ${resolution_second} == "534" ] ; then
+	ih_size="132"
+fi
+if [ ${resolution_second} == "536" ] ; then
+	ih_size="133"
+fi
+if [ ${resolution_second} == "480" ] ; then
+	ih_size="120"
+fi
+if [ ${resolution_second} == "384" ] ; then
+	ih_size="95"
+fi
+if [ ${resolution_second} == "360" ] ; then
+	ih_size="90"
+fi
+if [ ${resolution_second} == "240" ] ; then
+	ih_size="60"
+fi
+
+# Detect by specific resolution
+if [ ${resolution_detected} == "6400x4800" ] ; then
+	ih_size="1190"
+fi
+if [ ${resolution_detected} == "3840x2160" ] ; then
+	ih_size="540"
+fi
+if [ ${resolution_detected} == "3200x2400" ] ; then
+	ih_size="595"
+fi
+if [ ${resolution_detected} == "2560x2048" ] ; then
+	ih_size="510"
+fi
+if [ ${resolution_detected} == "2560x1440" ] ; then
+	ih_size="360"
+fi
+if [ ${resolution_detected} == "2560x1600" ] ; then
+	ih_size="400"
+fi
+if [ ${resolution_detected} == "2048x1536" ] ; then
+	ih_size="383"
+fi
+if [ ${resolution_detected} == "1920x1540" ] ; then
+	ih_size="380"
 fi
 if [ ${resolution_detected} == "1920x1080" ] ; then
 	ih_size="360"
@@ -185,14 +334,32 @@ fi
 if [ ${resolution_detected} == "1920x960" ] ; then
 	ih_size="240"
 fi
-if [ ${resolution_detected} == "1600x1200" ] ; then
-	ih_size="300"
+if [ ${resolution_detected} == "1680x1050" ] ; then
+	ih_size="250"
 fi
 if [ ${resolution_detected} == "1600x1280" ] ; then
 	ih_size="320"
 fi
+if [ ${resolution_detected} == "1600x1200" ] ; then
+	ih_size="300"
+fi
+if [ ${resolution_detected} == "1600x900" ] ; then
+	ih_size="222"
+fi
+if [ ${resolution_detected} == "1440x900" ] ; then
+	ih_size="222"
+fi
+if [ ${resolution_detected} == "1366x768" ] ; then
+	ih_size="190"
+fi
+if [ ${resolution_detected} == "1366x760" ] ; then
+	ih_size="187"
+fi
 if [ ${resolution_detected} == "1280x960" ] ; then
 	ih_size="240"
+fi
+if [ ${resolution_detected} == "1280x800" ] ; then
+	ih_size="200"
 fi
 if [ ${resolution_detected} == "1280x720" ] ; then
 	ih_size="180"
@@ -206,11 +373,38 @@ fi
 if [ ${resolution_detected} == "1280x536" ] ; then
 	ih_size="133"
 fi
+if [ ${resolution_detected} == "1152x864" ] ; then
+	ih_size="215"
+fi
+if [ ${resolution_detected} == "1024x768" ] ; then
+	ih_size="190"
+fi
+if [ ${resolution_detected} == "1024x760" ] ; then
+	ih_size="187"
+fi
+if [ ${resolution_detected} == "854x480" ] ; then
+	ih_size="120"
+fi
+if [ ${resolution_detected} == "800x600" ] ; then
+	ih_size="150"
+fi
 if [ ${resolution_detected} == "720x480" ] ; then
 	ih_size="120"
 fi
 if [ ${resolution_detected} == "720x576" ] ; then
 	ih_size="142"
+fi
+if [ ${resolution_detected} == "640x480" ] ; then
+	ih_size="120"
+fi
+if [ ${resolution_detected} == "640x360" ] ; then
+	ih_size="90"
+fi
+if [ ${resolution_detected} == "512x384" ] ; then
+	ih_size="95"
+fi
+if [ ${resolution_detected} == "426x240" ] ; then
+	ih_size="60"
 fi
 
 # Function to crop videos
