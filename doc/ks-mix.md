@@ -8,6 +8,9 @@ ks-mix - Extract video/audio and mix video/audio files.
   * `$ ks-mix -evpf <video-file>  --> Extract video track & set fps (H264/5 & MPEG4)`
   * `$ ks-mix -eaud <video-file>  --> Extract audio track`
   * `$ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)`
+  * `$ ks-mix -evti <video-file>  --> Extract video from a specific hour/minute/second`
+  * `$ ks-mix -eati <video-file>  --> Extract video from a specific hour/minute/second`
+  * `$ ks-mix -evat <video-file>  --> Extract video + audio from specific time`
   * `$ ks-mix -chec <video-file>  --> Analyze tracks of video file`
   * `$ ks-mix -mixf               --> Mix video and audio file`
   * `$ ks-mix -mixs               --> Mix video, audio and subtitle file`
@@ -35,6 +38,22 @@ ks-mix - Extract video/audio and mix video/audio files.
     * `$ ks-mix -evpf /data/movies/Example.mkv`
     
 _Note: Extracted video will be named `video.mkv` and extracted audio will be named `audio.mka`_
+
+### Examples (Extract video/audio by cutting time):
+
+  * Extract video from a specific hour/minute/second:
+  
+    * `$ ks-mix -evti /data/movies/Example.mkv`
+    
+  * Extract audio from a specific hour/minute/second:
+    
+    * `$ ks-mix -eati /data/movies/Example.avi`
+
+  * Extract video + audio from a hour/minute/second:
+    
+    * `$ ks-mix -evat /data/movies/Example.mkv`
+    
+_Note: After executing the command, an assistant will ask us from what hour, minute and second we want to cut the video. We can cut it to the end or the specified time._
     
 ### Examples (Mix video/audio):
 
