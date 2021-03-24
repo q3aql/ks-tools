@@ -36,7 +36,7 @@ ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
 if [ ${error_ffmpeg} -ne 0 ] ; then
 	echo ""
-	echo "* ks-mix (ks-tools) v${VERSION} (${M_DATE})"
+	echo "* ks-crop (ks-tools) v${VERSION} (${M_DATE})"
 	echo ""
 	echo "+ The 'ffmpeg' tool is not installed!"
 	echo ""
@@ -110,8 +110,8 @@ function show_menu() {
 	echo "  $ ks-crop -5:4-aspect <video-file>  --> Change aspect to 5:4 (stretched)"
 	echo ""
 	echo " + Examples: "
-	echo "    ks-mix -16:9-crop /data/movies/Example.mkv"
-	echo "    ks-mix -4:3-aspect /data/movies/Video.avi"
+	echo "    ks-crop -16:9-crop /data/movies/Example.mkv"
+	echo "    ks-crop -4:3-aspect /data/movies/Video.avi"
 	echo ""
 	exit
 }

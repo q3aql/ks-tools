@@ -51,6 +51,16 @@ else
 	subs_found="NOT FOUND"
 fi
 
+# Function to show zero before numbers
+function zero_number() {
+	if [ ${1} -le 9 ] ; then
+		numberwithZero=$(echo "0${1}")
+	else
+		numberwithZero=$(echo "${1}")
+	fi
+	echo "${numberwithZero}" | cut -c 1-2
+}
+
 # Function to show menu again when Syntax is wrong
 function show_menu() {
 	echo ""
@@ -70,6 +80,9 @@ function show_menu() {
 	echo "  $ ks-mix -evpf <video-file>  --> Extract video track & set fps (H264/5 & MPEG4)"
 	echo "  $ ks-mix -eaud <video-file>  --> Extract audio track"
 	echo "  $ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)"
+	echo "  $ ks-mix -evti <video-file>  --> Extract video from a specific hour/minute /second"
+	echo "  $ ks-mix -eati <video-file>  --> Extract video from a specific hour/minute /second"
+	echo "  $ ks-mix -evat <video-file>  --> Extract video + audio from specific time"
 	echo "  $ ks-mix -chec <video-file>  --> Analyze tracks of video file"
 	echo "  $ ks-mix -mixf               --> Mix video and audio file"
 	echo "  $ ks-mix -mixs               --> Mix video, audio and subtitle file"
@@ -253,7 +266,7 @@ elif [ "${1}" == "-evpf" ] ; then
 			video_track="${video_track}"
 		fi
 		frames_default="25"
-		echo -n "* [Default: ${frames_default}] Set fps to change: " ; read frames_change
+		echo -n "* (Default: ${frames_default}) Set fps to change: " ; read frames_change
 		if [ -z "${frames_change}" ] ; then
 			frames_default=${frames_default}
 		else
@@ -442,6 +455,287 @@ elif [ "${1}" == "-esub" ] ; then
 		echo ""
 		exit
 	fi
+
+elif [ "${1}" == "-evti" ] ; then
+	# Run commands for -evid parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		hourCut=0
+		minuteCut=1
+		secondCut=0
+		echo ""
+		echo "+ Video Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+		echo ""
+		echo "+ Video time:"
+		ffmpeg -i "${2}" 2>&1 | grep "Duration" | cut -d "," -f 1 | tr -s " "
+		echo ""
+		# Check de video track by default
+		video_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${video_default}" ] ; then
+			video_default="0:0"
+		else
+			video_default_patch=$(echo ${video_default} | cut -c4)
+			if [ "${video_default_patch}" == ":" ] ; then
+				video_default=$(echo ${video_default} | cut -c1-3)
+			else
+				video_default="${video_default}"
+			fi
+		fi
+		# Ask for video
+		echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+		if [ -z "${video_track}" ] ; then
+			video_track="${video_default}"
+		else
+			video_track="${video_track}"
+		fi
+		# Ask for hour to cut
+		echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
+		if [ -z "${hour_cut}" ] ; then
+			hourZero=$(zero_number "${hourCut}")
+			hourCut="${hourZero}"
+		else
+			hourZero=$(zero_number "${hour_cut}")
+			hourCut="${hourZero}"
+		fi
+		# Ask for minute to cut
+		echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
+		if [ -z "${minute_cut}" ] ; then
+			minuteZero=$(zero_number "${minuteCut}")
+			minuteCut="${minuteZero}"
+		else
+			minuteZero=$(zero_number "${minute_cut}")
+			minuteCut="${minuteZero}"
+		fi
+		# Ask for second to cut
+		echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
+		if [ -z "${second_cut}" ] ; then
+			secondZero=$(zero_number "${secondCut}")
+			secondCut="${secondZero}"
+		else
+			secondZero=$(zero_number "${second_cut}")
+			secondCut="${secondZero}"
+		fi
+		echo -n "* (Default: n) Extract video from ${hourCut}:${minuteCut}:${secondCut} to end? (y/n): " ; read accept_extraction
+		if [ "${accept_extraction}" == "y" ] ; then
+			echo ""
+			echo -n "* Starting extract video track (${2}) "
+			sleep 3
+			ffmpeg -y -i "${2}" -map ${video_track} -c:v copy -ss ${hourCut}:${minuteCut}:${secondCut} "${current_dir}/seeing.mp4"
+			ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+			echo ""
+			echo -n "* Extracted video into ${video_file_dir}"
+			sleep 2
+			rm -rf "${current_dir}/seeing.mp4"
+			echo "" && echo ""
+			exit
+		else
+			hourCutAfter=0
+			minuteCutAfter=10
+			secondCutAfter=0
+			# Ask for hour to cut
+			echo ""
+			echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
+			if [ -z "${hour_cutAfter}" ] ; then
+				hourZeroAfter=$(zero_number "${hourCutAfter}")
+				hourCutAfter="${hourZeroAfter}"
+			else
+				hourZeroAfter=$(zero_number "${hour_cutAfter}")
+				hourCutAfter="${hourZeroAfter}"
+			fi
+			# Ask for minute to cut
+			echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
+			if [ -z "${minute_cutAfter}" ] ; then
+				minuteZeroAfter=$(zero_number "${minuteCutAfter}")
+				minuteCutAfter="${minuteZeroAfter}"
+			else
+				minuteZeroAfter=$(zero_number "${minute_cutAfter}")
+				minuteCutAfter="${minuteZeroAfter}"
+			fi
+			# Ask for second to cut
+			echo -n "* (Default: ${secondCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+			if [ -z "${second_cutAfter}" ] ; then
+				secondZeroAfter=$(zero_number "${secondCutAfter}")
+				secondCutAfter="${secondZeroAfter}"
+			else
+				secondZeroAfter=$(zero_number "${second_cutAfter}")
+				secondCutAfter="${secondZeroAfter}"
+			fi
+			hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
+			minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
+			secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
+			# Convert time total
+			hourPlus=$(zero_number "${hourPlusRaw}")
+			minutePlus=$(zero_number "${minutePlusRaw}")
+			secondPlus=$(zero_number "${secondPlusRaw}")
+			echo -n "* (Default: y) Extract video from ${hourCut}:${minuteCut}:${secondCut} to ${hourPlus}:${minutePlus}:${secondPlus}? (y/n): " ; read accept_extraction_advanced
+			if [ "${accept_extraction_advanced}" == "n" ] ; then
+				exit
+			else
+				echo ""
+				echo -n "* Starting extract video track (${2}) "
+				sleep 3
+				ffmpeg -y -i "${2}" -map ${video_track} -c:v copy -ss ${hourCut}:${minuteCut}:${secondCut} -t ${hourCutAfter}:${minuteCutAfter}:${secondCutAfter} "${current_dir}/seeing.mp4"
+				ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+				echo ""
+				echo -n "* Extracted video into ${video_file_dir}"
+				sleep 2
+				rm -rf "${current_dir}/seeing.mp4"
+				echo "" && echo ""
+				exit
+			fi
+		fi
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+	
+elif [ "${1}" == "-eati" ] ; then
+	# Run commands for -evid parameter
+	if [ -z "${2}" ] ; then
+		show_menu
+	elif [ -f "${2}" ] ; then
+		hourCut=0
+		minuteCut=1
+		secondCut=0
+		echo ""
+		echo "+ Audio Tracks:"
+		ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+		echo ""
+		echo "+ Audio time:"
+		ffmpeg -i "${2}" 2>&1 | grep "Duration" | cut -d "," -f 1 | tr -s " "
+		echo ""
+		# Check the audio track by default
+		audio_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+		if [ -z "${audio_default}" ] ; then
+			audio_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+			if [ -z "${audio_default}" ] ; then
+				audio_default="0:1"
+			else
+				audio_default_patch=$(echo ${audio_default} | cut -c4)
+				if [ "${audio_default_patch}" == ":" ] ; then
+					audio_default=$(echo ${audio_default} | cut -c1-3)
+				else
+					audio_default="${audio_default}"
+				fi
+			fi
+		else
+			audio_default_patch=$(echo ${audio_default} | cut -c4)
+			if [ "${audio_default_patch}" == ":" ] ; then
+				audio_default=$(echo ${audio_default} | cut -c1-3)
+			else
+				audio_default="${audio_default}"
+			fi
+		fi
+		# Ask for audio
+		echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+		if [ -z "${audio_track}" ] ; then
+			audio_track="${audio_default}"
+		else
+			audio_track="${audio_track}"
+		fi
+		# Ask for hour to cut
+		echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
+		if [ -z "${hour_cut}" ] ; then
+			hourZero=$(zero_number "${hourCut}")
+			hourCut="${hourZero}"
+		else
+			hourZero=$(zero_number "${hour_cut}")
+			hourCut="${hourZero}"
+		fi
+		# Ask for minute to cut
+		echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
+		if [ -z "${minute_cut}" ] ; then
+			minuteZero=$(zero_number "${minuteCut}")
+			minuteCut="${minuteZero}"
+		else
+			minuteZero=$(zero_number "${minute_cut}")
+			minuteCut="${minuteZero}"
+		fi
+		# Ask for second to cut
+		echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
+		if [ -z "${second_cut}" ] ; then
+			secondZero=$(zero_number "${secondCut}")
+			secondCut="${secondZero}"
+		else
+			secondZero=$(zero_number "${second_cut}")
+			secondCut="${secondZero}"
+		fi
+		echo -n "* (Default: n) Extract audio from ${hourCut}:${minuteCut}:${secondCut} to end? (y/n): " ; read accept_extraction
+		if [ "${accept_extraction}" == "y" ] ; then
+			echo ""
+			echo -n "* Starting extract audio track (${2}) "
+			sleep 3
+			ffmpeg -y -i "${2}" -map ${audio_track} -c:v copy -ss ${hourCut}:${minuteCut}:${secondCut} -c:a copy "${audio_file_dir}"
+			echo ""
+			echo -n "* Extracted audio into ${audio_file_dir}"
+			sleep 2
+			echo "" && echo ""
+			exit
+		else
+			hourCutAfter=0
+			minuteCutAfter=10
+			secondCutAfter=0
+			# Ask for hour to cut
+			echo ""
+			echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
+			if [ -z "${hour_cutAfter}" ] ; then
+				hourZeroAfter=$(zero_number "${hourCutAfter}")
+				hourCutAfter="${hourZeroAfter}"
+			else
+				hourZeroAfter=$(zero_number "${hour_cutAfter}")
+				hourCutAfter="${hourZeroAfter}"
+			fi
+			# Ask for minute to cut
+			echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
+			if [ -z "${minute_cutAfter}" ] ; then
+				minuteZeroAfter=$(zero_number "${minuteCutAfter}")
+				minuteCutAfter="${minuteZeroAfter}"
+			else
+				minuteZeroAfter=$(zero_number "${minute_cutAfter}")
+				minuteCutAfter="${minuteZeroAfter}"
+			fi
+			# Ask for second to cut
+			echo -n "* (Default: ${secondCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+			if [ -z "${second_cutAfter}" ] ; then
+				secondZeroAfter=$(zero_number "${secondCutAfter}")
+				secondCutAfter="${secondZeroAfter}"
+			else
+				secondZeroAfter=$(zero_number "${second_cutAfter}")
+				secondCutAfter="${secondZeroAfter}"
+			fi
+			hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
+			minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
+			secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
+			# Convert time total
+			hourPlus=$(zero_number "${hourPlusRaw}")
+			minutePlus=$(zero_number "${minutePlusRaw}")
+			secondPlus=$(zero_number "${secondPlusRaw}")
+			echo -n "* (Default: y) Extract audio from ${hourCut}:${minuteCut}:${secondCut} to ${hourPlus}:${minutePlus}:${secondPlus}? (y/n): " ; read accept_extraction_advanced
+			if [ "${accept_extraction_advanced}" == "n" ] ; then
+				exit
+			else
+				echo ""
+				echo -n "* Starting extract audio track (${2}) "
+				sleep 3
+				ffmpeg -y -i "${2}" -map ${audio_track} -c:v copy -ss ${hourCut}:${minuteCut}:${secondCut} -t ${hourCutAfter}:${minuteCutAfter}:${secondCutAfter} -c:a copy "${audio_file_dir}"
+				echo ""
+				echo -n "* Extracted audio into ${audio_file_dir}"
+				sleep 2
+				echo "" && echo ""
+				exit
+			fi
+		fi
+	else
+		echo ""
+		echo "* The file '${2}' does not exist"
+		echo ""
+		exit
+	fi
+
 elif [ "${1}" == "-chec" ] ; then
 	# Run commands for -chec parameter
 	if [ -z "${2}" ] ; then
@@ -491,20 +785,20 @@ elif [ "${1}" == "-mixf" ] ; then
 	cut_audio=0
 	# Set the secons to cut on video/audio
 	echo ""
-	echo -n "* [Default: ${cut_video}] Set the seconds to cut in the video (0-59): " ; read seconds_video
+	echo -n "* (Default: ${cut_video}) Set the seconds to cut in the video (0-59): " ; read seconds_video
 	if [ -z "${seconds_video}" ] ; then
 		seconds_video=${cut_video}
 	else
 		seconds_video=${seconds_video}
 	fi
-	echo -n "* [Default: ${cut_audio}] Set the seconds to cut in the audio (0-59): " ; read seconds_audio
+	echo -n "* (Default: ${cut_audio}) Set the seconds to cut in the audio (0-59): " ; read seconds_audio
 	if [ -z "${seconds_audio}" ] ; then
 		seconds_audio=${cut_audio}
 	else
 		seconds_audio=${seconds_audio}
 	fi
 	# Set if you want -shortest mode
-	echo -n "* [Default: n] Finish the mix when one of the two (video or audio) finishes first? (y/n): " ; read finish_mix
+	echo -n "* (Default: n) Finish the mix when one of the two (video or audio) finishes first? (y/n): " ; read finish_mix
 	if [ -z "${finish_mix}" ] ; then
 		finish_mix=n
 	elif [ "${finish_mix}" == "y" ] ; then
@@ -598,20 +892,20 @@ elif [ "${1}" == "-mixs" ] ; then
 	cut_audio=0
 	# Set the secons to cut on video/audio
 	echo ""
-	echo -n "* [Default: ${cut_video}] Set the seconds to cut in the video (0-59): " ; read seconds_video
+	echo -n "* (Default: ${cut_video}) Set the seconds to cut in the video (0-59): " ; read seconds_video
 	if [ -z "${seconds_video}" ] ; then
 		seconds_video=${cut_video}
 	else
 		seconds_video=${seconds_video}
 	fi
-	echo -n "* [Default: ${cut_audio}] Set the seconds to cut in the audio (0-59): " ; read seconds_audio
+	echo -n "* (Default: ${cut_audio}) Set the seconds to cut in the audio (0-59): " ; read seconds_audio
 	if [ -z "${seconds_audio}" ] ; then
 		seconds_audio=${cut_audio}
 	else
 		seconds_audio=${seconds_audio}
 	fi
 	# Set if you want -shortest mode
-	echo -n "* [Default: n] Finish the mix when one of the three (video, audio or subs) finishes first? (y/n): " ; read finish_mix
+	echo -n "* (Default: n) Finish the mix when one of the three (video, audio or subs) finishes first? (y/n): " ; read finish_mix
 	if [ -z "${finish_mix}" ] ; then
 		finish_mix=n
 	elif [ "${finish_mix}" == "y" ] ; then
