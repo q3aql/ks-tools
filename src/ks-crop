@@ -175,8 +175,16 @@ resolution_detected="${detect_2}${detect_3}${detect_4}${detect_5}"
 resolution_height=$(echo ${resolution_detected} | cut -d "x" -f 2)
 
 # Set size crop to 16:9 (ih)
-calculate_crop=$(expr ${resolution_height} / 4)
-ih_size="${calculate_crop}"
+calculate_crop=$(expr ${resolution_height} / 4 2> /tmp/ks-tools.error)
+# Check if number is correct
+expr ${calculate_crop} + 1 &> /tmp/ks-tools.error
+ih_error="$?"
+
+if [ ${ih_error} -eq 0 ] ; then
+	ih_size="${calculate_crop}"
+else
+	ih_size="0"
+fi
 
 # Function to crop videos
 function crop_video() {
@@ -266,7 +274,25 @@ function crop_video() {
 		echo ""
 		echo "* COMMAND THAT WILL BE EXECUTED:"
 		echo ""
-		echo "  # File detected with resolution" ${resolution_detected} "(ih ${ih_size})"
+		inputFileSave="${inputFile}"
+		ih_sizeSave="${ih_size}"
+		if [ ${ih_size} -eq 0 ] ; then
+			if [ "${patch_thread}" == "y" ] ; then
+				echo "  # Error detecting file resolution. The generic solution is applied (slower)"
+				echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -s 1920x1440 ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-resize.${v_ext}\""
+				echo ""
+				inputFile="${inputFileOut}-resize.${v_ext}"
+				ih_size="360"
+			else
+				echo "  # Error detecting file resolution. The generic solution is applied (slower)"
+				echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -s 1920x1440 ${p_conversion} \"${inputFileOut}-resize.${v_ext}\""
+				echo ""
+				inputFile="${inputFileOut}-resize.${v_ext}"
+				ih_size="360"
+			fi
+		else
+			echo "  # File detected with resolution" ${resolution_detected} "(ih ${ih_size})"
+		fi
 		echo "  # Crop '${inputFile}' from 4:3/IMAX to 16:9 (1.77:1)"
 		if [ "${patch_thread}" == "y" ] ; then
 			echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
@@ -279,6 +305,20 @@ function crop_video() {
 		if [ "${run_commands_ffmpeg}" == "n" ] ; then
 			exit
 		else
+			inputFile="${inputFileSave}"
+			ih_size="${ih_sizeSave}"
+			inputFileOut=$(removeExtension ${inputFile})
+			if [ ${ih_size} -eq 0 ] ; then
+				if [ "${patch_thread}" == "y" ] ; then
+					${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -s 1920x1440 ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-resize.${v_ext}"
+					inputFile="${inputFileOut}-resize.${v_ext}"
+					ih_size="360"
+				else
+					${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -s 1920x1440 ${p_conversion} "${inputFileOut}-resize.${v_ext}"
+					inputFile="${inputFileOut}-resize.${v_ext}"
+					ih_size="360"
+				fi
+			fi
 			if [ "${patch_thread}" == "y" ] ; then
 				${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
 			else
