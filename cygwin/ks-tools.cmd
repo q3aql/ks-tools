@@ -2,12 +2,12 @@
 
 rem ######################################
 rem # ks-tools for Windows               #
-rem # U. Modificacion: 23-03-2021        #
+rem # U. Modificacion: 25-03-2021        #
 rem # Author: q3aql                      #
 rem # Contact: q3aql@protonmail.ch       #
 rem # License: GPL v2.0                  #
 rem ######################################
-set VERSION=6.9
+set VERSION=7.0
 
 rem # Start ks-tools terminal (bash)
 mkdir home\%USERNAME%

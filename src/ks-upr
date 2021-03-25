@@ -2,12 +2,12 @@
 
 ###########################################################################
 # ks-upr (ks-tools) - Upload recursively file(s) to server with rsync+ssh #
-# Date: 23-03-2021                                                        #
+# Date: 25-03-2021                                                        #
 # Author: q3aql                                                           #
 # Contact: q3aql@protonmail.ch                                            #
 ###########################################################################
-VERSION="6.9"
-M_DATE="230321"
+VERSION="7.0"
+M_DATE="250321"
 
 # Global parameters.
 dirTemp="/tmp"
