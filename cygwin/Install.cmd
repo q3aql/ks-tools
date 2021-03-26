@@ -6,6 +6,16 @@ echo  #####################################
 echo  # Welcome to ks-tools installer %VERSION% #
 echo  #####################################
 echo.
+echo  - This installer simply creates a shortcut to the 
+echo    application on your desktop. We recommend that 
+echo    before continuing, make sure you have left the 
+echo    application folder in a place where no one can 
+echo    delete it.
+echo.
+echo    Examples: 
+echo        - C:\ks-tools
+echo        - C:\Program Files\ks-tools
+echo.
 echo  * Press ENTER to continue or Ctrl+C to exit
 pause > nul
 echo.
