@@ -39,10 +39,10 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-vob-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
     
 ### Downloads:
-  * [ks-tools-7.0-250321-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v7.0/ks-tools-7.0-250321-Linux-en.tar.gz) - Unix/Linux package.
-  * [ks-tools-7.0-250321-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v7.0/ks-tools-7.0-250321-Windows-en.zip) - Windows package (with cygwin).
-  * [ks-tools-7.0-250321-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v7.0/ks-tools-7.0-250321-en-all.deb) - Debian based package.
-  * [ks-tools-7.0-250321-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v7.0/ks-tools-7.0-250321-en-all.rpm) - Red Hat based package.
+  * [ks-tools-7.1-260321-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v7.1/ks-tools-7.1-260321-Linux-en.tar.gz) - Unix/Linux package.
+  * [ks-tools-7.1-260321-Windows-en.zip](https://github.com/q3aql/ks-tools/releases/download/v7.1/ks-tools-7.1-260321-Windows-en.zip) - Windows package (with cygwin).
+  * [ks-tools-7.1-260321-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v7.1/ks-tools-7.1-260321-en-all.deb) - Debian based package.
+  * [ks-tools-7.1-260321-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v7.1/ks-tools-7.1-260321-en-all.rpm) - Red Hat based package.
  
 _Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, ffmpeg, grep_
 
@@ -50,7 +50,7 @@ _Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, 
 
   * **Unix/Linux instructions:**
     * Open the terminal.
-    * Type the command: `tar zxvf ks-tools-7.0-250321-Linux-en.tar.gz`
+    * Type the command: `tar zxvf ks-tools-7.1-260321-Linux-en.tar.gz`
     * Change the directory: `cd ks-tools`
     * Finally, install the scripts (as root): `make install`
 
