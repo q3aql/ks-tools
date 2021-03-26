@@ -131,9 +131,9 @@ if [ -z "${1}" ] ; then
 	echo ""
 	echo "+ Syntax: "
 	echo ""
-	echo "  $ ks-mp3 </absolute/path/album>"
+	echo "  $ ks-mp3-album </absolute/path/album>"
 	echo ""
-	echo " + Example: ks-mp3 /data/albums/matrix-soundtrack"
+	echo " + Example: ks-mp3-album /data/albums/matrix-soundtrack"
 	echo ""
 	exit
 fi
