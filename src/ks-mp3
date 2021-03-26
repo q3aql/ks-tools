@@ -2,12 +2,12 @@
 
 #########################################################################
 # ks-mp3 (ks-tools) - Convert video/audio file(s) to MP3 (Audio) Format #
-# Date: 25-03-2021                                                      #
+# Date: 26-03-2021                                                      #
 # Author: q3aql                                                         #
 # Contact: q3aql@protonmail.ch                                          #
 #########################################################################
-VERSION="7.0"
-M_DATE="250321"
+VERSION="7.1"
+M_DATE="260321"
 
 # Global parameters
 dirTemp="/tmp"
