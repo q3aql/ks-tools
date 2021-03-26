@@ -17,6 +17,12 @@ listTemp="ks-tools.list"
 dirConfig="$HOME/.ks-tools"
 ksToolsTempFolder="/tmp/ks-tools"
 
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  source "/usr/bin/cygwin-alias.sh"
+fi
+
 # Function to remove spaces and symbols
 # Syntax: convertText "<text>"
 function convertText() {

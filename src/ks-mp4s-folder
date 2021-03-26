@@ -14,6 +14,12 @@ tempFile="/tmp/ks-mp4s-folder.txt"
 tempFileTest="/tmp/ks-mp4s-folder-test.txt"
 formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
 
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  source "/usr/bin/cygwin-alias.sh"
+fi
+
 # Show help when folder is empty
 if [ -z "${1}" ] ; then
   echo ""

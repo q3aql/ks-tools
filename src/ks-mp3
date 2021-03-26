@@ -20,6 +20,12 @@ b_acodec="128k"
 v_ext="mp3"
 default_lang_audio="spa"
 
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  source "/usr/bin/cygwin-alias.sh"
+fi
+
 # Check if ffmpeg is installed
 ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
