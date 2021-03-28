@@ -754,7 +754,7 @@ elif [ "${1}" == "-evat" ] ; then
     echo "+ Audio Tracks:"
     ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
     echo ""
-    echo "+ audio time:"
+    echo "+ Video time:"
     ffmpeg -i "${2}" 2>&1 | grep "Duration" | cut -d "," -f 1 | tr -s " "
     echo ""
     # Check de video track by default
