@@ -26,388 +26,388 @@ fi
 # Function to remove spaces and symbols
 # Syntax: convertText "<text>"
 function convertText() {
-	wordToConvert=${1}
-	ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
-	mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
-	echo "${wordToConvert}" > ${ksToolsSedFile}
-	# Borrar espacios
-	sed -i 's/ /_/g' "${ksToolsSedFile}" &> /dev/null
-	# Borrar simbolos
-	symbolsList="[ ] @ { } | \ / ~ # $ % & ? ¿ = ( ) < > ! ¡"
-	for findSymbol in ${symbolsList} ; do
-		sed -i "s/${findSymbol}//g" "${ksToolsSedFile}" &> /dev/null
-	done
-	# Borrar el resto de simbolos
-	sed -i 's/*//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/"//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i "s/^//g" "${ksToolsSedFile}" &> /dev/null
-	# Cambiar algunos simbolos
-	sed -i 's/+/_/g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/:/-/g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/;/-/g' "${ksToolsSedFile}" &> /dev/null
-	# Mostrar texto convertido
-	wordToConvert=$(cat ${ksToolsSedFile})
-	echo ${wordToConvert}
+  wordToConvert=${1}
+  ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
+  mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
+  echo "${wordToConvert}" > ${ksToolsSedFile}
+  # Borrar espacios
+  sed -i 's/ /_/g' "${ksToolsSedFile}" &> /dev/null
+  # Borrar simbolos
+  symbolsList="[ ] @ { } | \ / ~ # $ % & ? ¿ = ( ) < > ! ¡"
+  for findSymbol in ${symbolsList} ; do
+    sed -i "s/${findSymbol}//g" "${ksToolsSedFile}" &> /dev/null
+  done
+  # Borrar el resto de simbolos
+  sed -i 's/*//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/"//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i "s/^//g" "${ksToolsSedFile}" &> /dev/null
+  # Cambiar algunos simbolos
+  sed -i 's/+/_/g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/:/-/g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/;/-/g' "${ksToolsSedFile}" &> /dev/null
+  # Mostrar texto convertido
+  wordToConvert=$(cat ${ksToolsSedFile})
+  echo ${wordToConvert}
 }
 
 # Function to list the files of a directory.
 # Syntax: listArchives <directory>
 function listArchives() {
-	fail=1
-	formatFiles=""
-	videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob"
-	formatFiles="${formatFiles} ${videoFiles}"
-	audioFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka"
-	formatFiles="${formatFiles} ${audioFiles}"
-	compressFiles="zip rar 7z bz2 gz xz tar bzip2 gzip"
-	formatFiles="${formatFiles} ${compressFiles}"
-	open_libreOfficeFiles="odt ods odp odb odg"
-	formatFiles="${formatFiles} ${open_libreOfficeFiles}"
-	OfficeFiles="doc docx dotx dot docm dic thmx xlsx ppt pps pst mbd accdb msg"
-	formatFiles="${formatFiles} ${OfficeFiles}"
-	documentFiles="txt pdf rtf html php xml json css"
-	formatFiles="${formatFiles} ${documentFiles}"
-	pictureFiles="png jpg jpeg gif bmp raw xcf ppm pnm tiff ico tga pbm pgm svg psd"
-	formatFiles="${formatFiles} ${pictureFiles}"
-	executableFiles="exe msi run bin elf dmg deb rpm tgz ebuild flatpakref snap sh bash cmd bat AppImage jar"
-	formatFiles="${formatFiles} ${executableFiles}"
-	otherFiles="desktop lnk blend db c cpp cxx cc py rb dll so link network service ko list java"
-	formatFiles="${formatFiles} ${otherFiles}"
-	# Rename files
-	cd "${1}"
-	mkdir -p ${ksToolsTempFolder}
-	ls -1 > ${ksToolsTempFolder}/rename-files.txt
-	count=1
-	sizeFile=$(cat ${ksToolsTempFolder}/rename-files.txt | wc -l)
-	while [ ${count} -le ${sizeFile} ] ; do
-		fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -${count} | tail -1)
-		fileRenamed=$(convertText "${fileToRename}")
-		if [ "${fileRenamed}" == "${fileToRename}" ] ; then
-			echo "null" > /dev/null
-		else
-			mv "${fileToRename}" "${fileRenamed}"
-		fi
-		count=$(expr $count + 1)
-	done
-	# Scan audio files
-	rm -rf ${dirTemp}/${listTemp}
-	rm -rf ${dirTemp}/${listCompTemp}
-	for format in ${formatFiles} ; do
-		find "${1}"/*.${format} &> ${dirTemp}/${listCompTempTest}
-		if [ $? -ne 0 ] ; then
-			echo "null" > /dev/null
-		else
-			find "${1}"/*.${format} &>> ${dirTemp}/${listCompTemp}
-			echo "+ File(s) in .${format} format found!"
-			cd "${1}" && ls -1 *.${format} &>> ${dirTemp}/${listTemp}
-			fail=0
-		fi
-	done
-	if [ ${fail} -eq 1 ] ; then
-		echo "+ No common file(s) found!"
-		echo ""
-		exit
-	else
-		echo ""
-	fi
+  fail=1
+  formatFiles=""
+  videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob"
+  formatFiles="${formatFiles} ${videoFiles}"
+  audioFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka"
+  formatFiles="${formatFiles} ${audioFiles}"
+  compressFiles="zip rar 7z bz2 gz xz tar bzip2 gzip"
+  formatFiles="${formatFiles} ${compressFiles}"
+  open_libreOfficeFiles="odt ods odp odb odg"
+  formatFiles="${formatFiles} ${open_libreOfficeFiles}"
+  OfficeFiles="doc docx dotx dot docm dic thmx xlsx ppt pps pst mbd accdb msg"
+  formatFiles="${formatFiles} ${OfficeFiles}"
+  documentFiles="txt pdf rtf html php xml json css"
+  formatFiles="${formatFiles} ${documentFiles}"
+  pictureFiles="png jpg jpeg gif bmp raw xcf ppm pnm tiff ico tga pbm pgm svg psd"
+  formatFiles="${formatFiles} ${pictureFiles}"
+  executableFiles="exe msi run bin elf dmg deb rpm tgz ebuild flatpakref snap sh bash cmd bat AppImage jar"
+  formatFiles="${formatFiles} ${executableFiles}"
+  otherFiles="desktop lnk blend db c cpp cxx cc py rb dll so link network service ko list java"
+  formatFiles="${formatFiles} ${otherFiles}"
+  # Rename files
+  cd "${1}"
+  mkdir -p ${ksToolsTempFolder}
+  ls -1 > ${ksToolsTempFolder}/rename-files.txt
+  count=1
+  sizeFile=$(cat ${ksToolsTempFolder}/rename-files.txt | wc -l)
+  while [ ${count} -le ${sizeFile} ] ; do
+    fileToRename=$(cat ${ksToolsTempFolder}/rename-files.txt | head -${count} | tail -1)
+    fileRenamed=$(convertText "${fileToRename}")
+    if [ "${fileRenamed}" == "${fileToRename}" ] ; then
+      echo "null" > /dev/null
+    else
+      mv "${fileToRename}" "${fileRenamed}"
+    fi
+    count=$(expr $count + 1)
+  done
+  # Scan audio files
+  rm -rf ${dirTemp}/${listTemp}
+  rm -rf ${dirTemp}/${listCompTemp}
+  for format in ${formatFiles} ; do
+    find "${1}"/*.${format} &> ${dirTemp}/${listCompTempTest}
+    if [ $? -ne 0 ] ; then
+      echo "null" > /dev/null
+    else
+      find "${1}"/*.${format} &>> ${dirTemp}/${listCompTemp}
+      echo "+ File(s) in .${format} format found!"
+      cd "${1}" && ls -1 *.${format} &>> ${dirTemp}/${listTemp}
+      fail=0
+    fi
+  done
+  if [ ${fail} -eq 1 ] ; then
+    echo "+ No common file(s) found!"
+    echo ""
+    exit
+  else
+    echo ""
+  fi
 }
 
 # Function to count the found files.
 function countArchives() {
-	totalArchives=$(cat ${dirTemp}/${listCompTemp} | wc -l)
-	echo ${totalArchives}
+  totalArchives=$(cat ${dirTemp}/${listCompTemp} | wc -l)
+  echo ${totalArchives}
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
-	FileName=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
-	FileNoExtension=$(echo $FileName | cut -d "." -f 1)
-	echo $FileNoExtension > ${dirTemp}/name.tmp
-	sed -i 's/_/ /g' ${dirTemp}/name.tmp
-	DisplayName=$(cat ${dirTemp}/name.tmp)
-	rm -rf ${dirTemp}/name.tmp
-	echo ${DisplayName}
+  FileName=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
+  FileNoExtension=$(echo $FileName | cut -d "." -f 1)
+  echo $FileNoExtension > ${dirTemp}/name.tmp
+  sed -i 's/_/ /g' ${dirTemp}/name.tmp
+  DisplayName=$(cat ${dirTemp}/name.tmp)
+  rm -rf ${dirTemp}/name.tmp
+  echo ${DisplayName}
 }
 
 # Function to show the name of the file.
 # Syntax: showFile <file number>
 function showFile() {
-	archive=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
-	echo ${archive}
+  archive=$(cat ${dirTemp}/${listTemp} | head -${1} | tail -1)
+  echo ${archive}
 }
 
 # Function to show full file path.
 # Syntax: showPathFile <file number>
 function showPathFile() {
-	pathFile=$(cat ${dirTemp}/${listCompTemp} | head -${1} | tail -1)
-	echo ${pathFile}
+  pathFile=$(cat ${dirTemp}/${listCompTemp} | head -${1} | tail -1)
+  echo ${pathFile}
 }
 
 # Function to send file to server.
 # Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
 function sendFile() {
-	#sshpass -p ${1} scp ${2} ${3}@${4}:${5} &> /dev/null
-	comandOne="sshpass -p ${1} rsync -azlr -e"
-	comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
-	${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
-	sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+  #sshpass -p ${1} scp ${2} ${3}@${4}:${5} &> /dev/null
+  comandOne="sshpass -p ${1} rsync -azlr -e"
+  comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
+  ${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+  sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
 }
 
 # Function to show config
 function showConfig() {
-	configAvailable=0
-	echo ""
-	echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	if [ -f ${dirConfig}/USER ] ; then
-		showUser=$(cat ${dirConfig}/USER)
-		echo "- Server User: ${showUser}"
-		configAvailable=1
-	fi
-	if [ -f ${dirConfig}/PASS ] ; then
-		showPassword=$(cat ${dirConfig}/PASS)
-		echo "- Server Password: ${showPassword}"
-		configAvailable=1
-	fi
-	if [ -f ${dirConfig}/SERVER ] ; then
-		showServer=$(cat ${dirConfig}/SERVER)
-		echo "- URL (or IP) Server: ${showServer}"
-		configAvailable=1
-	fi
-	if [ -f ${dirConfig}/DIR_SERVER ] ; then
-		showDirServer=$(cat ${dirConfig}/DIR_SERVER)
-		echo "- Destination Path (Server): ${showDirServer}"
-		configAvailable=1
-	fi
-	if [ -f ${dirConfig}/DIR ] ; then
-		showDirLocal=$(cat ${dirConfig}/DIR)
-		echo "- Scan Path (Local): ${showDirLocal}"
-		configAvailable=1
-	fi
-	if [ ${configAvailable} -eq 0 ] ; then
-		echo "* The configuration file does not exist!"
-	fi
-	echo ""
-	exit
+  configAvailable=0
+  echo ""
+  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  if [ -f ${dirConfig}/USER ] ; then
+    showUser=$(cat ${dirConfig}/USER)
+    echo "- Server User: ${showUser}"
+    configAvailable=1
+  fi
+  if [ -f ${dirConfig}/PASS ] ; then
+    showPassword=$(cat ${dirConfig}/PASS)
+    echo "- Server Password: ${showPassword}"
+    configAvailable=1
+  fi
+  if [ -f ${dirConfig}/SERVER ] ; then
+    showServer=$(cat ${dirConfig}/SERVER)
+    echo "- URL (or IP) Server: ${showServer}"
+    configAvailable=1
+  fi
+  if [ -f ${dirConfig}/DIR_SERVER ] ; then
+    showDirServer=$(cat ${dirConfig}/DIR_SERVER)
+    echo "- Destination Path (Server): ${showDirServer}"
+    configAvailable=1
+  fi
+  if [ -f ${dirConfig}/DIR ] ; then
+    showDirLocal=$(cat ${dirConfig}/DIR)
+    echo "- Scan Path (Local): ${showDirLocal}"
+    configAvailable=1
+  fi
+  if [ ${configAvailable} -eq 0 ] ; then
+    echo "* The configuration file does not exist!"
+  fi
+  echo ""
+  exit
 }
 
 # Function to edit the configuration file
 function editConfig() {
-	editConfig=0
-	while [ ${editConfig} -eq 0 ] ; do
-		clear
-		editUser=$(cat ${dirConfig}/USER 2> /dev/null)
-		editPassword=$(cat ${dirConfig}/PASS 2> /dev/null)
-		editServer=$(cat ${dirConfig}/SERVER 2> /dev/null)
-		editDirServer=$(cat ${dirConfig}/DIR_SERVER 2> /dev/null)
-		editDirLocal=$(cat ${dirConfig}/DIR 2> /dev/null)
-		echo ""
-		echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
-		echo ""
-		echo " 1 - Edit User (${editUser})"
-		echo " 2 - Edit Password (${editPassword})"
-		echo " 3 - Edit Server (${editServer})"
-		echo " 4 - Edit Dest. Path (${editDirServer})"
-		echo " 5 - Edit Local Path (${editDirLocal})"
-		echo ""
-		echo " 6 - Exit"
-		echo ""
-		echo -n "* Choose an option: " ; read EDIT
-		echo ""
-		if [ "${EDIT}" == "1" ] ; then
-			echo -n "* Enter the server user: " ; read USER
-			user=${USER}
-			echo ${user} > ${dirConfig}/USER
-		elif [ "${EDIT}" == "2" ] ; then
-			echo -n "* Enter the server key: " ; read PASS
-			password=${PASS}
-			echo ${password} > ${dirConfig}/PASS
-		elif [ "${EDIT}" == "3" ] ; then
-			echo -n "* Enter the server URL: " ; read SERVER
-			server=${SERVER}
-			echo ${server} > ${dirConfig}/SERVER
-		elif [ "${EDIT}" == "4" ] ; then
-			echo -n "* Enter the path on the server: " ; read DIR_SERVER
-			dirServer=${DIR_SERVER}
-			echo ${dirServer} > ${dirConfig}/DIR_SERVER
-		elif [ "${EDIT}" == "5" ] ; then
-			echo -n "* Enter the local path to scan: " ; read DIR
-			dirLocal=${DIR}
-			echo ${dirLocal} > ${dirConfig}/DIR
-		elif [ "${EDIT}" == "6" ] ; then
-			editConfig=1
-		else
-			echo "+ Invalid option!"
-			echo -n "- Press ENTER to continue " ; read CONTINUE
-		fi
-	done
-	exit
+  editConfig=0
+  while [ ${editConfig} -eq 0 ] ; do
+    clear
+    editUser=$(cat ${dirConfig}/USER 2> /dev/null)
+    editPassword=$(cat ${dirConfig}/PASS 2> /dev/null)
+    editServer=$(cat ${dirConfig}/SERVER 2> /dev/null)
+    editDirServer=$(cat ${dirConfig}/DIR_SERVER 2> /dev/null)
+    editDirLocal=$(cat ${dirConfig}/DIR 2> /dev/null)
+    echo ""
+    echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+    echo ""
+    echo " 1 - Edit User (${editUser})"
+    echo " 2 - Edit Password (${editPassword})"
+    echo " 3 - Edit Server (${editServer})"
+    echo " 4 - Edit Dest. Path (${editDirServer})"
+    echo " 5 - Edit Local Path (${editDirLocal})"
+    echo ""
+    echo " 6 - Exit"
+    echo ""
+    echo -n "* Choose an option: " ; read EDIT
+    echo ""
+    if [ "${EDIT}" == "1" ] ; then
+      echo -n "* Enter the server user: " ; read USER
+      user=${USER}
+      echo ${user} > ${dirConfig}/USER
+    elif [ "${EDIT}" == "2" ] ; then
+      echo -n "* Enter the server key: " ; read PASS
+      password=${PASS}
+      echo ${password} > ${dirConfig}/PASS
+    elif [ "${EDIT}" == "3" ] ; then
+      echo -n "* Enter the server URL: " ; read SERVER
+      server=${SERVER}
+      echo ${server} > ${dirConfig}/SERVER
+    elif [ "${EDIT}" == "4" ] ; then
+      echo -n "* Enter the path on the server: " ; read DIR_SERVER
+      dirServer=${DIR_SERVER}
+      echo ${dirServer} > ${dirConfig}/DIR_SERVER
+    elif [ "${EDIT}" == "5" ] ; then
+      echo -n "* Enter the local path to scan: " ; read DIR
+      dirLocal=${DIR}
+      echo ${dirLocal} > ${dirConfig}/DIR
+    elif [ "${EDIT}" == "6" ] ; then
+      editConfig=1
+    else
+      echo "+ Invalid option!"
+      echo -n "- Press ENTER to continue " ; read CONTINUE
+    fi
+  done
+  exit
 }
 
 # Function to show version
 function showVersion() {
-	echo ""
-	echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	exit
+  echo ""
+  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  exit
 }
 
 # Function to show help
 function showHelp() {
-	echo ""
-	echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "- Upload recursively file(s) to server with rsync+ssh"
-	echo ""
-	echo "+ Syntax:"
-	echo ""
-	echo " $ ks-upf -i  - Start upload"
-	echo " $ ks-upf -r  - Remove configuration"
-	echo " $ ks-upf -c  - Show configuration"
-	echo " $ ks-upf -e  - Edit configuration"
-	echo " $ ks-upf -v  - Show version"
-	echo " $ ks-upf -h  - Show help"
-	echo ""
-	exit
+  echo ""
+  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Upload recursively file(s) to server with rsync+ssh"
+  echo ""
+  echo "+ Syntax:"
+  echo ""
+  echo " $ ks-upf -i  - Start upload"
+  echo " $ ks-upf -r  - Remove configuration"
+  echo " $ ks-upf -c  - Show configuration"
+  echo " $ ks-upf -e  - Edit configuration"
+  echo " $ ks-upf -v  - Show version"
+  echo " $ ks-upf -h  - Show help"
+  echo ""
+  exit
 }
 
 # Function to check if all the necessary tools
 # for the execution are installed.
 function checkDependencies() {
-	dependence=0
-	echo -n "* Checking necessary tools... "
-	sleep 3 && echo ""
-	sshpass -h &> /dev/null
-	OUTPUT=$?
-	if [ ${OUTPUT} -ne 0 ] ; then
-		echo "* The 'sshpass' tool is not installed!"
-		dependence=1
-	fi
-	md5sum --help &> /dev/null
-	OUTPUT=$?
-	if [ ${OUTPUT} -ne 0 ] ; then
-		echo "* The 'md5sum' tool is not installed!"
-		dependence=1
-	fi
-	rsync --version &> /dev/null
-	OUTPUT=$?
-	if [ ${OUTPUT} -ne 0 ] ; then
-		echo "* The 'rsync' tool is not installed!"
-		dependence=1
-	fi
-	if [ -f /usr/bin/scp ] ; then
-		echo "OK" > /dev/null
-	else
-		echo "* The 'scp' tool is not installed!"
-		dependence=1
-	fi
-	if [ -f /usr/bin/ssh ] ; then
-		echo "OK" > /dev/null
-	else
-		echo "* The 'ssh' tool is not installed!"
-		dependence=1
-	fi
-	if [ ${dependence} -eq 0 ] ; then
-		echo "* Necessary tools installed!"
-		echo ""
-	else
-		echo ""
-		exit
-	fi
+  dependence=0
+  echo -n "* Checking necessary tools... "
+  sleep 3 && echo ""
+  sshpass -h &> /dev/null
+  OUTPUT=$?
+  if [ ${OUTPUT} -ne 0 ] ; then
+    echo "* The 'sshpass' tool is not installed!"
+    dependence=1
+  fi
+  md5sum --help &> /dev/null
+  OUTPUT=$?
+  if [ ${OUTPUT} -ne 0 ] ; then
+    echo "* The 'md5sum' tool is not installed!"
+    dependence=1
+  fi
+  rsync --version &> /dev/null
+  OUTPUT=$?
+  if [ ${OUTPUT} -ne 0 ] ; then
+    echo "* The 'rsync' tool is not installed!"
+    dependence=1
+  fi
+  if [ -f /usr/bin/scp ] ; then
+    echo "OK" > /dev/null
+  else
+    echo "* The 'scp' tool is not installed!"
+    dependence=1
+  fi
+  if [ -f /usr/bin/ssh ] ; then
+    echo "OK" > /dev/null
+  else
+    echo "* The 'ssh' tool is not installed!"
+    dependence=1
+  fi
+  if [ ${dependence} -eq 0 ] ; then
+    echo "* Necessary tools installed!"
+    echo ""
+  else
+    echo ""
+    exit
+  fi
 }
 
 # Check if the configuration directory exists.
 if [ -d ${dirConfig} ] ; then
-	echo ${dirConfig} > /dev/null
+  echo ${dirConfig} > /dev/null
 else
-	mkdir -p ${dirConfig}
+  mkdir -p ${dirConfig}
 fi
 
 # Delete the existing configuration.
 if [ "$1" == "-r" ] ; then
-	rm -rf ${dirConfig}/USER
-	rm -rf ${dirConfig}/PASS
-	rm -rf ${dirConfig}/SERVER
-	rm -rf ${dirConfig}/DIR_SERVER
-	rm -rf ${dirConfig}/DIR
-	exit
+  rm -rf ${dirConfig}/USER
+  rm -rf ${dirConfig}/PASS
+  rm -rf ${dirConfig}/SERVER
+  rm -rf ${dirConfig}/DIR_SERVER
+  rm -rf ${dirConfig}/DIR
+  exit
 fi
 
 # Show configuration file
 if [ "$1" == "-c" ] ; then
-	showConfig
-	# Show configuration file
+  showConfig
+  # Show configuration file
 elif [ "$1" == "-e" ] ; then
-	editConfig
-	# Show the version
+  editConfig
+  # Show the version
 elif [ "$1" == "-v" ] ; then
-	showVersion
-	# Show the help
+  showVersion
+  # Show the help
 elif [ "$1" == "-h" ] ; then
-	showHelp
-	# Init
+  showHelp
+  # Init
 elif [ "$1" == "-i" ] ; then
-	# Start script
-	clear
-	echo ""
-	echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	checkDependencies
-	# Ask the user and if it exists, read it from the config.
-	if [ -f ${dirConfig}/USER ] ; then
-		user=$(cat ${dirConfig}/USER)
-	else
-		echo -n "* Enter the server user: " ; read USER
-		user=${USER}
-		echo ${user} > ${dirConfig}/USER
-	fi
-	# Ask the password and if it exists, read it from the config.
-	if [ -f ${dirConfig}/PASS ] ; then
-		password=$(cat ${dirConfig}/PASS)
-	else
-		echo -n "* Enter the server key: " ; read PASS
-		password=${PASS}
-		echo ${password} > ${dirConfig}/PASS
-	fi
-	# Ask the server URL and if it exists, read it from the config.
-	if [ -f ${dirConfig}/SERVER ] ; then
-		server=$(cat ${dirConfig}/SERVER)
-	else
-		echo -n "* Enter the server URL: " ; read SERVER
-		server=${SERVER}
-		echo ${server} > ${dirConfig}/SERVER
-	fi
-	# Ask the path on the server and if it exists, read it from the config.
-	if [ -f ${dirConfig}/DIR_SERVER ] ; then
-		dirServer=$(cat ${dirConfig}/DIR_SERVER)
-	else
-		echo -n "* Enter the path on the server: " ; read DIR_SERVER
-		dirServer=${DIR_SERVER}
-		echo ${dirServer} > ${dirConfig}/DIR_SERVER
-	fi
-	# Ask the local path and if it exists, read it from the config.
-	if [ -f ${dirConfig}/DIR ] ; then
-		dirLocal=$(cat ${dirConfig}/DIR)
-	else
-		echo -n "* Enter the local path to scan: " ; read DIR
-		dirLocal=${DIR}
-		echo ${dirLocal} > ${dirConfig}/DIR
-	fi
+  # Start script
+  clear
+  echo ""
+  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  checkDependencies
+  # Ask the user and if it exists, read it from the config.
+  if [ -f ${dirConfig}/USER ] ; then
+    user=$(cat ${dirConfig}/USER)
+  else
+    echo -n "* Enter the server user: " ; read USER
+    user=${USER}
+    echo ${user} > ${dirConfig}/USER
+  fi
+  # Ask the password and if it exists, read it from the config.
+  if [ -f ${dirConfig}/PASS ] ; then
+    password=$(cat ${dirConfig}/PASS)
+  else
+    echo -n "* Enter the server key: " ; read PASS
+    password=${PASS}
+    echo ${password} > ${dirConfig}/PASS
+  fi
+  # Ask the server URL and if it exists, read it from the config.
+  if [ -f ${dirConfig}/SERVER ] ; then
+    server=$(cat ${dirConfig}/SERVER)
+  else
+    echo -n "* Enter the server URL: " ; read SERVER
+    server=${SERVER}
+    echo ${server} > ${dirConfig}/SERVER
+  fi
+  # Ask the path on the server and if it exists, read it from the config.
+  if [ -f ${dirConfig}/DIR_SERVER ] ; then
+    dirServer=$(cat ${dirConfig}/DIR_SERVER)
+  else
+    echo -n "* Enter the path on the server: " ; read DIR_SERVER
+    dirServer=${DIR_SERVER}
+    echo ${dirServer} > ${dirConfig}/DIR_SERVER
+  fi
+  # Ask the local path and if it exists, read it from the config.
+  if [ -f ${dirConfig}/DIR ] ; then
+    dirLocal=$(cat ${dirConfig}/DIR)
+  else
+    echo -n "* Enter the local path to scan: " ; read DIR
+    dirLocal=${DIR}
+    echo ${dirLocal} > ${dirConfig}/DIR
+  fi
 
-	# Call the functions to perform the whole process.
-	echo -n "* Scanning ${dirLocal} " && sleep 4
-	echo ""
-	if [ -d ${dirLocal} ] ; then
-		sendFile ${password} "${dirLocal}" ${user} ${server} ${dirServer}
-		echo ""
-		count=$(expr ${count} + 1)
-	else
-		echo "* Directory ${dirLocal} does not exist!"
-		echo ""
-		exit
-	fi
-	# Show help
+  # Call the functions to perform the whole process.
+  echo -n "* Scanning ${dirLocal} " && sleep 4
+  echo ""
+  if [ -d ${dirLocal} ] ; then
+    sendFile ${password} "${dirLocal}" ${user} ${server} ${dirServer}
+    echo ""
+    count=$(expr ${count} + 1)
+  else
+    echo "* Directory ${dirLocal} does not exist!"
+    echo ""
+    exit
+  fi
+  # Show help
 else
-	showHelp
+  showHelp
 fi

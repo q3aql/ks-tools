@@ -37,104 +37,104 @@ fi
 ffmpeg_test=$(ffmpeg --help 2>&1)
 error_ffmpeg=$?
 if [ ${error_ffmpeg} -ne 0 ] ; then
-	echo ""
-	echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "+ The 'ffmpeg' tool is not installed!"
-	echo ""
-	exit
+  echo ""
+  echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The 'ffmpeg' tool is not installed!"
+  echo ""
+  exit
 fi
 
 # Funcion to show the name of file/folder from full path
 # Syntax: extractFolderOrFile <full/path/file.txt>
 function extractFolderOrFile() {
-	pathToExtract="${1}/"
-	findFolder=0
-	count=1
-	nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
-	count=$(expr $count + 1)
-	while [ ${findFolder} -eq 0 ] ; do
-		nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
-		if [ -z "${nameFolderTemp}" ] ; then
-			findFolder=1
-		else
-			nameFolder="${nameFolderTemp}"
-			count=$(expr $count + 1)
-		fi
-	done
-	echo "${nameFolder}"
+  pathToExtract="${1}/"
+  findFolder=0
+  count=1
+  nameFolder=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+  count=$(expr $count + 1)
+  while [ ${findFolder} -eq 0 ] ; do
+    nameFolderTemp=$(echo ${pathToExtract} | cut -d "/" -f ${count})
+    if [ -z "${nameFolderTemp}" ] ; then
+      findFolder=1
+    else
+      nameFolder="${nameFolderTemp}"
+      count=$(expr $count + 1)
+    fi
+  done
+  echo "${nameFolder}"
 }
 
 # Function to remove extension from file
 # Syntax: removeExtension "<text>"
 function removeExtension() {
-	wordToConvert=${1}
-	ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
-	mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
-	echo "${wordToConvert}" > ${ksToolsSedFile}
-	# Remove extensions
-	sed -i 's/.avi//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.mp4//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.mkv//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i "s/.mov//g" "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.vob//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.mpg//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.mpeg//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.wmv//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.ogv//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.webm//g' "${ksToolsSedFile}" &> /dev/null
-	sed -i 's/.flv//g' "${ksToolsSedFile}" &> /dev/null
-	# Show file without extension
-	wordToConvert=$(cat ${ksToolsSedFile})
-	echo ${wordToConvert}
+  wordToConvert=${1}
+  ksToolsSedFile="${ksToolsTempFolder}/ks-tools-${RANDOM}.txt"
+  mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
+  echo "${wordToConvert}" > ${ksToolsSedFile}
+  # Remove extensions
+  sed -i 's/.avi//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mp4//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mkv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i "s/.mov//g" "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.vob//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mpg//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.mpeg//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.wmv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.ogv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.webm//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/.flv//g' "${ksToolsSedFile}" &> /dev/null
+  # Show file without extension
+  wordToConvert=$(cat ${ksToolsSedFile})
+  echo ${wordToConvert}
 }
 
 # Function to show files with spaces.
 # Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
-	echo "${1}" > ${dirTemp}/name.tmp
-	sed -i 's/_/ /g' ${dirTemp}/name.tmp
-	DisplayName=$(cat ${dirTemp}/name.tmp)
-	rm -rf ${dirTemp}/name.tmp
-	echo ${DisplayName}
+  echo "${1}" > ${dirTemp}/name.tmp
+  sed -i 's/_/ /g' ${dirTemp}/name.tmp
+  DisplayName=$(cat ${dirTemp}/name.tmp)
+  rm -rf ${dirTemp}/name.tmp
+  echo ${DisplayName}
 }
 
 # Syntax: ks-mp4 </absolute/path/video.mkv> </path/prefix_name>
 if [ -z "${1}" ] ; then
-	echo ""
-	echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "- Convert video file(s) to compact and efficient MP4"
-	echo ""
-	echo "+ Config:"
-	echo ""
-	echo " - Resolution: ${rel_size}"
-	echo " - Video codec: ${vcodec}"
-	echo " - Bitrate video: ${b_vcodec}"
-	echo " - Preset: ${v_preset}"
-	echo " - Audio codec: ${acodec} (stereo)"
-	echo " - Bitrate audio: ${b_acodec}"
-	echo " - Default Audio: ${default_lang_audio}"
-	echo " - Default Subtitle: ${default_lang_subt} (forced)"
-	echo " - Container: ${v_ext}"
-	echo ""
-	echo "+ Syntax: "
-	echo ""
-	echo "  $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>"
-	echo ""
-	echo " + Example: ks-mp4 /data/movies/Example.mkv /data/converted/Example"
-	echo ""
-	exit
+  echo ""
+  echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Convert video file(s) to compact and efficient MP4"
+  echo ""
+  echo "+ Config:"
+  echo ""
+  echo " - Resolution: ${rel_size}"
+  echo " - Video codec: ${vcodec}"
+  echo " - Bitrate video: ${b_vcodec}"
+  echo " - Preset: ${v_preset}"
+  echo " - Audio codec: ${acodec} (stereo)"
+  echo " - Bitrate audio: ${b_acodec}"
+  echo " - Default Audio: ${default_lang_audio}"
+  echo " - Default Subtitle: ${default_lang_subt} (forced)"
+  echo " - Container: ${v_ext}"
+  echo ""
+  echo "+ Syntax: "
+  echo ""
+  echo "  $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>"
+  echo ""
+  echo " + Example: ks-mp4 /data/movies/Example.mkv /data/converted/Example"
+  echo ""
+  exit
 fi
 if [ -f "${1}" ] ; then
-	echo "detected" > /dev/null
+  echo "detected" > /dev/null
 else
-	echo ""
-	echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "* The file '${1}' does not exist!"
-	echo ""
-	exit
+  echo ""
+  echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "* The file '${1}' does not exist!"
+  echo ""
+  exit
 fi
 
 # Conversion parameters
@@ -147,239 +147,239 @@ codec_hevc=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" |
 yuv420p10le=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
 codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
 if [ -z "${codec_h265_hevc}" ] ; then
-	p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+  p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
 else
-	p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+  p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
 fi
 
 # Init conversion file
 current_date=$(date +%Y)
 if [ -z "${2}" ] ; then
-	echo ""
-	echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
-	echo ""
-	echo "- Convert video file(s) to compact and efficient MP4"
-	echo ""
-	echo "+ Config:"
-	echo ""
-	echo " - Resolution: ${rel_size}"
-	echo " - Video codec: ${vcodec}"
-	echo " - Bitrate video: ${b_vcodec}"
-	echo " - Preset: ${v_preset}"
-	echo " - Audio codec: ${acodec} (stereo)"
-	echo " - Bitrate audio: ${b_acodec}"
-	echo " - Default Audio: ${default_lang_audio}"
-	echo " - Default Subtitle: ${default_lang_subt} (forced)"
-	echo " - Container: ${v_ext}"
-	echo ""
-	echo "+ Syntax: "
-	echo ""
-	echo "  $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>"
-	echo ""
-	echo " + Example: ks-mp4 /data/movies/Example.mkv /data/converted/Example"
-	echo ""
-	exit
+  echo ""
+  echo "* ks-mp4 (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Convert video file(s) to compact and efficient MP4"
+  echo ""
+  echo "+ Config:"
+  echo ""
+  echo " - Resolution: ${rel_size}"
+  echo " - Video codec: ${vcodec}"
+  echo " - Bitrate video: ${b_vcodec}"
+  echo " - Preset: ${v_preset}"
+  echo " - Audio codec: ${acodec} (stereo)"
+  echo " - Bitrate audio: ${b_acodec}"
+  echo " - Default Audio: ${default_lang_audio}"
+  echo " - Default Subtitle: ${default_lang_subt} (forced)"
+  echo " - Container: ${v_ext}"
+  echo ""
+  echo "+ Syntax: "
+  echo ""
+  echo "  $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>"
+  echo ""
+  echo " + Example: ks-mp4 /data/movies/Example.mkv /data/converted/Example"
+  echo ""
+  exit
 else
-	echo ""
-	echo "* Information of ${1}:"
-	echo ""
-	echo "+ Video Tracks:"
-	${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
-	echo ""
-	echo "+ Audio Tracks:"
-	${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
-	echo ""
-	echo "+ Subtitle Tracks:"
-	${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
-	echo ""
-	# Check de video track by default
-	video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-	if [ -z "${video_default}" ] ; then
-		video_default="0:0"
-	else
-		video_default_patch=$(echo ${video_default} | cut -c4)
-		if [ "${video_default_patch}" == ":" ] ; then
-			video_default=$(echo ${video_default} | cut -c1-3)
-		else
-			video_default="${video_default}"
-		fi
-	fi
-	# Ask for video
-	echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
-	if [ -z "${video_track}" ] ; then
-		video_track="${video_default}"
-	else
-		video_track="${video_track}"
-	fi
-	# Check the audio track by default
-	audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-	if [ -z "${audio_default}" ] ; then
-		audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-		if [ -z "${audio_default}" ] ; then
-			audio_default="0:1"
-		else
-			audio_default_patch=$(echo ${audio_default} | cut -c4)
-			if [ "${audio_default_patch}" == ":" ] ; then
-				audio_default=$(echo ${audio_default} | cut -c1-3)
-			else
-				audio_default="${audio_default}"
-			fi
-		fi
-	else
-		audio_default_patch=$(echo ${audio_default} | cut -c4)
-		if [ "${audio_default_patch}" == ":" ] ; then
-			audio_default=$(echo ${audio_default} | cut -c1-3)
-		else
-			audio_default="${audio_default}"
-		fi
-	fi
-	# Ask for audio
-	echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
-	if [ -z "${audio_track}" ] ; then
-		audio_track="${audio_default}"
-	else
-		audio_track="${audio_track}"
-	fi
-	# Check the subtitle track by default
-	subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-	if [ -z "${subtitle_default}" ] ; then
-		subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-		if [ -z "${subtitle_default}" ] ; then
-			subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
-			if [ -z "${subtitle_default}" ] ; then
-				subtitle_default="0:3"
-			else
-				subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
-				if [ "${subtitle_default_patch}" == ":" ] ; then
-					subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
-				else
-					subtitle_default="${subtitle_default}"
-				fi
-			fi
-		else
-			subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
-			if [ "${subtitle_default_patch}" == ":" ] ; then
-				subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
-			else
-				subtitle_default="${subtitle_default}"
-			fi
-		fi
-	else
-		subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
-		if [ "${subtitle_default_patch}" == ":" ] ; then
-			subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
-		else
-			subtitle_default="${subtitle_default}"
-		fi
-	fi
-	# Ask for subtitle
-	echo -n "* (Default: n) Do you want include subtitles? (y/n): " ; read subtitles_y_n
-	if [ "${subtitles_y_n}" == "y" ] ; then
-		echo -n "* (Default: ${subtitle_default}) Type the number of subtitle track: " ; read subtitle_track
-		if [ -z "${subtitle_track}" ] ; then
-			subtitle_track="${subtitle_default}"
-		else
-			subtitle_track="${subtitle_track}"
-		fi
-	fi
-	echo -n "* (Default: ${rel_size}) Type the resolution: " ; read resolution
-	if [ -z "${resolution}" ] ; then
-		resolution="${rel_size}"
-	else
-		rel_size="${resolution}"
-		if [ -z "${codec_h265_hevc}" ] ; then
-			p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-		else
-			p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-		fi
-	fi
-	echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
-	if [ "${patch_thread}" == "y" ] ; then
-		patch_thread="y"
-	else
-		patch_thread="n"
-	fi
-	echo ""
-	echo "* METADATA configuration:"
-	echo ""
-	# Prepare name title by default
-	FullPath="${1}"
-	name_title_default=$(extractFolderOrFile "${FullPath}")
-	name_title_default=$(removeExtension "${name_title_default}")
-	name_title_default=$(showFileWithSpace "${name_title_default}")
-	# Ask name title, year and genre
-	echo -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
-	if [ -z "${name_title}" ] ; then
-		name_title="${name_title_default}"
-	else
-		name_title="${name_title}"
-	fi
-	echo -n "* (Default: ${current_date}) Type the year: " ; read year_file
-	if [ -z "${year_file}" ] ; then
-		year_file="${current_date}"
-	else
-		year_file="${year_file}"
-	fi
-	echo -n "* (Default: Unknown) Type the genre: " ; read genre_file
-	if [ -z "${genre_file}" ] ; then
-		genre_file="Unknown"
-	else
-		genre_file="${genre_file}"
-	fi
+  echo ""
+  echo "* Information of ${1}:"
+  echo ""
+  echo "+ Video Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+  echo ""
+  echo "+ Audio Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+  echo ""
+  echo "+ Subtitle Tracks:"
+  ${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d "," -f 1
+  echo ""
+  # Check de video track by default
+  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  if [ -z "${video_default}" ] ; then
+    video_default="0:0"
+  else
+    video_default_patch=$(echo ${video_default} | cut -c4)
+    if [ "${video_default_patch}" == ":" ] ; then
+      video_default=$(echo ${video_default} | cut -c1-3)
+    else
+      video_default="${video_default}"
+    fi
+  fi
+  # Ask for video
+  echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+  if [ -z "${video_track}" ] ; then
+    video_track="${video_default}"
+  else
+    video_track="${video_track}"
+  fi
+  # Check the audio track by default
+  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  if [ -z "${audio_default}" ] ; then
+    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    if [ -z "${audio_default}" ] ; then
+      audio_default="0:1"
+    else
+      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      if [ "${audio_default_patch}" == ":" ] ; then
+        audio_default=$(echo ${audio_default} | cut -c1-3)
+      else
+        audio_default="${audio_default}"
+      fi
+    fi
+  else
+    audio_default_patch=$(echo ${audio_default} | cut -c4)
+    if [ "${audio_default_patch}" == ":" ] ; then
+      audio_default=$(echo ${audio_default} | cut -c1-3)
+    else
+      audio_default="${audio_default}"
+    fi
+  fi
+  # Ask for audio
+  echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+  if [ -z "${audio_track}" ] ; then
+    audio_track="${audio_default}"
+  else
+    audio_track="${audio_track}"
+  fi
+  # Check the subtitle track by default
+  subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+  if [ -z "${subtitle_default}" ] ; then
+    subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    if [ -z "${subtitle_default}" ] ; then
+      subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+      if [ -z "${subtitle_default}" ] ; then
+        subtitle_default="0:3"
+      else
+        subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+        if [ "${subtitle_default_patch}" == ":" ] ; then
+          subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+        else
+          subtitle_default="${subtitle_default}"
+        fi
+      fi
+    else
+      subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+      if [ "${subtitle_default_patch}" == ":" ] ; then
+        subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+      else
+        subtitle_default="${subtitle_default}"
+      fi
+    fi
+  else
+    subtitle_default_patch=$(echo ${subtitle_default} | cut -c4)
+    if [ "${subtitle_default_patch}" == ":" ] ; then
+      subtitle_default=$(echo ${subtitle_default} | cut -c1-3)
+    else
+      subtitle_default="${subtitle_default}"
+    fi
+  fi
+  # Ask for subtitle
+  echo -n "* (Default: n) Do you want include subtitles? (y/n): " ; read subtitles_y_n
+  if [ "${subtitles_y_n}" == "y" ] ; then
+    echo -n "* (Default: ${subtitle_default}) Type the number of subtitle track: " ; read subtitle_track
+    if [ -z "${subtitle_track}" ] ; then
+      subtitle_track="${subtitle_default}"
+    else
+      subtitle_track="${subtitle_track}"
+    fi
+  fi
+  echo -n "* (Default: ${rel_size}) Type the resolution: " ; read resolution
+  if [ -z "${resolution}" ] ; then
+    resolution="${rel_size}"
+  else
+    rel_size="${resolution}"
+    if [ -z "${codec_h265_hevc}" ] ; then
+      p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+    else
+      p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+    fi
+  fi
+  echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
+  if [ "${patch_thread}" == "y" ] ; then
+    patch_thread="y"
+  else
+    patch_thread="n"
+  fi
+  echo ""
+  echo "* METADATA configuration:"
+  echo ""
+  # Prepare name title by default
+  FullPath="${1}"
+  name_title_default=$(extractFolderOrFile "${FullPath}")
+  name_title_default=$(removeExtension "${name_title_default}")
+  name_title_default=$(showFileWithSpace "${name_title_default}")
+  # Ask name title, year and genre
+  echo -n "* (Default: ${name_title_default}) Type name of title: " ; read name_title
+  if [ -z "${name_title}" ] ; then
+    name_title="${name_title_default}"
+  else
+    name_title="${name_title}"
+  fi
+  echo -n "* (Default: ${current_date}) Type the year: " ; read year_file
+  if [ -z "${year_file}" ] ; then
+    year_file="${current_date}"
+  else
+    year_file="${year_file}"
+  fi
+  echo -n "* (Default: Unknown) Type the genre: " ; read genre_file
+  if [ -z "${genre_file}" ] ; then
+    genre_file="Unknown"
+  else
+    genre_file="${genre_file}"
+  fi
 
-	# Check audio 5.1 or 7.1
-	audio_5_7_1=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
-	audio_5_7_1_2=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
-	audio_5_7_1="${audio_5_7_1}${audio_5_7_1_2}"
-	if [ -z "${audio_5_7_1}" ] ; then
-		stereo_params="-ac 2"
-	else
-		stereo_params="-ac 2 -clev 3dB -slev -6dB"
-	fi
+  # Check audio 5.1 or 7.1
+  audio_5_7_1=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "5.1")
+  audio_5_7_1_2=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "${audio_track}" | grep -i "7.1")
+  audio_5_7_1="${audio_5_7_1}${audio_5_7_1_2}"
+  if [ -z "${audio_5_7_1}" ] ; then
+    stereo_params="-ac 2"
+  else
+    stereo_params="-ac 2 -clev 3dB -slev -6dB"
+  fi
 
-	# Show commands for conversion
-	echo ""
-	echo "* COMMANDS THAT WILL BE EXECUTED:"
-	echo ""
-	if [ "${subtitles_y_n}" == "y" ] ; then
-		echo "  # Extract subtitles from file ${1}"
-		echo "  ${p_ffmpeg} \"${1}\" -map ${subtitle_track} \"${2}.srt\""
-		echo ""
-		if [ "${patch_thread}" == "y" ] ; then
-			echo "  # Convert the file '${1}' to MP4"
-			echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
-		else
-			echo "  # Convert the file '${1}' to MP4"
-			echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
-		fi
-	else
-		if [ "${patch_thread}" == "y" ] ; then
-			echo "  # Convert the file '${1}' to MP4"
-			echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
-		else
-			echo "  # Convert the file '${1}' to MP4"
-			echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
-		fi
-	fi
-	# Execute commands for conversion
-	echo ""
-	echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
-	if [ "${run_commands_ffmpeg}" == "n" ] ; then
-		exit
-	else
-		if [ "${subtitles_y_n}" == "y" ] ; then
-			${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
-			if [ "${patch_thread}" == "y" ] ; then
-				${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
-			else
-				${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
-			fi
-		else
-			if [ "${patch_thread}" == "y" ] ; then
-				${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
-			else
-				${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
-			fi
-		fi
-	fi
+  # Show commands for conversion
+  echo ""
+  echo "* COMMANDS THAT WILL BE EXECUTED:"
+  echo ""
+  if [ "${subtitles_y_n}" == "y" ] ; then
+    echo "  # Extract subtitles from file ${1}"
+    echo "  ${p_ffmpeg} \"${1}\" -map ${subtitle_track} \"${2}.srt\""
+    echo ""
+    if [ "${patch_thread}" == "y" ] ; then
+      echo "  # Convert the file '${1}' to MP4"
+      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+    else
+      echo "  # Convert the file '${1}' to MP4"
+      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+    fi
+  else
+    if [ "${patch_thread}" == "y" ] ; then
+      echo "  # Convert the file '${1}' to MP4"
+      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+    else
+      echo "  # Convert the file '${1}' to MP4"
+      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+    fi
+  fi
+  # Execute commands for conversion
+  echo ""
+  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    exit
+  else
+    if [ "${subtitles_y_n}" == "y" ] ; then
+      ${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
+      if [ "${patch_thread}" == "y" ] ; then
+        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+      else
+        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+      fi
+    else
+      if [ "${patch_thread}" == "y" ] ; then
+        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+      else
+        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+      fi
+    fi
+  fi
 fi
