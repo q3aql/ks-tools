@@ -20,7 +20,10 @@ ksToolsTempFolder="/tmp/ks-tools"
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
   shopt -s expand_aliases
+  cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
+else
+  cygwin="no"
 fi
 
 # Function to remove spaces and symbols
@@ -57,7 +60,7 @@ function listArchives() {
   formatFiles=""
   videoFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
   formatFiles="${formatFiles} ${videoFiles}"
-  audioFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka"
+  audioFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka ac3"
   formatFiles="${formatFiles} ${audioFiles}"
   compressFiles="zip rar 7z bz2 gz xz tar bzip2 gzip"
   formatFiles="${formatFiles} ${compressFiles}"
@@ -156,17 +159,22 @@ function sendFile() {
     ${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
     sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     OUTPUT=$?
-    if [ ${OUTPUT} -ne 0 ] ; then
-      echo "Failure to send ${2}"
-      echo "Retrying..."
-      sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
-      sleep 5
-      countSend=$(expr ${countSend} + 1)
-      if [ ${countSend} -eq 5 ] ; then
+    if [ "${cygwin}" == "yes" ] ; then
+      echo "retry_disabled" > /dev/null
+      correct=1
+    else
+      if [ ${OUTPUT} -ne 0 ] ; then
+        echo "Failure to send ${2}"
+        echo "Retrying..."
+        sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        sleep 5
+        countSend=$(expr ${countSend} + 1)
+        if [ ${countSend} -eq 5 ] ; then
+          correct=1
+        fi
+      else
         correct=1
       fi
-    else
-      correct=1
     fi
   done
 }
@@ -178,24 +186,30 @@ function checkChecksum() {
   countChecksum=0
   echo -n "Checking checksum... " && sleep 4
   echo ""
-  while [ ${correct} -eq 0 ] ; do
-    checksumServer=$(sshpass -p ${1} ssh ${3}@${4} md5sum ${5} 2> /dev/null)
-    OUTPUT=$?
-    if [ ${OUTPUT} -ne 0 ] ; then
-      echo "Failed to get checksum for ${5}"
-      echo "Retrying..."
-      sleep 5
-      countChecksum=$(expr ${countChecksum} + 1)
-      if [ ${countChecksum} -eq 5 ] ; then
+  if [ "${cygwin}" == "yes" ] ; then
+    checksumLocal=$(md5sum ${2})
+    echo "Local checksum: ${checksumLocal}"
+    echo "Server checksum: checksum_disabled"
+  else
+    while [ ${correct} -eq 0 ] ; do
+      checksumServer=$(sshpass -p ${1} ssh ${3}@${4} md5sum ${5} 2> /dev/null)
+      OUTPUT=$?
+      if [ ${OUTPUT} -ne 0 ] ; then
+        echo "Failed to get checksum for ${5}"
+        echo "Retrying..."
+        sleep 5
+        countChecksum=$(expr ${countChecksum} + 1)
+        if [ ${countChecksum} -eq 5 ] ; then
+          correct=1
+        fi
+      else
+        checksumLocal=$(md5sum ${2})
+        echo "Local checksum: ${checksumLocal}"
+        echo "Server checksum: ${checksumServer}"
         correct=1
       fi
-    else
-      checksumLocal=$(md5sum ${2})
-      echo "Local checksum: $checksumLocal"
-      echo "Server checksum: $checksumServer"
-      correct=1
-    fi
-  done
+    done
+  fi
 }
 
 # Function to show config
