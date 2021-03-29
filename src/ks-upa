@@ -151,7 +151,7 @@ function sendFile() {
         sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         sleep 5
         countSend=$(expr ${countSend} + 1)
-        if [ ${countSend} -eq 5 ] ; then
+        if [ ${countSend} -eq 3 ] ; then
           correct=1
         fi
       else
@@ -181,7 +181,7 @@ function checkChecksum() {
         echo "Retrying..."
         sleep 5
         countChecksum=$(expr ${countChecksum} + 1)
-        if [ ${countChecksum} -eq 5 ] ; then
+        if [ ${countChecksum} -eq 3 ] ; then
           correct=1
         fi
       else
