@@ -141,11 +141,17 @@ f_conversion="-vsync 1 -async 1"
 codec_h265=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
 codec_hevc=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
 yuv420p10le=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
+hevc_main10=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
+hevc_profile_10bit="${yuv420p10le}${hevc_main10}"
 codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
 if [ -z "${codec_h265_hevc}" ] ; then
   p_conversion="-c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
 else
-  p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+  if [ -z "${hevc_profile_10bit}" ] ; then
+    p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+  else
+    p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+  fi
 fi
 
 # Show menu with bad syntax
@@ -263,7 +269,11 @@ function crop_video() {
   if [ -z "${codec_h265_hevc}" ] ; then
     p_conversion="-c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
   else
-    p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+    if [ -z "${hevc_profile_10bit}" ] ; then
+      p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+    else
+      p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+    fi
   fi
   # Ask for patched
   echo -n "* (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): " ; read patch_thread
