@@ -184,6 +184,8 @@ elif [ "${1}" == "-ev25" ] ; then
     codec_h265=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
     codec_hevc=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
     yuv420p10le=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
+    hevc_main10=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
+    hevc_profile_10bit="${yuv420p10le}${hevc_main10}"
     codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
     # Check if video input uses MPEG4/XVID
     codec_mpeg4=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "mpeg4")
@@ -196,7 +198,11 @@ elif [ "${1}" == "-ev25" ] ; then
         codec_encoded="mpeg4_encoded"
       fi
     else
-      codec_encoded="h265_encoded"
+      if [ -z "${hevc_profile_10bit}" ] ; then
+        codec_encoded="h265_encoded"
+      else
+        codec_encoded="h265_encoded_10bit"
+      fi
     fi
     # Extract video with diferent codecs
     if [ "${codec_encoded}" == "h264_encoded" ] ; then
@@ -212,6 +218,19 @@ elif [ "${1}" == "-ev25" ] ; then
       exit
     elif [ "${codec_encoded}" == "h265_encoded" ] ; then
       ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+      ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+      rm -rf "${current_dir}/temp-h265.mkv"
+      ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      echo ""
+      echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+      sleep 2
+      rm -rf "${current_dir}/seeing_noaudio.h264"
+      rm -rf "${current_dir}/seeing.mp4"
+      echo "" && echo ""
+      exit
+    elif [ "${codec_encoded}" == "h265_encoded_10bit" ] ; then
+      ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
@@ -286,6 +305,8 @@ elif [ "${1}" == "-evpf" ] ; then
     codec_h265=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
     codec_hevc=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
     yuv420p10le=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
+    hevc_main10=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
+    hevc_profile_10bit="${yuv420p10le}${hevc_main10}"
     codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
     # Check if video input uses MPEG4/XVID
     codec_mpeg4=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "mpeg4")
@@ -298,7 +319,11 @@ elif [ "${1}" == "-evpf" ] ; then
         codec_encoded="mpeg4_encoded"
       fi
     else
-      codec_encoded="h265_encoded"
+      if [ -z "${hevc_profile_10bit}" ] ; then
+        codec_encoded="h265_encoded"
+      else
+        codec_encoded="h265_encoded_10bit"
+      fi
     fi
     # Extract video with diferent codecs
     if [ "${codec_encoded}" == "h264_encoded" ] ; then
@@ -317,6 +342,19 @@ elif [ "${1}" == "-evpf" ] ; then
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      echo ""
+      echo -n "* Extracted video into ${video_file_dir} (25 fps)"
+      sleep 2
+      rm -rf "${current_dir}/seeing_noaudio.h264"
+      rm -rf "${current_dir}/seeing.mp4"
+      echo "" && echo ""
+      exit
+    elif [ "${codec_encoded}" == "h265_encoded_10bit" ] ; then
+      ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+      ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
+      rm -rf "${current_dir}/temp-h265.mkv"
+      ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
       ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
