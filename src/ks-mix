@@ -184,7 +184,7 @@ elif [ "${1}" == "-ev25" ] ; then
     codec_h265=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
     codec_hevc=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
     yuv420p10le=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
-    hevc_main10=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
+    hevc_main10=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
     hevc_profile_10bit="${yuv420p10le}${hevc_main10}"
     codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
     # Check if video input uses MPEG4/XVID
@@ -305,7 +305,7 @@ elif [ "${1}" == "-evpf" ] ; then
     codec_h265=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
     codec_hevc=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
     yuv420p10le=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "yuv420p10le")
-    hevc_main10=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
+    hevc_main10=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "Main 10")
     hevc_profile_10bit="${yuv420p10le}${hevc_main10}"
     codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}"
     # Check if video input uses MPEG4/XVID
