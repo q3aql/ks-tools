@@ -53,11 +53,11 @@ _Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, 
   
     * Open the terminal and type the following commands:
     
-    ```shell
-    $ tar zxvf ks-tools-7.2-300321-Linux-en.tar.gz
-    $ cd ks-tools
-    $ sudo make install
-    ````
+      ```shell
+      $ tar zxvf ks-tools-7.2-300321-Linux-en.tar.gz
+      $ cd ks-tools
+      $ sudo make install
+      ````
 
   * **Windows instruccions:**
     * Unzip the package with [7-zip](http://www.7-zip.org/) or [Winrar](http://www.rarlab.com/).
