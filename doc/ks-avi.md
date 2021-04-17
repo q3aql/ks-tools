@@ -44,9 +44,9 @@ $ ks-avi </absolute/path/video.mkv> </path/prefix_name>
 
   * An example of use would be the following:
   
-  ```shell
-  $ ks-avi /data/movies/Example.mkv /data/converted/Example
-  ````
+    ```shell
+    $ ks-avi /data/movies/Example.mkv /data/converted/Example
+    ````
     
   * Executing the command, the file will be analyzed and a wizard will be shown to select the tracks, choose the settings and define the metadata:
   

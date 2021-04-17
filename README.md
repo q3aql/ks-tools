@@ -50,7 +50,9 @@ _Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, 
 ### Installation:
 
   * **Unix/Linux instructions:**
-    * Open the terminal and type the following commands:.
+  
+    * Open the terminal and type the following commands:
+    
     ```shell
     $ tar zxvf ks-tools-7.2-300321-Linux-en.tar.gz
     $ cd ks-tools
