@@ -597,7 +597,7 @@ elif [ "${1}" == "-evti" ] ; then
         minuteCutAfter="${minuteZeroAfter}"
       fi
       # Ask for second to cut
-      echo -n "* (Default: ${secondCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+      echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
       if [ -z "${second_cutAfter}" ] ; then
         secondZeroAfter=$(zero_number "${secondCutAfter}")
         secondCutAfter="${secondZeroAfter}"
@@ -741,7 +741,7 @@ elif [ "${1}" == "-eati" ] ; then
         minuteCutAfter="${minuteZeroAfter}"
       fi
       # Ask for second to cut
-      echo -n "* (Default: ${secondCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+      echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
       if [ -z "${second_cutAfter}" ] ; then
         secondZeroAfter=$(zero_number "${secondCutAfter}")
         secondCutAfter="${secondZeroAfter}"
@@ -905,7 +905,7 @@ elif [ "${1}" == "-evat" ] ; then
         minuteCutAfter="${minuteZeroAfter}"
       fi
       # Ask for second to cut
-      echo -n "* (Default: ${secondCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+      echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
       if [ -z "${second_cutAfter}" ] ; then
         secondZeroAfter=$(zero_number "${secondCutAfter}")
         secondCutAfter="${secondZeroAfter}"
@@ -920,7 +920,7 @@ elif [ "${1}" == "-evat" ] ; then
       hourPlus=$(zero_number "${hourPlusRaw}")
       minutePlus=$(zero_number "${minutePlusRaw}")
       secondPlus=$(zero_number "${secondPlusRaw}")
-      echo -n "* (Default: y) Extract audio from ${hourCut}:${minuteCut}:${secondCut} to ${hourPlus}:${minutePlus}:${secondPlus}? (y/n): " ; read accept_extraction_advanced
+      echo -n "* (Default: y) Extract video + audio from ${hourCut}:${minuteCut}:${secondCut} to ${hourPlus}:${minutePlus}:${secondPlus}? (y/n): " ; read accept_extraction_advanced
       if [ "${accept_extraction_advanced}" == "n" ] ; then
         exit
       else
