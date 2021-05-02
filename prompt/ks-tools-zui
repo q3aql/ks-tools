@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-tools - Initialize the ks-tools ZUI (using xterm)        #
-# Date: 30-03-2021                                            #
+# Date: 03-05-2021                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@protonmail.ch                                #
 ###############################################################
-VERSION="7.2 (BETA)"
-M_DATE="300321"
+VERSION="7.3 (BETA)"
+M_DATE="030521"
 
 # Variables
 name_terminal="ks-tools v${VERSION} (${M_DATE})"

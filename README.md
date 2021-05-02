@@ -45,7 +45,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   * [ks-tools-7.2-300321-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-en-all.deb) - Debian based package.
   * [ks-tools-7.2-300321-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-en-all.rpm) - Red Hat based package.
  
-_Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, ffmpeg, grep_
+_Dependencies: `bash`, `coreutils`, `openssh-server`, `openssh-client`, `sshpass`, `rsync`, `ffmpeg`, `grep`_
 
 ### Installation:
 
@@ -60,15 +60,16 @@ _Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, 
       ````
 
   * **Windows instruccions:**
+  
     * Unzip the package with [7-zip](http://www.7-zip.org/) or [Winrar](http://www.rarlab.com/).
     * Copy folder `ks-tools` on `C:\Program Files`.
     * Open CMD terminal and type the following commands:
-      
+
       ```shell
       Drive:> cd "C:\Program Files\ks-tools"
       Drive:> Install.cmd
       ````
-          
+
 ### External links:
 
   * [ffmpeg homepage](http://ffmpeg.org/)
