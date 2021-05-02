@@ -62,9 +62,13 @@ _Dependencies: bash, coreutils, openssh-server, openssh-client, sshpass, rsync, 
   * **Windows instruccions:**
     * Unzip the package with [7-zip](http://www.7-zip.org/) or [Winrar](http://www.rarlab.com/).
     * Copy folder `ks-tools` on `C:\Program Files`.
-    * Enter to folder with name `ks-tools` and execute `Install.cmd`.
-    * Finally, you will see a Shortcut on your Desktop.
-    
+    * Open CMD terminal and type the following commands:
+      
+      ```shell
+      Drive:> cd "C:\Program Files\ks-tools"
+      Drive:> Install.cmd
+      ````
+          
 ### External links:
 
   * [ffmpeg homepage](http://ffmpeg.org/)
