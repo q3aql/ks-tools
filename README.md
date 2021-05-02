@@ -39,11 +39,11 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-vob-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
     
 ### Downloads:
-  * [ks-tools-7.2-300321-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-Linux-en.tar.gz) - Unix/Linux package.
-  * [ks-tools-7.2-300321-Windows-en-x86.zip](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-Windows-en-x86.zip) - Windows 32-bit package (with cygwin).
-  * [ks-tools-7.2-300321-Windows-en-x86-64.zip](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-Windows-en-x86-64.zip) - Windows 64-bit package (with cygwin).
-  * [ks-tools-7.2-300321-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-en-all.deb) - Debian based package.
-  * [ks-tools-7.2-300321-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v7.2/ks-tools-7.2-300321-en-all.rpm) - Red Hat based package.
+  * [ks-tools-7.3-030521-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v7.3/ks-tools-7.3-030521-Linux-en.tar.gz) - Unix/Linux package.
+  * [ks-tools-7.3-030521-Windows-en-x86.zip](https://github.com/q3aql/ks-tools/releases/download/v7.3/ks-tools-7.3-030521-Windows-en-x86.zip) - Windows 32-bit package (with cygwin).
+  * [ks-tools-7.3-030521-Windows-en-x86-64.zip](https://github.com/q3aql/ks-tools/releases/download/v7.3/ks-tools-7.3-030521-Windows-en-x86-64.zip) - Windows 64-bit package (with cygwin).
+  * [ks-tools-7.3-030521-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v7.3/ks-tools-7.3-030521-en-all.deb) - Debian based package.
+  * [ks-tools-7.3-030521-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v7.3/ks-tools-7.3-030521-en-all.rpm) - Red Hat based package.
  
 _Dependencies: `bash`, `coreutils`, `openssh-server`, `openssh-client`, `sshpass`, `rsync`, `ffmpeg`, `grep`_
 
@@ -54,7 +54,7 @@ _Dependencies: `bash`, `coreutils`, `openssh-server`, `openssh-client`, `sshpass
     * Open the terminal and type the following commands:
     
       ```shell
-      $ tar zxvf ks-tools-7.2-300321-Linux-en.tar.gz
+      $ tar zxvf ks-tools-7.3-030521-Linux-en.tar.gz
       $ cd ks-tools
       $ sudo make install
       ````
