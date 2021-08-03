@@ -10,7 +10,7 @@ $ ks-mix -evpf <video-file>  --> Extract video track & set fps (H264/5 & MPEG4)
 $ ks-mix -eaud <video-file>  --> Extract audio track
 $ ks-mix -esub <video-file>  --> Extract subtitle track (only for subrip/srt)
 $ ks-mix -evti <video-file>  --> Extract video from a specific hour/minute/second
-$ ks-mix -eati <video-file>  --> Extract video from a specific hour/minute/second
+$ ks-mix -eati <video-file>  --> Extract audio from a specific hour/minute/second
 $ ks-mix -evat <video-file>  --> Extract video + audio from specific time
 $ ks-mix -chec <video-file>  --> Analyze tracks of video file
 $ ks-mix -mixf               --> Mix video and audio file
