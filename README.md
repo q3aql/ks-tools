@@ -59,7 +59,7 @@ _Dependencies: `bash`, `coreutils`, `openssh-server`, `openssh-client`, `sshpass
       $ sudo make install
       ````
 
-  * **Windows instruccions:**
+  * **Windows instructions:**
   
     * Unzip the package with [7-zip](http://www.7-zip.org/) or [Winrar](http://www.rarlab.com/).
     * Copy folder `ks-tools` on `C:\Program Files`.
