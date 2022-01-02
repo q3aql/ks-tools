@@ -47,7 +47,7 @@ $ ks-conf
     q - Exit to main menu
     
     * Choose an option (r/v/b/p/a/i/l/s/q):
-        ````
+    ````
 
 ### Editing config of audio tools:
 
@@ -63,7 +63,7 @@ $ ks-conf
     q - Exit to main menu
     
     * Choose an option (a/l/c/q):
-        ````
+    ````
     
 ### Back to README.md
     
