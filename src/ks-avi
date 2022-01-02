@@ -13,6 +13,8 @@ M_DATE="030521"
 dirTemp="/tmp"
 listTemp="ks-tools.list"
 ksToolsTempFolder="/tmp/ks-tools"
+configFolder=${HOME}/.ks-tools 
+configFile=${configFolder}/ks-avi
 
 # Basic parameters
 rel_size="720x480"
@@ -26,6 +28,61 @@ b_acodec="192k"
 default_lang_audio="spa"
 default_lang_subt="spa"
 v_ext="avi"
+
+# Create inicial config file
+mkdir -p ${configFolder}
+if [ -f ${configFile} ] ; then
+  exist_rel_size=$(cat ${configFile} | grep "rel_size=")
+  exist_vcodec=$(cat ${configFile} | grep "vcodec=" | cut -c2 | cut -d "_" -f 1)
+  exist_b_vcodec=$(cat ${configFile} | grep "b_vcodec=") 
+  exist_v_preset=$(cat ${configFile} | grep "v_preset=") 
+  exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
+  exist_b_acodec=$(cat ${configFile} | grep "b_acodec=") 
+  exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
+  exist_default_lang_subt=$(cat ${configFile} | grep "default_lang_subt=") 
+  exist_v_ext=$(cat ${configFile} | grep "v_ext=")
+  if [ -z ${exist_rel_size} ] ; then
+    echo "rel_size=${rel_size}" >> ${configFile}
+  fi
+  if [ -z ${exist_vcodec} ] ; then
+    echo "vcodec=${vcodec}" >> ${configFile}
+  fi 
+  if [ -z ${exist_b_vcodec} ] ; then
+    echo "b_vcodec=${b_vcodec}" >> ${configFile}
+  fi
+  if [ -z ${exist_v_preset} ] ; then
+    echo "v_preset=${v_preset}" >> ${configFile}
+  fi
+  if [ -z ${exist_acodec} ] ; then
+    echo "acodec=${acodec}" >> ${configFile}
+  fi
+  if [ -z ${exist_b_acodec} ] ; then
+    echo "b_acodec=${b_acodec}" >> ${configFile}
+  fi
+  if [ -z ${exist_default_lang_audio} ] ; then
+    echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+  fi
+  if [ -z ${exist_default_lang_subt} ] ; then
+    echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
+  fi
+  if [ -z ${exist_v_ext} ] ; then
+    echo "v_ext=${v_ext}" >> ${configFile}
+  fi
+  source ${configFile}
+else
+  echo "#!/bin/bash" > ${configFile}
+  echo "" >> ${configFile}
+  echo "rel_size=${rel_size}" >> ${configFile}
+  echo "vcodec=${vcodec}" >> ${configFile}
+  echo "b_vcodec=${b_vcodec}" >> ${configFile}
+  echo "v_preset=${v_preset}" >> ${configFile}
+  echo "acodec=${acodec}" >> ${configFile}
+  echo "b_acodec=${b_acodec}" >> ${configFile}
+  echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+  echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
+  echo "v_ext=${v_ext}" >> ${configFile}
+  source ${configFile}
+fi
 
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
@@ -106,7 +163,7 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "- Convert video file(s) to compact and efficient AVI"
   echo ""
-  echo "+ Config:"
+  echo "+ Config: ${configFile}"
   echo ""
   echo " - Resolution: ${rel_size}"
   echo " - Video codec: ${vcodec}"
