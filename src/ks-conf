@@ -627,7 +627,7 @@ edit_audio_config() {
     echo " c - Reset configuration file"
     echo " q - Exit to main menu"
     echo ""
-    echo -n "* Choose an option (r/v/b/p/a/i/l/s/q): " ; read option
+    echo -n "* Choose an option (a/l/c/q): " ; read option
     if [ "${option}" == "a" ] ; then
     # Set bitrate for audio
       echo ""
