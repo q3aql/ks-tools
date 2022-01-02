@@ -18,6 +18,8 @@ formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ogg oga mp3 mp2 aa
 dirTemp="/tmp"
 listTemp="ks-tools.list"
 ksToolsTempFolder="/tmp/ks-tools"
+configFolder=${HOME}/.ks-tools 
+configFile=${configFolder}/ks-mp3
 
 # Basic parameters
 acodec="libmp3lame"
@@ -26,6 +28,36 @@ v_ext="mp3"
 track_init="1"
 artist_init="Artist"
 default_lang_audio="spa"
+
+# Create inicial config file
+mkdir -p ${configFolder}
+if [ -f ${configFile} ] ; then
+  exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
+  exist_b_acodec=$(cat ${configFile} | grep "b_acodec=") 
+  exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
+  exist_v_ext=$(cat ${configFile} | grep "v_ext=")
+  if [ -z ${exist_acodec} ] ; then
+    echo "acodec=${acodec}" >> ${configFile}
+  fi
+  if [ -z ${exist_b_acodec} ] ; then
+    echo "b_acodec=${b_acodec}" >> ${configFile}
+  fi
+  if [ -z ${exist_default_lang_audio} ] ; then
+    echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+  fi
+  if [ -z ${exist_v_ext} ] ; then
+    echo "v_ext=${v_ext}" >> ${configFile}
+  fi
+  source ${configFile}
+else
+  echo "#!/bin/bash" > ${configFile}
+  echo "" >> ${configFile}
+  echo "acodec=${acodec}" >> ${configFile}
+  echo "b_acodec=${b_acodec}" >> ${configFile}
+  echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+  echo "v_ext=${v_ext}" >> ${configFile}
+  source ${configFile}
+fi
 
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
@@ -129,7 +161,7 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "- Convert folder album to MP3 Audio Format"
   echo ""
-  echo "+ Config:"
+  echo "+ Config: ${configFile}"
   echo ""
   echo " - Audio codec: ${acodec}"
   echo " - Bitrate audio: ${b_acodec}"
