@@ -9,10 +9,12 @@ rem # License: GPL v2.0                  #
 rem ######################################
 set VERSION=8.0
 
-rem # Start ks-tools ZUI (bash)
+rem # Start ks-tools terminal (bash)
+cd "%~d0%~p0"
 mkdir home\%USERNAME%
 copy /Y prompt\.bashrc home\%USERNAME%
 copy /Y prompt\.minttyrc home\%USERNAME%
 cls
 set PATH=%PATH%;%~d0%~p0\bin
-bin\bash.exe bin\ks-zui
+bin\bash.exe
+rem bash

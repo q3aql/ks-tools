@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4 (ks-tools) - Convert video to MP4 format             #
-# Date: 03-05-2021                                            #
+# Date: 02-01-2022                                            #
 # Author: q3aql                                               #
-# Contact: q3aql@protonmail.ch                                #
+# Contact: q3aql@duck.com                                     #
 ###############################################################
-VERSION="7.3"
-M_DATE="030521"
+VERSION="8.0"
+M_DATE="020122"
 
 # Global parameters
 dirTemp="/tmp"
@@ -28,6 +28,12 @@ b_acodec="256k"
 default_lang_audio="spa"
 default_lang_subt="spa"
 v_ext="mp4"
+
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  source "/usr/bin/cygwin-alias.sh"
+fi
 
 # Create inicial config file
 mkdir -p ${configFolder}
@@ -82,12 +88,6 @@ else
   echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
   echo "v_ext=${v_ext}" >> ${configFile}
   source ${configFile}
-fi
-
-# Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
-  source "/usr/bin/cygwin-alias.sh"
 fi
 
 # Check if ffmpeg is installed

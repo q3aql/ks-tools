@@ -2,12 +2,12 @@
 
 ############################################################################
 # ks-oga-album (ks-tools) - Convert folder album to OGA (OGG Audio) Format #
-# Date: 03-05-2021                                                         #
+# Date: 02-01-2022                                                         #
 # Author: q3aql                                                            #
-# Contact: q3aql@protonmail.ch                                             #
+# Contact: q3aql@duck.com                                                  #
 ############################################################################
-VERSION="7.3"
-M_DATE="030521"
+VERSION="8.0"
+M_DATE="020122"
 
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"
@@ -28,6 +28,12 @@ v_ext="oga"
 track_init="1"
 artist_init="Artist"
 default_lang_audio="spa"
+
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  source "/usr/bin/cygwin-alias.sh"
+fi
 
 # Create inicial config file
 mkdir -p ${configFolder}
@@ -57,12 +63,6 @@ else
   echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
   echo "v_ext=${v_ext}" >> ${configFile}
   source ${configFile}
-fi
-
-# Check cygwin alias (for Windows)
-if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
-  shopt -s expand_aliases
-  source "/usr/bin/cygwin-alias.sh"
 fi
 
 # Check if ffmpeg is installed

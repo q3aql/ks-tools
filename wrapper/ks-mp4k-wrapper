@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4k-wrapper (ks-tools) - Wrapper for ks-mp4k            #
-# Date: 03-05-2021                                            #
+# Date: 02-01-2022                                            #
 # Author: q3aql                                               #
-# Contact: q3aql@protonmail.ch                                #
+# Contact: q3aql@duck.com                                     #
 ###############################################################
-VERSION="7.3"
-M_DATE="030521"
+VERSION="8.0"
+M_DATE="020122"
 
 # Conversion parameters
 ks_mp4k_to_wrap="/usr/bin/ks-mp4k"

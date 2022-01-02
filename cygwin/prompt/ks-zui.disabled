@@ -2,12 +2,12 @@
 
 #################################################################
 # ks-zui (ks-tools) - Simple zenity user interface for ks-tools #
-# Date: 03-05-2021                                              #
+# Date: 02-01-2022                                              #
 # Author: q3aql                                                 #
-# Contact: q3aql@protonmail.ch                                  #
+# Contact: q3aql@duck.com                                       #
 #################################################################
-VERSION="7.3 (BETA)"
-M_DATE="030521"
+VERSION="8.0 (BETA)"
+M_DATE="020122"
 
 # Function to show about
 function showAbout() {
