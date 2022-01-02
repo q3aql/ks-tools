@@ -25,6 +25,8 @@ $ ks-oga-album </absolute/path/album>
     v_ext="oga"`
     default_lang_audio="spa"`
     ````
+
+  * RECOMMENDED: You can use the [ks-conf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-conf.md) tool to edit the configuration.
     
 ### Example of use:
 

@@ -36,7 +36,9 @@ $ ks-avi </absolute/path/video.mkv> </path/prefix_name>
     default_lang_subt="spa"
     v_ext="avi"
     ````
-    
+
+  * RECOMMENDED: You can use the [ks-conf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-conf.md) tool to edit the configuration.
+
 ### Example of use:
 
   * An example of use would be the following:
