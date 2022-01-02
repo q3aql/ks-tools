@@ -30,13 +30,14 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-mix](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mix.md) - Extract video/audio and mix video/audio files.
     * [ks-crop](https://github.com/q3aql/ks-tools/blob/main/doc/ks-crop.md) - Crop or change aspect ratio of a video.
   
-  * `Wrappers:`
+  * `Wrappers/Configuration:`
 
     * [ks-mp4-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4-wrapper.md) - Wrapper for ks-mp4 to create graphical interfaces.
     * [ks-mp4k-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4k-wrapper.md) - Wrapper for ks-mp4k to create graphical interfaces.
     * [ks-mp4s-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s-wrapper.md) - Wrapper for ks-mp4s to create graphical interfaces.
     * [ks-avi-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-avi-wrapper.md) - Wrapper for ks-avi to create graphical interfaces.
     * [ks-vob-wrapper](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
+    * [ks-conf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-conf.md) - Tool for create and modify all configuration files. 
     
 ### Downloads:
   * [ks-tools-7.3-030521-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v7.3/ks-tools-7.3-030521-Linux-en.tar.gz) - Unix/Linux package.
