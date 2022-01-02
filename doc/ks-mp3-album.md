@@ -17,7 +17,7 @@ $ ks-mp3-album </absolute/path/album>
     - Container: oga
     ````
     
-  * If you want to change the settings, you need to edit the `ks-mp3-album` file and change the following variables:
+  * If you want to change the settings, you need to edit the `~/.ks-tools/ks-mp3` file and change the following variables:
   
     ```shell
     # Basic parameters

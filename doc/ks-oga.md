@@ -17,10 +17,9 @@ $ ks-oga </absolute/path/song.mp3> </path/prefix_name>
     - Container: oga
     ````
     
-  * If you want to change the settings, you need to edit the `ks-oga` file and change the following variables:
+  * If you want to change the settings, you need to edit the `~/.ks-tools/ks-oga` file and change the following variables:
 
     ```shell
-    # Basic parameters
     acodec="libvorbis"
     b_acodec="130k"
     v_ext="oga"

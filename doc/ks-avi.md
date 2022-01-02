@@ -23,15 +23,12 @@ $ ks-avi </absolute/path/video.mkv> </path/prefix_name>
     - Container: avi
     ````
     
-  * If you want to change the settings, you need to edit the `ks-avi` file and change the following variables:
+  * If you want to change the settings, you need to edit the `~/.ks-tools/ks-avi` file and change the following variables:
   
     ```shell
-    # Basic parameters
     rel_size="720x480"
     vcodec="libxvid"
     b_vcodec="3000k"
-    # Presets: ultrafast, superfast, veryfast, faster,
-    #  fast, medium (default), slow, slower, veryslow
     v_preset="slow"
     acodec="libmp3lame"
     b_acodec="192k"

@@ -23,15 +23,12 @@ $ ks-mp4s </absolute/path/video.mkv> </path/prefix_name>
     - Container: mp4
     ````
     
-  * If you want to change the settings, you need to edit the `ks-mp4s` file and change the following variables:
+  * If you want to change the settings, you need to edit the `~/.ks-tools/ks-mp4s` file and change the following variables:
 
     ```shell
-    # Basic parameters
     rel_size="720x480"
     vcodec="libx264"
     b_vcodec="950k"
-    # Presets: ultrafast, superfast, veryfast, faster,
-    #  fast, medium (default), slow, slower, veryslow
     v_preset="medium"
     acodec="aac"
     b_acodec="128k"
