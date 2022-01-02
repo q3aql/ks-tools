@@ -20,7 +20,6 @@ $ ks-mp3-album </absolute/path/album>
   * If you want to change the settings, you need to edit the `~/.ks-tools/ks-mp3` file and change the following variables:
   
     ```shell
-    # Basic parameters
     acodec="libmp3lame"
     b_acodec="128k"
     v_ext="mp3"
