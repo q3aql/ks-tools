@@ -24,7 +24,7 @@ $ ks-upr -h  - Show help
 
     ```shell
     * Enter the server user: anonymous
-    * Enter the server key: 1234567
+    * Enter the server key: *******
     * Enter the server URL: mypersonaldomain.es
     * Enter the path on the server: /home/anonymous
     * Enter the local path to scan: /home/local/videos
@@ -52,7 +52,7 @@ $ ks-upr -h  - Show help
 
     ```shell
     * Server User: anonymous
-    * Server Password: 1234567
+    * Server Password: *******
     * URL (or IP) Server: mypersonaldomain.es
     * Destination Path (Server): /home/anonymous
     * Scan Path (Local): /home/local/videos
@@ -70,7 +70,7 @@ $ ks-upr -h  - Show help
 
     ```shell
     1 - Edit User (anonymous)
-    2 - Edit Password (1234567)
+    2 - Edit Password (*******)
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
