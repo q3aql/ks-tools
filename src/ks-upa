@@ -194,34 +194,106 @@ function checkChecksum() {
   fi
 }
 
+# Generate random codes 
+function generate_codes() {
+  chars="abcdefghijklmnopqrstywxz1234567890ABCDEFHIJKLMNOPQRSTYWXZ@/"
+  long_code="${1}"
+  for i in {1} ; do
+    echo -n "${chars:RANDOM%${#chars}:1}"
+  done
+}
+
+# Function to encrypt pass on config file
+# Syntax: encrypt_kstools <password>
+function encrypt_kstools() {
+  raw_pass="${1}"
+  characters_pass_raw=$(echo ${raw_pass} | wc -m)
+  characters_pass=$(expr ${characters_pass_raw} - 1)
+  total_characters=0
+  mkdir -p ${HOME}/.ks-tools/
+  rm -rf ${HOME}/.ks-tools/.seq-codes
+  while [ ${total_characters} -le ${characters_pass} ] ; do
+    num_gen=$(echo -n ${RANDOM} | cut -c1)
+    echo -n ${num_gen} >> ${HOME}/.ks-tools/.seq-codes
+    total_characters=$(expr ${total_characters} + 1)
+  done
+  characters_seq_raw=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | wc -m)
+  characters_seq=$(expr ${characters_seq_raw} - 1)
+  total_characters=1
+  encrypted_pass=""
+  while [ ${total_characters} -le ${characters_pass} ] ; do
+    num_seq_read=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | cut -c${total_characters})
+    character=$(echo ${raw_pass} | cut -c${total_characters})
+    repeat_seq=0
+    while [ ${repeat_seq} -lt ${num_seq_read} ] ; do
+      code_gen=$(generate_codes)
+      encrypted_pass="${encrypted_pass}${code_gen}"
+      repeat_seq=$(expr ${repeat_seq} + 1)
+    done
+    encrypted_pass="${encrypted_pass}${character}"
+    total_characters=$(expr ${total_characters} + 1)
+  done
+  code_gen=$(generate_codes)
+  encrypted_pass="${encrypted_pass}${code_gen}"
+  echo ${encrypted_pass}
+}
+
+# Function to decrypt pass on config file
+# Syntax: decrypt_kstools <password>
+function decrypt_kstools() {
+  raw_pass_encrypted="${1}"
+  total_characters=1
+  codes_seq=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null)
+  num_codes_seq=$(cat ${HOME}/.ks-tools/.seq-codes 2> /dev/null | wc -m)
+  pass_decrypt=""
+  total_characters=1
+  pos_codes_pass=0
+  while [ ${total_characters} -lt ${num_codes_seq} ] ; do
+    pos_codes=$(echo ${codes_seq} | cut -c${total_characters})
+    pos_codes_pass=$(expr ${pos_codes_pass} + ${pos_codes} + 1)
+    pos_pass=$(expr ${raw_pass_encrypted} | cut -c${pos_codes_pass})
+    pass_decrypt="${pass_decrypt}${pos_pass}"
+    total_characters=$(expr ${total_characters} + 1)
+  done
+  echo ${pass_decrypt}
+}
+
 # Function to show config
 function showConfig() {
   configAvailable=0
   echo ""
   echo "* ks-upa (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
-  if [ -f ${dirConfig}/USER ] ; then
-    showUser=$(cat ${dirConfig}/USER)
+  if [ -f ${dirConfig}/ks-upload-user ] ; then
+    showUser=$(cat ${dirConfig}/ks-upload-user)
     echo "- Server User: ${showUser}"
     configAvailable=1
   fi
-  if [ -f ${dirConfig}/PASS ] ; then
-    showPassword=$(cat ${dirConfig}/PASS)
+  if [ -f ${dirConfig}/ks-upload-pass ] ; then
+    readPasswordEncrypted=$(cat ${dirConfig}/ks-upload-pass)
+    readPasswordDecrypted=$(decrypt_kstools "${readPasswordEncrypted}")
+    readPasswordChars=$(echo ${readPasswordDecrypted} | wc -m)
+    totalchars=0
+    showPassword=""
+    while [ ${totalchars} -lt ${readPasswordChars} ] ; do
+      showPassword="${showPassword}*"
+      totalchars=$(expr ${totalchars} + 1)
+    done
     echo "- Server Password: ${showPassword}"
     configAvailable=1
   fi
-  if [ -f ${dirConfig}/SERVER ] ; then
-    showServer=$(cat ${dirConfig}/SERVER)
+  if [ -f ${dirConfig}/ks-upload-server ] ; then
+    showServer=$(cat ${dirConfig}/ks-upload-server)
     echo "- URL (or IP) Server: ${showServer}"
     configAvailable=1
   fi
-  if [ -f ${dirConfig}/DIR_SERVER ] ; then
-    showDirServer=$(cat ${dirConfig}/DIR_SERVER)
+  if [ -f ${dirConfig}/ks-upload-dirserver ] ; then
+    showDirServer=$(cat ${dirConfig}/ks-upload-dirserver)
     echo "- Destination Path (Server): ${showDirServer}"
     configAvailable=1
   fi
-  if [ -f ${dirConfig}/DIR ] ; then
-    showDirLocal=$(cat ${dirConfig}/DIR)
+  if [ -f ${dirConfig}/ks-upload-dirlocal ] ; then
+    showDirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
     echo "- Scan Path (Local): ${showDirLocal}"
     configAvailable=1
   fi
@@ -237,11 +309,19 @@ function editConfig() {
   editConfig=0
   while [ ${editConfig} -eq 0 ] ; do
     clear
-    editUser=$(cat ${dirConfig}/USER 2> /dev/null)
-    editPassword=$(cat ${dirConfig}/PASS 2> /dev/null)
-    editServer=$(cat ${dirConfig}/SERVER 2> /dev/null)
-    editDirServer=$(cat ${dirConfig}/DIR_SERVER 2> /dev/null)
-    editDirLocal=$(cat ${dirConfig}/DIR 2> /dev/null)
+    editUser=$(cat ${dirConfig}/ks-upload-user 2> /dev/null)
+    readPasswordEncrypted=$(cat ${dirConfig}/ks-upload-pass)
+    readPasswordDecrypted=$(decrypt_kstools "${readPasswordEncrypted}")
+    readPasswordChars=$(echo ${readPasswordDecrypted} | wc -m)
+    totalchars=0
+    editPassword=""
+    while [ ${totalchars} -lt ${readPasswordChars} ] ; do
+      editPassword="${editPassword}*"
+      totalchars=$(expr ${totalchars} + 1)
+    done
+    editServer=$(cat ${dirConfig}/ks-upload-server 2> /dev/null)
+    editDirServer=$(cat ${dirConfig}/ks-upload-dirserver 2> /dev/null)
+    editDirLocal=$(cat ${dirConfig}/ks-upload-dirlocal 2> /dev/null)
     echo ""
     echo "* ks-upa (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
@@ -258,23 +338,24 @@ function editConfig() {
     if [ "${EDIT}" == "1" ] ; then
       echo -n "* Enter the server user: " ; read USER
       user=${USER}
-      echo ${user} > ${dirConfig}/USER
+      echo ${user} > ${dirConfig}/ks-upload-user
     elif [ "${EDIT}" == "2" ] ; then
       echo -n "* Enter the server key: " ; read PASS
-      password=${PASS}
-      echo ${password} > ${dirConfig}/PASS
+      raw_password_enter=${PASS}
+      encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+      echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
     elif [ "${EDIT}" == "3" ] ; then
       echo -n "* Enter the server URL: " ; read SERVER
       server=${SERVER}
-      echo ${server} > ${dirConfig}/SERVER
+      echo ${server} > ${dirConfig}/ks-upload-server
     elif [ "${EDIT}" == "4" ] ; then
       echo -n "* Enter the path on the server: " ; read DIR_SERVER
       dirServer=${DIR_SERVER}
-      echo ${dirServer} > ${dirConfig}/DIR_SERVER
+      echo ${dirServer} > ${dirConfig}/ks-upload-dirserver
     elif [ "${EDIT}" == "5" ] ; then
       echo -n "* Enter the local path to scan: " ; read DIR
       dirLocal=${DIR}
-      echo ${dirLocal} > ${dirConfig}/DIR
+      echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
     elif [ "${EDIT}" == "6" ] ; then
       editConfig=1
     else
@@ -366,11 +447,11 @@ fi
 
 # Delete the existing configuration.
 if [ "$1" == "-r" ] ; then
-  rm -rf ${dirConfig}/USER
-  rm -rf ${dirConfig}/PASS
-  rm -rf ${dirConfig}/SERVER
-  rm -rf ${dirConfig}/DIR_SERVER
-  rm -rf ${dirConfig}/DIR
+  rm -rf ${dirConfig}/ks-upload-user
+  rm -rf ${dirConfig}/ks-upload-pass
+  rm -rf ${dirConfig}/ks-upload-server
+  rm -rf ${dirConfig}/ks-upload-dirserver
+  rm -rf ${dirConfig}/ks-upload-dirlocal
   exit
 fi
 
@@ -395,44 +476,46 @@ elif [ "$1" == "-i" ] ; then
   echo ""
   checkDependencies
   # Ask the user and if it exists, read it from the config.
-  if [ -f ${dirConfig}/USER ] ; then
-    user=$(cat ${dirConfig}/USER)
+  if [ -f ${dirConfig}/ks-upload-user ] ; then
+    user=$(cat ${dirConfig}/ks-upload-user)
   else
     echo -n "* Enter the server user: " ; read USER
     user=${USER}
-    echo ${user} > ${dirConfig}/USER
+    echo ${user} > ${dirConfig}/ks-upload-user
   fi
   # Ask the password and if it exists, read it from the config.
-  if [ -f ${dirConfig}/PASS ] ; then
-    password=$(cat ${dirConfig}/PASS)
+  if [ -f ${dirConfig}/ks-upload-pass ] ; then
+    raw_password=$(cat ${dirConfig}/ks-upload-pass)
+    password=$(decrypt_kstools "${raw_password}")
   else
     echo -n "* Enter the server key: " ; read PASS
-    password=${PASS}
-    echo ${password} > ${dirConfig}/PASS
+    raw_password_enter=${PASS}
+    encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+    echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
   fi
   # Ask the server URL and if it exists, read it from the config.
-  if [ -f ${dirConfig}/SERVER ] ; then
-    server=$(cat ${dirConfig}/SERVER)
+  if [ -f ${dirConfig}/ks-upload-server ] ; then
+    server=$(cat ${dirConfig}/ks-upload-server)
   else
     echo -n "* Enter the server URL: " ; read SERVER
     server=${SERVER}
-    echo ${server} > ${dirConfig}/SERVER
+    echo ${server} > ${dirConfig}/ks-upload-server
   fi
   # Ask the path on the server and if it exists, read it from the config.
-  if [ -f ${dirConfig}/DIR_SERVER ] ; then
-    dirServer=$(cat ${dirConfig}/DIR_SERVER)
+  if [ -f ${dirConfig}/ks-upload-dirserver ] ; then
+    dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
   else
     echo -n "* Enter the path on the server: " ; read DIR_SERVER
     dirServer=${DIR_SERVER}
-    echo ${dirServer} > ${dirConfig}/DIR_SERVER
+    echo ${dirServer} > ${dirConfig}/ks-upload-dirserver
   fi
   # Ask the local path and if it exists, read it from the config.
-  if [ -f ${dirConfig}/DIR ] ; then
-    dirLocal=$(cat ${dirConfig}/DIR)
+  if [ -f ${dirConfig}/ks-upload-dirlocal ] ; then
+    dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
   else
     echo -n "* Enter the local path to scan: " ; read DIR
     dirLocal=${DIR}
-    echo ${dirLocal} > ${dirConfig}/DIR
+    echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
   fi
 
   # Call the functions to perform the whole process.

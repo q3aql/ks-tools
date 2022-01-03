@@ -707,8 +707,8 @@ while [ ${show_menu} -eq 0 ] ; do
   source ${HOME}/.ks-tools/ks-oga
   echo " o - Edit ks-oga/ks-oga-album config (${acodec}/${b_acodec}/${default_lang_audio})"
   echo ""
-  user_config=$(cat ${HOME}/.ks-tools/USER 2> /dev/null)
-  server_config=$(cat ${HOME}/.ks-tools/SERVER 2> /dev/null)
+  user_config=$(cat ${HOME}/.ks-tools/ks-upload-user 2> /dev/null)
+  server_config=$(cat ${HOME}/.ks-tools/ks-upload-server 2> /dev/null)
   echo " u - Edit ks-upv/ks-upa/ks-upf/ks-upr config (${user_config}/${server_config})"
   echo ""
   echo " q - Exit"
