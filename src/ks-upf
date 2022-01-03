@@ -14,7 +14,7 @@ dirTemp="/tmp"
 listCompTemp="ks-tools.list-full"
 listCompTempTest="ks-tools.list-full.test"
 listTemp="ks-tools.list"
-dirConfig="$HOME/.ks-tools"
+dirConfig="${HOME}/.ks-tools"
 ksToolsTempFolder="/tmp/ks-tools"
 
 # Check cygwin alias (for Windows)
@@ -455,6 +455,39 @@ function checkDependencies() {
     exit
   fi
 }
+
+# Function to migrate old configuration.
+if [ -f ${dirConfig}/USER ] ; then
+  cat ${dirConfig}/USER > ${dirConfig}/ks-upload-user
+  echo "* Migrating ${dirConfig}/USER > ${dirConfig}/ks-upload-user"
+  rm -rf ${dirConfig}/USER
+  sleep 1
+fi
+if [ -f ${dirConfig}/PASS ] ; then
+  echo "* Migrating ${dirConfig}/PASS > ${dirConfig}/ks-upload-pass"
+  current_pass=$(cat ${dirConfig}/PASS)
+  encrypt_kstools "${current_pass}" > ${dirConfig}/ks-upload-pass
+  rm -rf ${dirConfig}/PASS
+  sleep 1
+fi
+if [ -f ${dirConfig}/SERVER ] ; then
+  cat ${dirConfig}/SERVER > ${dirConfig}/ks-upload-server
+  echo "* Migrating ${dirConfig}/SERVER > ${dirConfig}/ks-upload-server"
+  rm -rf ${dirConfig}/SERVER
+  sleep 1
+fi
+if [ -f ${dirConfig}/DIR_SERVER ] ; then
+  cat ${dirConfig}/DIR_SERVER > ${dirConfig}/ks-upload-dirserver
+  echo "* Migrating ${dirConfig}/DIR_SERVER > ${dirConfig}/ks-upload-dirserver"
+  rm -rf ${dirConfig}/DIR_SERVER
+  sleep 1
+fi
+if [ -f ${dirConfig}/DIR ] ; then
+  cat ${dirConfig}/DIR > ${dirConfig}/ks-upload-dirlocal
+  echo "* Migrating ${dirConfig}/DIR > ${dirConfig}/ks-upload-dirlocal"
+  rm -rf ${dirConfig}/DIR
+  sleep 1
+fi
 
 # Check if the configuration directory exists.
 if [ -d ${dirConfig} ] ; then
