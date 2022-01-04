@@ -532,31 +532,49 @@ else
 fi
 
 # Delete the existing configuration.
-if [ "$1" == "-r" ] ; then
-  rm -rf ${dirConfig}/ks-upload-user
-  rm -rf ${dirConfig}/ks-upload-pass
-  rm -rf ${dirConfig}/ks-upload-server
-  rm -rf ${dirConfig}/ks-upload-dirserver
-  rm -rf ${dirConfig}/ks-upload-dirlocal
-  exit
+if [ "${1}" == "-r" ] ; then
+  echo ""
+  echo "* ks-upa (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo -n "* [Default: n] Are you sure you want to delete the configuration? (y/n): " ; read confirm
+  if [ "${confirm}" == "y" ] ; then
+    echo ""
+    echo "+ Removing USER file configuration..."
+    rm -rf ${dirConfig}/ks-upload-user
+    echo "+ Removing PASSWORD file configuration..."
+    rm -rf ${dirConfig}/ks-upload-pass
+    echo "+ Removing SERVER file configuration..."
+    rm -rf ${dirConfig}/ks-upload-server
+    echo "+ Removing SERVER PATH file configuration..."
+    rm -rf ${dirConfig}/ks-upload-dirserver
+    echo "+ Removing LOCAL PATH file configuration..."
+    rm -rf ${dirConfig}/ks-upload-dirlocal
+    echo "* Removed all configuration"
+    echo ""
+    exit
+  else
+    echo ""
+    echo "+ Remove configuration canceled"
+    echo ""
+    exit
+  fi
 fi
-
 # Show configuration file
-if [ "$1" == "-c" ] ; then
+if [ "${1}" == "-c" ] ; then
   showConfig
   # Show configuration file
-elif [ "$1" == "-e" ] ; then
+elif [ "${1}" == "-e" ] ; then
   editConfig
   # Show the version
-elif [ "$1" == "-v" ] ; then
+elif [ "${1}" == "-v" ] ; then
   showVersion
   # Show the help
-elif [ "$1" == "-h" ] ; then
+elif [ "${1}" == "-h" ] ; then
   showHelp
-elif [ "$1" == "-g" ] ; then
+elif [ "${1}" == "-g" ] ; then
   createConfig
   # Init
-elif [ "$1" == "-i" ] ; then
+elif [ "${1}" == "-i" ] ; then
   # Start script
   createConfig
   user=$(cat ${dirConfig}/ks-upload-user)
