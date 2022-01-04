@@ -326,6 +326,58 @@ function editConfig() {
   exit
 }
 
+# Function to create initial config file.
+function createConfig() {
+# Start script
+  clear
+  echo ""
+  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  checkDependencies
+  # Ask the user and if it exists, read it from the config.
+  if [ -f ${dirConfig}/ks-upload-user ] ; then
+    echo "+ The USER configuration already exists (Use: 'ks-upr -e' for edit)"
+  else
+    echo -n "* Enter the server user: " ; read USER
+    user=${USER}
+    echo ${user} > ${dirConfig}/ks-upload-user
+  fi
+  # Ask the password and if it exists, read it from the config.
+  if [ -f ${dirConfig}/ks-upload-pass ] ; then
+    echo "+ The PASSWORD configuration already exists (Use: 'ks-upr -e' for edit)" 
+  else
+    echo -n "* Enter the server password: " ; read PASS
+    raw_password_enter=${PASS}
+    encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+    echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+  fi
+  # Ask the server URL and if it exists, read it from the config.
+  if [ -f ${dirConfig}/ks-upload-server ] ; then
+    echo "+ The SERVER configuration already exists (Use: 'ks-upr -e' for edit)"
+  else
+    echo -n "* Enter the server URL: " ; read SERVER
+    server=${SERVER}
+    echo ${server} > ${dirConfig}/ks-upload-server
+  fi
+  # Ask the path on the server and if it exists, read it from the config.
+  if [ -f ${dirConfig}/ks-upload-dirserver ] ; then
+    echo "+ The SERVER PATH configuration already exists (Use: 'ks-upr -e' for edit)"
+  else
+    echo -n "* Enter the path on the server: " ; read DIR_SERVER
+    dirServer=${DIR_SERVER}
+    echo ${dirServer} > ${dirConfig}/ks-upload-dirserver
+  fi
+  # Ask the local path and if it exists, read it from the config.
+  if [ -f ${dirConfig}/ks-upload-dirlocal ] ; then
+    echo "+ The LOCAL PATH configuration already exists (Use: 'ks-upr -e' for edit)"
+  else
+    echo -n "* Enter the local path to scan: " ; read DIR
+    dirLocal=${DIR}
+    echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
+  fi
+  echo ""
+}
+
 # Function to show version
 function showVersion() {
   echo ""
@@ -343,12 +395,13 @@ function showHelp() {
   echo ""
   echo "+ Syntax:"
   echo ""
-  echo " $ ks-upf -i  - Start upload"
-  echo " $ ks-upf -r  - Remove configuration"
-  echo " $ ks-upf -c  - Show configuration"
-  echo " $ ks-upf -e  - Edit configuration"
-  echo " $ ks-upf -v  - Show version"
-  echo " $ ks-upf -h  - Show help"
+  echo " $ ks-upr -i  - Start upload"
+  echo " $ ks-upr -g  - Create configuration" 
+  echo " $ ks-upr -r  - Remove configuration"
+  echo " $ ks-upr -c  - Show configuration"
+  echo " $ ks-upr -e  - Edit configuration"
+  echo " $ ks-upr -v  - Show version"
+  echo " $ ks-upr -h  - Show help"
   echo ""
   exit
 }
@@ -460,57 +513,18 @@ elif [ "$1" == "-v" ] ; then
   # Show the help
 elif [ "$1" == "-h" ] ; then
   showHelp
+elif [ "$1" == "-g" ] ; then
+  createConfig
   # Init
 elif [ "$1" == "-i" ] ; then
   # Start script
-  clear
-  echo ""
-  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
-  echo ""
-  checkDependencies
-  # Ask the user and if it exists, read it from the config.
-  if [ -f ${dirConfig}/ks-upload-user ] ; then
-    user=$(cat ${dirConfig}/ks-upload-user)
-  else
-    echo -n "* Enter the server user: " ; read USER
-    user=${USER}
-    echo ${user} > ${dirConfig}/ks-upload-user
-  fi
-  # Ask the password and if it exists, read it from the config.
-  if [ -f ${dirConfig}/ks-upload-pass ] ; then
-    raw_password=$(cat ${dirConfig}/ks-upload-pass)
-    password=$(decrypt_kstools "${raw_password}")
-  else
-    echo -n "* Enter the server key: " ; read PASS
-    raw_password_enter=${PASS}
-    encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-    echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
-  fi
-  # Ask the server URL and if it exists, read it from the config.
-  if [ -f ${dirConfig}/ks-upload-server ] ; then
-    server=$(cat ${dirConfig}/ks-upload-server)
-  else
-    echo -n "* Enter the server URL: " ; read SERVER
-    server=${SERVER}
-    echo ${server} > ${dirConfig}/ks-upload-server
-  fi
-  # Ask the path on the server and if it exists, read it from the config.
-  if [ -f ${dirConfig}/ks-upload-dirserver ] ; then
-    dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
-  else
-    echo -n "* Enter the path on the server: " ; read DIR_SERVER
-    dirServer=${DIR_SERVER}
-    echo ${dirServer} > ${dirConfig}/ks-upload-dirserver
-  fi
-  # Ask the local path and if it exists, read it from the config.
-  if [ -f ${dirConfig}/ks-upload-dirlocal ] ; then
-    dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
-  else
-    echo -n "* Enter the local path to scan: " ; read DIR
-    dirLocal=${DIR}
-    echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
-  fi
-
+  createConfig
+  user=$(cat ${dirConfig}/ks-upload-user)
+  raw_password=$(cat ${dirConfig}/ks-upload-pass)
+  password=$(decrypt_kstools "${raw_password}")
+  server=$(cat ${dirConfig}/ks-upload-server)
+  dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
+  dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
   # Call the functions to perform the whole process.
   echo -n "* Scanning ${dirLocal} " && sleep 4
   echo ""
