@@ -400,7 +400,7 @@ edit_video_config() {
     echo " c - Reset configuration file"
     echo " q - Exit to main menu"
     echo ""
-    echo -n "* Choose an option (r/v/b/p/a/i/l/s/q): " ; read option
+    echo -n "* Choose an option (r/v/b/p/a/i/l/s/c/q): " ; read option
     if [ "${option}" == "r" ] ; then
       # Set resolution
       echo ""
@@ -451,6 +451,8 @@ edit_video_config() {
       fi
     elif [ "${option}" == "b" ] ; then
       # Set bitrate for video
+      echo ""
+      echo "* Recommended: 950k / 2400k / 3000k / 6000k / 10000k"
       echo ""
       echo -n "* [Current: ${b_vcodec}] Type bitrate for video: " ; read videobitrate
       if [ -z ${videobitrate} ] ; then
@@ -520,6 +522,8 @@ edit_video_config() {
     elif [ "${option}" == "i" ] ; then
       # Set bitrate for audio
       echo ""
+      echo "* Recommended: 92k / 128k / 192k / 256k / 320k / 640k"
+      echo ""
       echo -n "* [Current: ${b_acodec}] Type bitrate for audio: " ; read audiobitrate
       if [ -z ${audiobitrate} ] ; then
         echo > /dev/null
@@ -545,7 +549,7 @@ edit_video_config() {
       echo "   Italian --> ita"
       echo "   French  --> fra"
       echo ""
-      echo "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO__codes"
+      echo "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes"
       echo ""
       echo -n "* [Current: ${default_lang_audio}] Type the preferred audio language: " ; read audiolanguage
       if [ -z ${audiolanguage} ] ; then
@@ -572,7 +576,7 @@ edit_video_config() {
       echo "   Italian --> ita"
       echo "   French  --> fra"
       echo ""
-      echo "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO__codes"
+      echo "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes"
       echo ""
       echo -n "* [Current: ${default_lang_subt}] Type the preferred subtitles language: " ; read subtitlelanguage
       if [ -z ${subtitlelanguage} ] ; then
@@ -630,6 +634,14 @@ edit_audio_config() {
     echo -n "* Choose an option (a/l/c/q): " ; read option
     if [ "${option}" == "a" ] ; then
     # Set bitrate for audio
+      if [ "$v_ext" == "mp3" ] ; then
+       echo ""
+       echo "* Recommended: 92k / 128k / 192k / 256k / 320k / 640k"
+      fi
+      if [ "$v_ext" == "oga" ] ; then
+       echo ""
+       echo "* Recommended: 96k / 112k / 130k / 160k / 224k / 256k / 320k"
+      fi
       echo ""
       echo -n "* [Current: ${b_acodec}] Type bitrate for audio: " ; read audiobitrate
       if [ -z ${audiobitrate} ] ; then
@@ -651,7 +663,7 @@ edit_audio_config() {
       echo "   Italian --> ita"
       echo "   French  --> fra"
       echo ""
-      echo "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO__codes"
+      echo "* Complete 639-2 codes: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes"
       echo ""
       echo -n "* [Current: ${default_lang_audio}] Type the preferred audio language: " ; read audiolanguage
       if [ -z ${audiolanguage} ] ; then
@@ -693,6 +705,8 @@ while [ ${show_menu} -eq 0 ] ; do
   echo ""
   echo "* ks-conf (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
+  echo "- Tool for create and modify all configuration files"
+  echo ""
   source ${HOME}/.ks-tools/ks-mp4
   echo " m - Edit ks-mp4 config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
   source ${HOME}/.ks-tools/ks-mp4k
@@ -713,7 +727,7 @@ while [ ${show_menu} -eq 0 ] ; do
   echo ""
   echo " q - Exit"
   echo ""
-  echo -n "* Choose an option (m/k/s/a/p/o/q): " ; read option
+  echo -n "* Choose an option (m/k/s/a/p/o/u/q): " ; read option
   if [ "${option}" == "m" ] ; then
     edit_video_config ks-mp4
   elif [ "${option}" == "k" ] ; then
