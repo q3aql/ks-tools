@@ -2,18 +2,18 @@
 
 #################################################################
 # ks-zui (ks-tools) - Simple zenity user interface for ks-tools #
-# Date: 02-01-2022                                              #
+# Date: 04-01-2022                                              #
 # Author: q3aql                                                 #
 # Contact: q3aql@duck.com                                       #
 #################################################################
-VERSION="8.0 (BETA)"
-M_DATE="020122"
+VERSION="8.1 (BETA)"
+M_DATE="040122"
 
 # Function to show about
 function showAbout() {
   zenity --title "About" --info --width=330 \
   --text "Software: ks-zui (ks-tools) ${VERSION} \
-  (${M_DATE})\nAuthor: q3aql\nContact: q3aql@protonmail.ch\nLicense: GPL v2.0"
+  (${M_DATE})\nAuthor: q3aql\nContact: q3aql@duck.com\nLicense: GPL v2.0"
 }
 
 # Function to show information of video file

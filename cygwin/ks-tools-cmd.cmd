@@ -2,12 +2,12 @@
 
 rem ######################################
 rem # ks-tools for Windows               #
-rem # U. Modificacion: 01-02-2022        #
+rem # U. Modificacion: 04-01-2022        #
 rem # Author: q3aql                      #
 rem # Contact: q3aql@duck.com            #
 rem # License: GPL v2.0                  #
 rem ######################################
-set VERSION=8.0
+set VERSION=8.1
 
 rem # Start ks-tools terminal (bash)
 cd "%~d0%~p0"

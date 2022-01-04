@@ -2,12 +2,12 @@
 
 ######################################################################
 # ks-upf (ks-tools) - Upload common file(s) to server with rsync+ssh #
-# Date: 02-01-2022                                                   #
+# Date: 04-01-2022                                                   #
 # Author: q3aql                                                      #
 # Contact: q3aql@duck.com                                            #
 ######################################################################
-VERSION="8.0"
-M_DATE="020122"
+VERSION="8.1"
+M_DATE="040122"
 
 # Global parameters.
 dirTemp="/tmp"
@@ -578,21 +578,21 @@ if [ "${1}" == "-r" ] ; then
   fi
 fi
 # Show configuration file
-if [ "$1" == "-c" ] ; then
+if [ "${1}" == "-c" ] ; then
   showConfig
   # Show configuration file
-elif [ "$1" == "-e" ] ; then
+elif [ "${1}" == "-e" ] ; then
   editConfig
   # Show the version
-elif [ "$1" == "-v" ] ; then
+elif [ "${1}" == "-v" ] ; then
   showVersion
   # Show the help
-elif [ "$1" == "-h" ] ; then
+elif [ "${1}" == "-h" ] ; then
   showHelp
-elif [ "$1" == "-g" ] ; then
+elif [ "${1}" == "-g" ] ; then
   createConfig
   # Init
-elif [ "$1" == "-i" ] ; then
+elif [ "${1}" == "-i" ] ; then
   # Start script
   createConfig
   user=$(cat ${dirConfig}/ks-upload-user)
