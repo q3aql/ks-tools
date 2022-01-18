@@ -43,7 +43,7 @@ $ ks-mp4k-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 "My video"
     
 ### Notes:
 
-  * The option `patch` apply the `-thread_queue_size 2048` patch to ffmpeg.
+  * The option `patch` apply the `-max_muxing_queue_size 9999` patch to ffmpeg.
   * If you specify a path or file with spaces, you must use quotes.
     
 ### Back to README.md

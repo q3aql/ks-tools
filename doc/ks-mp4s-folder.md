@@ -28,16 +28,16 @@ $ ks-mp4s-folder </path/folder> [subs]
     + Video file(s) in .mkv found!
 
     * Files to convert (/data/Westworld):
-      + Westworl-1x01.mkv (without subtitles)
-      + Westworl-1x02.mkv (without subtitles)
-      + Westworl-1x03.mkv (without subtitles)
-      + Westworl-1x04.mkv (without subtitles)
-      + Westworl-1x05.mkv (without subtitles)
-      + Westworl-1x06.mkv (without subtitles)
-      + Westworl-1x07.mkv (without subtitles)
-      + Westworl-1x08.mkv (without subtitles)
-      + Westworl-1x09.mkv (without subtitles)
-      + Westworl-1x10.mkv (without subtitles)
+      + Westworld-1x01.mkv (without subtitles)
+      + Westworld-1x02.mkv (without subtitles)
+      + Westworld-1x03.mkv (without subtitles)
+      + Westworld-1x04.mkv (without subtitles)
+      + Westworld-1x05.mkv (without subtitles)
+      + Westworld-1x06.mkv (without subtitles)
+      + Westworld-1x07.mkv (without subtitles)
+      + Westworld-1x08.mkv (without subtitles)
+      + Westworld-1x09.mkv (without subtitles)
+      + Westworld-1x10.mkv (without subtitles)
 
     * The output folder will be '/data/Westworld/to-mp4'
 
