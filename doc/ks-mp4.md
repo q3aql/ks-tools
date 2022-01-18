@@ -84,11 +84,11 @@ $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>
       ffmpeg -i "Example.mkv" -map 0:5 "Example.srt"
 
       # Convert the file 'Example.mkv' to MP4
-      ffmpeg -i "Example.mkv" -vsync 1 -async 1 -map 0:0 -map 0:1 
-      -vf subtitles="Example.srt" -s 1280x534 -c:v libx264 -profile:v high 
-      -b:v 2400k -preset medium -c:a aac -b:a 256k -ac 2 -clev 3dB 
-      -slev -6dB -metadata title="Example (2016)" -metadata date="2016" 
-      -metadata genre="Thriller" -metadata:s:v:0 title="Example (2016)" 
+      ffmpeg -i "Example.mkv" -vsync cfr -af aresample=async=1:min_hard_comp=0.100000:first_pts=0 
+      -map 0:0 -map 0:1 -vf subtitles="Example.srt" -s 1280x534 -c:v libx264 -profile:v high 
+      -b:v 2400k -preset medium -c:a aac -b:a 256k -ac 2 -clev 3dB -slev -6dB 
+      -metadata title="Example (2016)" -metadata date="2016" -metadata genre="Thriller" 
+      -metadata:s:v:0 title="Example (2016)" 
       -metadata:s:a:0 title="aac Stereo Audio (256k)" "Example.mp4"
 
     * (Default: y) Do you want run the conversion? (y/n): n
