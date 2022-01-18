@@ -111,8 +111,8 @@ _Note: Output file name will be `Example-aspect.mkv`_
     * COMMAND THAT WILL BE EXECUTED:
 
       # Crop 'Example.mkv' from 16:9 to 4:3 (1.33:1)
-      ffmpeg -i Example.mkv -vsync 1 -async 1 -map 0:0 -map 0:1 
-      -filter:v "crop=ih/3*4:ih" -s 1920x1440 -c:v libx264 -profile:v high 
+      ffmpeg -i Example.mkv -vsync cfr -af aresample=async=1:min_hard_comp=0.100000:first_pts=0 
+      -map 0:0 -map 0:1 -filter:v "crop=ih/3*4:ih" -s 1920x1440 -c:v libx264 -profile:v high 
       -b:v 5000k -preset medium -c:a copy Example-crop.mkv
 
     * (Default: y) Do you want run the conversion? (y/n): n
