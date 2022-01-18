@@ -208,7 +208,7 @@ elif [ "${1}" == "-ev25" ] ; then
     if [ "${codec_encoded}" == "h264_encoded" ] ; then
       ffmpeg -y -i "${2}" -map ${video_track} -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
