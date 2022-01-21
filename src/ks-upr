@@ -155,9 +155,7 @@ function sendFile() {
     if [ "${toolSelected}" == "rsync" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
-      comandOne="/usr/bin/sshpass -p ${1} /usr/bin/rsync -azL -e"
-      comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
-      ${comandOne} "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+      /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       /usr/bin/sshpass -p ${1} /usr/bin/ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     else
       echo ""
@@ -169,9 +167,7 @@ function sendFile() {
     if [ "${toolSelected}" == "rsync" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
-      comandOne="sshpass -p ${1} rsync -azlr -e"
-      comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
-      ${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+      rsync --progress -azL --rsh="sshpass -p ${1} ssh -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     else
       echo ""
@@ -595,6 +591,12 @@ elif [ "${1}" == "-i" ] ; then
   # Call the functions to perform the whole process.
   echo -n "* Scanning ${dirLocal} " && sleep 4
   echo ""
+  current_tool=$(cat ${dirConfig}/ks-upload-tool)
+  if [ "${current_tool}" == "scp" ] ; then
+    echo ""
+    echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
+    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+  fi
   if [ -d ${dirLocal} ] ; then
     sendFile ${password} "${dirLocal}" ${user} ${server} ${dirServer}
     echo ""

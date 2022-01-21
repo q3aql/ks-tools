@@ -157,9 +157,7 @@ function sendFile() {
     # Run command for upload on Windows (Cygwin)
     if [ "${cygwin}" == "yes" ] ; then
       if [ "${toolSelected}" == "rsync" ] ; then
-        comandOne="/usr/bin/sshpass -p ${1} /usr/bin/rsync -azL -e"
-        comandTwo="--progress ${2} ${3}@${4}:${5}"
-        ${comandOne} "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+        /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -l ${3}" ${2} ${4}:${5} 2> /dev/null
         /usr/bin/sshpass -p ${1} /usr/bin/ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
       else
@@ -169,9 +167,7 @@ function sendFile() {
     # Run command for upload on Unix systems
     else
       if [ "${toolSelected}" == "rsync" ] ; then
-        comandOne="sshpass -p ${1} rsync -azL -e"
-        comandTwo="--progress ${2} ${3}@${4}:${5}"
-        ${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+        rsync --progress -azL --rsh="sshpass -p ${1} ssh -l ${3}" ${2} ${4}:${5} 2> /dev/null
         sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
       else
@@ -646,6 +642,12 @@ elif [ "${1}" == "-i" ] ; then
     count=1
     echo "+ ${totalFiles} common file(s) found!"
     echo ""
+    current_tool=$(cat ${dirConfig}/ks-upload-tool)
+    if [ "${current_tool}" == "scp" ] ; then
+      echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
+      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+      echo ""
+    fi
     while [ ${count} -le ${totalFiles} ] ; do
       fullNameFile=$(showFile ${count})
       fullPathFile=$(showPathFile ${count})
