@@ -159,7 +159,7 @@ function sendFile() {
     else
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
-      /usr/bin/sshpass -p ${1} /usr/bin/scp ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     fi
   # Run command for upload on Unix systems
   else
