@@ -147,11 +147,35 @@ function showPathFile() {
 # Function to send file to server.
 # Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
 function sendFile() {
-  #sshpass -p ${1} scp ${2} ${3}@${4}:${5} &> /dev/null
-  comandOne="sshpass -p ${1} rsync -azlr -e"
-  comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
-  ${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
-  sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+  toolSelected=$(cat ${dirConfig}/ks-upload-tool)
+  if [ "${cygwin}" == "yes" ] ; then
+    if [ "${toolSelected}" == "rsync" ] ; then
+      echo ""
+      echo "+ Syncing folder ${2} to ${5} (${4})"
+      comandOne="/usr/bin/sshpass -p ${1} /usr/bin/rsync -azL -e"
+      comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
+      ${comandOne} "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    else
+      echo ""
+      echo "+ Sending files from ${2} to ${5} (${4})"
+      /usr/bin/sshpass -p ${1} /usr/bin/scp ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+    fi
+  # Run command for upload on Unix systems
+  else
+    if [ "${toolSelected}" == "rsync" ] ; then
+      echo ""
+      echo "+ Syncing folder ${2} to ${5} (${4})"
+      comandOne="sshpass -p ${1} rsync -azlr -e"
+      comandTwo="--progress ${2}/ ${3}@${4}:${5}/"
+      ${comandOne} "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" ${comandTwo} 2> /dev/null
+      sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    else
+      echo ""
+      echo "+ Sending files from ${2} to ${5} (${4})"
+      sshpass -p ${1} scp -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+    fi
+  fi
 }
 
 # Generate random codes 
@@ -531,6 +555,7 @@ if [ "${1}" == "-r" ] ; then
     echo "+ Removing LOCAL PATH file configuration..."
     rm -rf ${dirConfig}/ks-upload-dirlocal
     echo "* Removed all configuration"
+    rm -f ${dirConfig}/ks-upload-tool
     echo ""
     exit
   else
