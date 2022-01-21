@@ -5,6 +5,7 @@ ks-upa - Upload audio file(s) to server with scp or rsync.
 
 ```shell
 $ ks-upa -i  - Start upload
+$ ks-upa -g  - Create configuration
 $ ks-upa -r  - Remove configuration
 $ ks-upa -c  - Show configuration
 $ ks-upa -e  - Edit configuration
@@ -75,8 +76,9 @@ $ ks-upa -h  - Show help
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
+    6 - Edit Upload Tool (scp)
 
-    6 - Exit
+    7 - Exit
 
     * Choose an option: 
     ````

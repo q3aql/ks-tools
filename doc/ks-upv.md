@@ -5,6 +5,7 @@ ks-upv - Upload videos file(s) to server with scp or rsync.
 
 ```shell
 $ ks-upv -i  - Start upload
+$ ks-upv -g  - Create configuration
 $ ks-upv -r  - Remove configuration
 $ ks-upv -c  - Show configuration
 $ ks-upv -e  - Edit configuration
@@ -14,7 +15,7 @@ $ ks-upv -h  - Show help
 
 ### Initialize video file(s) upload:
 
-  * For initialize video file(s) upload only un the following command:
+  * For initialize video file(s) upload only run the following command:
   
     ```shell
     $ ks-upv -i
@@ -75,8 +76,9 @@ $ ks-upv -h  - Show help
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
+    6 - Edit Upload Tool (scp)
 
-    6 - Exit
+    7 - Exit
 
     * Choose an option: 
     ````

@@ -5,6 +5,7 @@ ks-upr - Upload recursively file(s) to server with scp or rsync.
 
 ```shell
 $ ks-upr -i  - Start upload
+$ ks-upr -g  - Create configuration
 $ ks-upr -r  - Remove configuration
 $ ks-upr -c  - Show configuration
 $ ks-upr -e  - Edit configuration
@@ -14,7 +15,7 @@ $ ks-upr -h  - Show help
 
 ### Initialize common file(s) upload:
 
-  * For initialize recursively upload only un the following command:
+  * For initialize recursively upload only run the following command:
   
     ```shell
     $ ks-upr -i
@@ -75,8 +76,9 @@ $ ks-upr -h  - Show help
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
+    6 - Edit Upload Tool (scp)
 
-    6 - Exit
+    7 - Exit
 
     * Choose an option: 
     ````

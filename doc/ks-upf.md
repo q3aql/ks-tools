@@ -5,6 +5,7 @@ ks-upf - Upload common file(s) to server with scp or rsync.
 
 ```shell
 $ ks-upf -i  - Start upload
+$ ks-upf -g  - Create configuration
 $ ks-upf -r  - Remove configuration
 $ ks-upf -c  - Show configuration
 $ ks-upf -e  - Edit configuration
@@ -14,7 +15,7 @@ $ ks-upf -h  - Show help
 
 ### Initialize common file(s) upload:
 
-  * For initialize file(s) upload only un the following command:
+  * For initialize file(s) upload only run the following command:
   
     ```shell
     $ ks-upf -i
@@ -75,8 +76,9 @@ $ ks-upf -h  - Show help
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
+    6 - Edit Upload Tool (scp)
 
-    6 - Exit
+    7 - Exit
 
     * Choose an option:
     ````
