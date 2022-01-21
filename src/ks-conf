@@ -723,7 +723,8 @@ while [ ${show_menu} -eq 0 ] ; do
   echo ""
   user_config=$(cat ${HOME}/.ks-tools/ks-upload-user 2> /dev/null)
   server_config=$(cat ${HOME}/.ks-tools/ks-upload-server 2> /dev/null)
-  echo " u - Edit ks-upv/ks-upa/ks-upf/ks-upr config (${user_config}/${server_config})"
+  tool_config=$(cat ${HOME}/.ks-tools/ks-upload-tool 2> /dev/null)
+  echo " u - Edit ks-upv/ks-upa/ks-upf/ks-upr config (${user_config}/${server_config}/${tool_config})"
   echo ""
   echo " q - Exit"
   echo ""

@@ -298,6 +298,11 @@ function showConfig() {
     echo "- Scan Path (Local): ${showDirLocal}"
     configAvailable=1
   fi
+  if [ -f ${dirConfig}/ks-upload-tool ] ; then
+    showUpvTool=$(cat ${dirConfig}/ks-upload-tool)
+    echo "- Upload Tool: ${showUpvTool}"
+    configAvailable=1
+  fi
   if [ ${configAvailable} -eq 0 ] ; then
     echo "* The configuration file does not exist!"
   fi
@@ -323,6 +328,7 @@ function editConfig() {
     editServer=$(cat ${dirConfig}/ks-upload-server 2> /dev/null)
     editDirServer=$(cat ${dirConfig}/ks-upload-dirserver 2> /dev/null)
     editDirLocal=$(cat ${dirConfig}/ks-upload-dirlocal 2> /dev/null)
+    editUpvTool=$(cat ${dirConfig}/ks-upload-tool 2> /dev/null)
     echo ""
     echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
@@ -331,8 +337,9 @@ function editConfig() {
     echo " 3 - Edit Server (${editServer})"
     echo " 4 - Edit Dest. Path (${editDirServer})"
     echo " 5 - Edit Local Path (${editDirLocal})"
+    echo " 6 - Edit Upload Tool (${editUpvTool})"
     echo ""
-    echo " 6 - Exit"
+    echo " 7 - Exit"
     echo ""
     echo -n "* Choose an option: " ; read EDIT
     echo ""
@@ -357,7 +364,15 @@ function editConfig() {
       echo -n "* Enter the local path to scan: " ; read DIR
       dirLocal=${DIR}
       echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
-    elif [ "${EDIT}" == "6" ] ; then
+     elif [ "${EDIT}" == "6" ] ; then
+      echo -n "* [Default: scp] Type upload tool (scp or rsync): " ; read TOOL
+      if [ -z "${TOOL}" ] ; then
+        upvTool="scp"
+      else  
+        upvTool=${TOOL}
+      fi
+      echo ${upvTool} > ${dirConfig}/ks-upload-tool
+    elif [ "${EDIT}" == "7" ] ; then
       editConfig=1
     else
       echo "+ Invalid option!"
@@ -415,6 +430,12 @@ function createConfig() {
     echo -n "* Enter the local path to scan: " ; read DIR
     dirLocal=${DIR}
     echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
+  fi
+  # Configure upload tool by default
+  if [ -f ${dirConfig}/ks-upload-tool ] ; then
+    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upa -e' for edit)"
+  else
+    echo "scp" > ${dirConfig}/ks-upload-tool
   fi
   echo ""
 }
