@@ -20,7 +20,10 @@ ksToolsTempFolder="/tmp/ks-tools"
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
   shopt -s expand_aliases
+  cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
+else
+  cygwin="no"
 fi
 
 # Function to remove spaces and symbols
