@@ -4,10 +4,10 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
 ### Documentation:
   * `Tools for upload:`
 
-    * [ks-upv](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upv.md) - Upload video file(s) to server with rsync+ssh.
-    * [ks-upa](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upa.md) - Upload audio file(s) to server with rsync+ssh.
-    * [ks-upf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upf.md) - Upload common file(s) to server with rsync+ssh.
-    * [ks-upr](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upr.md) - Upload recursively file(s) to server with rsync+ssh.
+    * [ks-upv](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upv.md) - Upload video file(s) to server with scp or rsync.
+    * [ks-upa](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upa.md) - Upload audio file(s) to server with scp or rsync.
+    * [ks-upf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upf.md) - Upload common file(s) to server with scp or rsync.
+    * [ks-upr](https://github.com/q3aql/ks-tools/blob/main/doc/ks-upr.md) - Upload recursively file(s) to server with scp or rsync.
   
   * `Tools for convert video:`
 

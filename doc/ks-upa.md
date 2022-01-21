@@ -1,5 +1,5 @@
-ks-upa - Upload audio file(s) to server with rsync+ssh.
-=======================================================
+ks-upa - Upload audio file(s) to server with scp or rsync.
+==========================================================
 
 ### Syntax:
 
@@ -56,6 +56,7 @@ $ ks-upa -h  - Show help
     * URL (or IP) Server: mypersonaldomain.es
     * Destination Path (Server): /home/anonymous
     * Scan Path (Local): /home/local/videos
+    * Upload Tool: scp
     ````
     
 ### Edit configuration:

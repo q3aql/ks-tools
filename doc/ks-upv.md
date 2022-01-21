@@ -1,5 +1,5 @@
-ks-upv - Upload videos file(s) to server with rynsc+ssh.
-========================================================
+ks-upv - Upload videos file(s) to server with scp or rsync.
+===========================================================
 
 ### Syntax:
 
@@ -56,6 +56,7 @@ $ ks-upv -h  - Show help
     * URL (or IP) Server: mypersonaldomain.es
     * Destination Path (Server): /home/anonymous
     * Scan Path (Local): /home/local/videos
+    * Upload Tool: scp
     ````
     
 ### Edit configuration:
