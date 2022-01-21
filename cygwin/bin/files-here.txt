@@ -7,7 +7,7 @@ cd /usr/bin
 
 # All executables
 
-list_binary="bash cat clear cut cygwin-console-helper date echo expr ffmpeg ffprobe find grep head ls md5sum mkdir mv cp rm rsync scp sed sleep ssh-add ssh-agent ssh-keygen ssh-keyscan ssh sshpass tail tr wc pwd mintty file ldd touch nano"
+list_binary="bash cat clear cut cygwin-console-helper date echo expr ffmpeg ffprobe find grep head ls md5sum mkdir mv cp rm rsync scp sed sleep ssh-add ssh-agent ssh-keygen ssh-keyscan ssh sshpass tail tr wc pwd mintty file ldd touch nano chmod chown"
 
 echo "* Copying script bashbug"
 cp -rfv /usr/bin/bashbug ${HOME}/ks-tools/bin/  
@@ -29,6 +29,5 @@ strip --strip-all ${HOME}/ks-tools/bin/*
 cp -rfv /usr/bin/cyggcc_s-*.dll ${HOME}/ks-tools/bin/
 cp -rfv /usr/bin/cygwin1.dll ${HOME}/ks-tools/bin/
 cp -rfv /usr/bin/cygz.dll ${HOME}/ks-tools/bin/
-
 
 # Finally, copy ks-tools scripts here.
