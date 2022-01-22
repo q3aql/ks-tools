@@ -542,7 +542,7 @@ function createConfig() {
   fi
   # Configure upload tool by default
   if [ -f ${dirConfig}/ks-upload-tool ] ; then
-    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upa -e' for edit)"
+    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upv -e' for edit)"
   else
     echo "scp" > ${dirConfig}/ks-upload-tool
   fi

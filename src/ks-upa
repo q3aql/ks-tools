@@ -728,12 +728,12 @@ elif [ "${1}" == "-i" ] ; then
     current_tool=$(cat ${dirConfig}/ks-upload-tool)
     if [ "${current_tool}" == "scp" ] ; then
       echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upa -e)"
       echo ""
     fi
     if [ "${current_tool}" == "scp-rsa" ] ; then
       echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upa -e)"
       echo ""
     fi
     while [ ${count} -le ${totalFiles} ] ; do

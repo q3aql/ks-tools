@@ -498,7 +498,7 @@ function createConfig() {
   fi
   # Configure upload tool by default
   if [ -f ${dirConfig}/ks-upload-tool ] ; then
-    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upa -e' for edit)"
+    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo "scp" > ${dirConfig}/ks-upload-tool
   fi
@@ -679,12 +679,12 @@ elif [ "${1}" == "-i" ] ; then
   if [ "${current_tool}" == "scp" ] ; then
     echo ""
     echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upr -e)"
   fi
   if [ "${current_tool}" == "scp-rsa" ] ; then
     echo ""
     echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upr -e)"
   fi
   if [ -d ${dirLocal} ] ; then
     sendFile ${password} "${dirLocal}" ${user} ${server} ${dirServer}
