@@ -1,11 +1,11 @@
 #!/bin/bash
 
-###########################################################################
-# ks-upr (ks-tools) - Upload recursively file(s) to server with rsync+ssh #
-# Date: 22-01-2022                                                        #
-# Author: q3aql                                                           #
-# Contact: q3aql@duck.com                                                 #
-###########################################################################
+##############################################################################
+# ks-upr (ks-tools) - Upload recursively file(s) to server with scp or rsync #
+# Date: 22-01-2022                                                           #
+# Author: q3aql                                                              #
+# Contact: q3aql@duck.com                                                    #
+##############################################################################
 VERSION="8.2"
 M_DATE="220122"
 
@@ -144,14 +144,23 @@ function showFile() {
 # check_fingerprint <user> <server>
 function check_fingerprint() {
   fingerprint_host=$(cat ${HOME}/.ssh/known_hosts 2> /dev/null | grep -o "${2}")
+  toolSelected=$(cat ${dirConfig}/ks-upload-tool | grep "rsa")
   if [ -z "${fingerprint_host}" ] ; then
     # Run command for upload on Windows (Cygwin)
     if [ "${cygwin}" == "yes" ] ; then
-      echo "* INFO: First connection to a server requires saving the fingerprint."
-      echo "* INFO: Only the first time you will have to enter the password."
-      echo ""
-      /usr/bin/ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
-      OUTPUT=$?
+      if [ -z "${toolSelected}" ] ; then
+        echo "* INFO: First connection to a server requires saving the fingerprint."
+        echo "* INFO: Only the first time you will have to enter the password."
+        echo ""
+        /usr/bin/ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        OUTPUT=$?
+      else
+        echo "* INFO: First connection to a server requires saving the fingerprint."
+        echo "* INFO: Only the first time you will have to enter the password."
+        echo ""
+        /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        OUTPUT=$?
+      fi
       if [ ${OUTPUT} -ne 0 ] ; then
         echo ""
         echo "+ ERROR: There has been a failure to connect to the server."
@@ -163,11 +172,19 @@ function check_fingerprint() {
       fi
     # Run command for upload on Unix systems
     else
-      echo "* INFO: First connection to a server requires saving the fingerprint."
-      echo "* INFO: Only the first time you will have to enter the password."
-      echo ""
-      ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
-      OUTPUT=$?
+      if [ -z "${toolSelected}" ] ; then
+        echo "* INFO: First connection to a server requires saving the fingerprint."
+        echo "* INFO: Only the first time you will have to enter the password."
+        echo ""
+        ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        OUTPUT=$?
+      else
+        echo "* INFO: First connection to a server requires saving the fingerprint."
+        echo "* INFO: Only the first time you will have to enter the password."
+        echo ""
+        ssh -o HostKeyAlgorithms=+ssh-rsa ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        OUTPUT=$?
+      fi
       if [ ${OUTPUT} -ne 0 ] ; then
         echo ""
         echo "+ ERROR: There has been a failure to connect to the server."
@@ -191,6 +208,15 @@ function sendFile() {
       echo "+ Syncing folder ${2} to ${5} (${4})"
       /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       /usr/bin/sshpass -p ${1} /usr/bin/ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    elif [ "${toolSelected}" == "rsync-rsa" ] ; then
+      echo ""
+      echo "+ Syncing folder ${2} to ${5} (${4})"
+      /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    elif [ "${toolSelected}" == "scp-rsa" ] ; then
+      echo ""
+      echo "+ Sending files from ${2} to ${5} (${4})"
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     else
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
@@ -203,6 +229,15 @@ function sendFile() {
       echo "+ Syncing folder ${2} to ${5} (${4})"
       rsync --progress -azL --rsh="sshpass -p ${1} ssh -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    elif [ "${toolSelected}" == "rsync-rsa" ] ; then
+      echo ""
+      echo "+ Syncing folder ${2} to ${5} (${4})"
+      rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
+      sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    elif [ "${toolSelected}" == "scp-rsa" ] ; then
+      echo ""
+      echo "+ Sending files from ${2} to ${5} (${4})"
+      sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     else
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
@@ -381,11 +416,25 @@ function editConfig() {
       dirLocal=${DIR}
       echo ${dirLocal} > ${dirConfig}/ks-upload-dirlocal
      elif [ "${EDIT}" == "6" ] ; then
-      echo -n "* [Default: scp] Type upload tool (scp or rsync): " ; read TOOL
+      echo ""
+      echo "* Available options:"
+      echo ""
+      echo "- scp"
+      echo "- rsync"
+      echo "- scp-rsa (legacy RSA algorithm)"
+      echo "- rsync-rsa (legacy RSA algorithm)"
+      echo ""
+      echo -n "* [Default: scp] Type upload tool (scp/rsync/scp-rsa/rsync-rsa): " ; read TOOL
       if [ -z "${TOOL}" ] ; then
         upvTool="scp"
+      elif [ "${TOOL}" == "rsync" ] ; then
+        upvTool="rsync"
+      elif [ "${TOOL}" == "rsync-rsa" ] ; then
+        upvTool="rsync-rsa"
+      elif [ "${TOOL}" == "scp-rsa" ] ; then
+        upvTool="scp-rsa"
       else  
-        upvTool=${TOOL}
+        upvTool="scp"
       fi
       echo ${upvTool} > ${dirConfig}/ks-upload-tool
     elif [ "${EDIT}" == "7" ] ; then
@@ -469,7 +518,7 @@ function showHelp() {
   echo ""
   echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
-  echo "- Upload recursively file(s) to server with rsync+ssh"
+  echo "- Upload recursively file(s) to server with scp or rsync"
   echo ""
   echo "+ Syntax:"
   echo ""
@@ -628,6 +677,11 @@ elif [ "${1}" == "-i" ] ; then
   echo ""
   current_tool=$(cat ${dirConfig}/ks-upload-tool)
   if [ "${current_tool}" == "scp" ] ; then
+    echo ""
+    echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
+    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
+  fi
+  if [ "${current_tool}" == "scp-rsa" ] ; then
     echo ""
     echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
     echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upv -e)"
