@@ -62,6 +62,58 @@ install:
 	chmod +x $(PREFIX)/share/ks-tools/ks-tools
 	chmod +x $(PREFIX)/share/ks-tools/ks-tools-zui
 	
+install-cygwin:
+	cp -rf src/ks-upv $(PREFIX)/bin/ks-upv
+	chmod +x $(PREFIX)/bin/ks-upv
+	cp -rf src/ks-upa $(PREFIX)/bin/ks-upa
+	chmod +x $(PREFIX)/bin/ks-upa
+	cp -rf src/ks-upf $(PREFIX)/bin/ks-upf
+	chmod +x $(PREFIX)/bin/ks-upf
+	cp -rf src/ks-upr $(PREFIX)/bin/ks-upr
+	chmod +x $(PREFIX)/bin/ks-upr
+	cp -rf src/ks-avi $(PREFIX)/bin/ks-avi
+	chmod +x $(PREFIX)/bin/ks-avi
+	cp -rf src/ks-mp4 $(PREFIX)/bin/ks-mp4
+	chmod +x $(PREFIX)/bin/ks-mp4
+	cp -rf src/ks-mp4k $(PREFIX)/bin/ks-mp4k
+	chmod +x $(PREFIX)/bin/ks-mp4k
+	cp -rf src/ks-mp4s $(PREFIX)/bin/ks-mp4s
+	chmod +x $(PREFIX)/bin/ks-mp4s
+	cp -rf src/ks-mp4s-folder $(PREFIX)/bin/ks-mp4s-folder
+	chmod +x $(PREFIX)/bin/ks-mp4s-folder
+	cp -rf src/ks-vob $(PREFIX)/bin/ks-vob
+	chmod +x $(PREFIX)/bin/ks-vob
+	cp -rf src/ks-oga $(PREFIX)/bin/ks-oga
+	chmod +x $(PREFIX)/bin/ks-oga
+	cp -rf src/ks-mp3 $(PREFIX)/bin/ks-mp3
+	chmod +x $(PREFIX)/bin/ks-mp3
+	cp -rf src/ks-oga-album $(PREFIX)/bin/ks-oga-album
+	chmod +x $(PREFIX)/bin/ks-oga-album
+	cp -rf src/ks-mp3-album $(PREFIX)/bin/ks-mp3-album
+	chmod +x $(PREFIX)/bin/ks-mp3-album
+	cp -rf src/ks-mix $(PREFIX)/bin/ks-mix
+	chmod +x $(PREFIX)/bin/ks-mix
+	cp -rf src/ks-crop $(PREFIX)/bin/ks-crop
+	chmod +x $(PREFIX)/bin/ks-crop
+	cp -rf src/ks-conf $(PREFIX)/bin/ks-conf
+	chmod +x $(PREFIX)/bin/ks-conf
+	cp -rf wrapper/ks-mp4-wrapper $(PREFIX)/bin/ks-mp4-wrapper
+	chmod +x $(PREFIX)/bin/ks-mp4-wrapper
+	cp -rf wrapper/ks-mp4k-wrapper $(PREFIX)/bin/ks-mp4k-wrapper
+	chmod +x $(PREFIX)/bin/ks-mp4k-wrapper
+	cp -rf wrapper/ks-mp4s-wrapper $(PREFIX)/bin/ks-mp4s-wrapper
+	chmod +x $(PREFIX)/bin/ks-mp4s-wrapper
+	cp -rf wrapper/ks-avi-wrapper $(PREFIX)/bin/ks-avi-wrapper
+	chmod +x $(PREFIX)/bin/ks-avi-wrapper
+	cp -rf wrapper/ks-vob-wrapper $(PREFIX)/bin/ks-vob-wrapper
+	chmod +x $(PREFIX)/bin/ks-vob-wrapper
+	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
+	chmod +x $(PREFIX)/bin/cygwin-path
+	cp -rf cygwin/* /
+	cp -rfv doc /
+	cp -rfv LICENSE.txt /
+	cp -rfv README.md /
+	
 compile:
 	mkdir -p build/
 	cp -rf src/ks-avi build
