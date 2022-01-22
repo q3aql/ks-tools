@@ -40,11 +40,11 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-conf](https://github.com/q3aql/ks-tools/blob/main/doc/ks-conf.md) - Tool for create and modify all configuration files. 
     
 ### Downloads:
-  * [ks-tools-8.1-040122-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v8.1/ks-tools-8.1-040122-Linux-en.tar.gz) - Unix/Linux package.
-  * [ks-tools-8.1-040122-Windows-en-x86.zip](https://github.com/q3aql/ks-tools/releases/download/v8.1/ks-tools-8.1-040122-Windows-en-x86.zip) - Windows 32-bit package (with cygwin).
-  * [ks-tools-8.1-040122-Windows-en-x86-64.zip](https://github.com/q3aql/ks-tools/releases/download/v8.1/ks-tools-8.1-040122-Windows-en-x86-64.zip) - Windows 64-bit package (with cygwin).
-  * [ks-tools-8.1-040122-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v8.1/ks-tools-8.1-040122-en-all.deb) - Debian based package.
-  * [ks-tools-8.1-040122-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v8.1/ks-tools-8.1-040122-en-all.rpm) - Red Hat based package.
+  * [ks-tools-8.2-220122-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v8.2/ks-tools-8.2-220122-Linux-en.tar.gz) - Unix/Linux package.
+  * [ks-tools-8.2-220122-Windows-en-x86.zip](https://github.com/q3aql/ks-tools/releases/download/v8.2/ks-tools-8.2-220122-Windows-en-x86.zip) - Windows 32-bit package (with cygwin).
+  * [ks-tools-8.2-220122-Windows-en-x86-64.zip](https://github.com/q3aql/ks-tools/releases/download/v8.2/ks-tools-8.2-220122-Windows-en-x86-64.zip) - Windows 64-bit package (with cygwin).
+  * [ks-tools-8.2-220122-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v8.2/ks-tools-8.2-220122-en-all.deb) - Debian based package.
+  * [ks-tools-8.2-220122-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v8.2/ks-tools-8.2-220122-en-all.rpm) - Red Hat based package.
  
 _Dependencies: `bash`, `coreutils`, `openssh-server`, `openssh-client`, `sshpass`, `rsync`, `ffmpeg`, `grep`_
 
@@ -57,7 +57,7 @@ _Note: You can download FFmpeg builds from [here.](https://github.com/q3aql/ffmp
     * Open the terminal and type the following commands:
     
       ```shell
-      $ tar zxvf ks-tools-8.1-040122-Linux-en.tar.gz
+      $ tar zxvf ks-tools-8.2-220122-Linux-en.tar.gz
       $ cd ks-tools
       $ sudo make install
       ````
