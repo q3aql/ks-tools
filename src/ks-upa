@@ -129,6 +129,47 @@ function showPathFile() {
   echo ${pathFile}
 }
 
+# Function to check and save fingerprint SSH
+# check_fingerprint <user> <server>
+function check_fingerprint() {
+  fingerprint_host=$(cat ${HOME}/.ssh/known_hosts 2> /dev/null | grep -o "${2}")
+  if [ -z "${fingerprint_host}" ] ; then
+    # Run command for upload on Windows (Cygwin)
+    if [ "${cygwin}" == "yes" ] ; then
+      echo "* INFO: First connection to a server requires saving the fingerprint."
+      echo "* INFO: Only the first time you will have to enter the password."
+      echo ""
+      /usr/bin/ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
+      OUTPUT=$?
+      if [ ${OUTPUT} -ne 0 ] ; then
+        echo ""
+        echo "+ ERROR: There has been a failure to connect to the server."
+        echo "* INFO: Rerun or check password."
+        echo ""
+        exit
+      else
+        echo "# ${2} cipher mark for ks-tools" >> ${HOME}/.ssh/known_hosts
+      fi
+    # Run command for upload on Unix systems
+    else
+      echo "* INFO: First connection to a server requires saving the fingerprint."
+      echo "* INFO: Only the first time you will have to enter the password."
+      echo ""
+      ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
+      OUTPUT=$?
+      if [ ${OUTPUT} -ne 0 ] ; then
+        echo ""
+        echo "+ ERROR: There has been a failure to connect to the server."
+        echo "* INFO: Re-run or check password."
+        echo ""
+        exit
+      else
+        echo "# ${2} cipher mark for ks-tools" >> ${HOME}/.ssh/known_hosts
+      fi
+    fi
+  fi
+}
+
 # Function to send file to server.
 # Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
 function sendFile() {
@@ -616,6 +657,7 @@ elif [ "${1}" == "-i" ] ; then
   dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
   dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
   # Call the functions to perform the whole process.
+  check_fingerprint ${user} ${server}
   echo -n "* Scanning ${dirLocal} " && sleep 4
   echo ""
   if [ -d ${dirLocal} ] ; then
