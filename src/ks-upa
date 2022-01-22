@@ -57,7 +57,8 @@ function convertText() {
 # Syntax: listArchives <directory>
 function listArchives() {
   fail=1
-  formatFiles="mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka ac3"
+  formatFilesMayus="MP3 WMA OGG WAV FLAC MIDI ACC OGA OPUS MP2 RA M4A MKA AC3 AAC"
+  formatFiles="${formatFilesMayus} mp3 wma ogg wav flac midi acc oga opus mp2 ra m4a mka ac3 aac"
   # Rename files
   cd "${1}"
   mkdir -p ${ksToolsTempFolder}

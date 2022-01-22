@@ -57,7 +57,8 @@ function convertText() {
 # Syntax: listArchives <directory>
 function listArchives() {
   fail=1
-  formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
+  formatFilesMayus="MP4 AVI MPG MPEG MOV WMV MKV OGV WEBM RM FLV VOB TS"
+  formatFiles="${formatFilesMayus} mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
   # Rename files
   cd "${1}"
   mkdir -p ${ksToolsTempFolder}
