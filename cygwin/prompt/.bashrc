@@ -185,7 +185,7 @@ alias Z:="/cygdrive/z"
 # Show menu of ks-tools
 echo ""
 echo " #####################################"
-echo " # ks-tools 8.1 (for Windows/Cygwin) #"
+echo " # ks-tools 8.2 (for Windows/Cygwin) #"
 echo " #####################################"
 echo ""
 echo " * Note:"

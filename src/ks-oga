@@ -2,12 +2,12 @@
 
 #############################################################################
 # ks-oga (ks-tools) - Convert video/audio file(s) to OGA (OGG Audio) Format #
-# Date: 04-01-2022                                                          #
+# Date: 22-01-2022                                                          #
 # Author: q3aql                                                             #
 # Contact: q3aql@duck.com                                                   #
 #############################################################################
-VERSION="8.1"
-M_DATE="040122"
+VERSION="8.2"
+M_DATE="220122"
 
 # Global parameters
 dirTemp="/tmp"
