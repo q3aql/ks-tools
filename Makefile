@@ -109,10 +109,16 @@ install-cygwin:
 	chmod +x $(PREFIX)/bin/ks-vob-wrapper
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
-	cp -rf cygwin/* /
-	cp -rfv doc /
-	cp -rfv LICENSE.txt /
-	cp -rfv README.md /
+	cp -rf cygwin/bin /
+	cp -rf cygwin/prompt /
+	cp -rf cygwin/usr /
+	cp -rf cygwin/Install.cmd /
+	cp -rf cygwin/cygwin-path /
+	cp -rf cygwin/ks-tools.cmd /
+	cp -rf cygwin/ks-tools-cmd.cmd /
+	cp -rf doc /
+	cp -rf LICENSE.txt /
+	cp -rf README.md /
 	
 compile:
 	mkdir -p build/
