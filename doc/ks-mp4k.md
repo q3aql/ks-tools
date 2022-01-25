@@ -1,5 +1,5 @@
-ks-mp4k - Convert video file(s) to compact and efficient MP4 (4K).
-=================================================================
+ks-mp4k - Convert video file to compact and efficient MP4 (4K).
+===============================================================
 
 ### Syntax:
 

@@ -1,5 +1,5 @@
-ks-avi - Convert video file(s) to compact and efficient AVI.
-============================================================
+ks-avi - Convert video file to compact and efficient AVI.
+=========================================================
 
 ### Syntax:
 

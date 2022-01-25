@@ -1,5 +1,5 @@
-ks-oga - Convert video/audio file(s) to OGA (OGG Audio) Format.
-===============================================================
+ks-oga - Convert video/audio file to OGA (OGG Audio) Format.
+============================================================
 
 ### Syntax:
 

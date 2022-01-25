@@ -1,5 +1,5 @@
-ks-vob - Convert video file(s) to compact and efficient VOB.
-============================================================
+ks-vob - Convert video file to VOB (DVD splitet) format.
+========================================================
 
 ### Syntax:
 

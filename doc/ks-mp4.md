@@ -1,5 +1,5 @@
-ks-mp4 - Convert video file(s) to compact and efficient MP4.
-============================================================
+ks-mp4 - Convert video file to compact and efficient MP4.
+=========================================================
 
 ### Syntax:
 

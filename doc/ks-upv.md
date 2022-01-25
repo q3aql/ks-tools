@@ -58,6 +58,7 @@ $ ks-upv -h  - Show help
     * Destination Path (Server): /home/anonymous
     * Scan Path (Local): /home/local/videos
     * Upload Tool: scp
+    * Port Connection: 22
     ````
     
 ### Edit configuration:
@@ -77,8 +78,9 @@ $ ks-upv -h  - Show help
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
     6 - Edit Upload Tool (scp)
+    7 - Edit Port Connection (22)
 
-    7 - Exit
+    8 - Exit
 
     * Choose an option: 
     ````

@@ -11,18 +11,18 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
   * `Tools for convert video:`
 
-    * [ks-mp4](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4.md) - Convert video file(s) to compact and efficient MP4 (libx264 + aac).
-    * [ks-mp4k](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4k.md) - Convert video file(s) to compact and efficient MP4 (4K).
-    * [ks-mp4s](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s.md) - Convert video file(s) to compact and efficient MP4 (Series).
+    * [ks-mp4](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4.md) - Convert video file to compact and efficient MP4 (libx264 + aac).
+    * [ks-mp4k](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4k.md) - Convert video file to compact and efficient MP4 (4K).
+    * [ks-mp4s](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s.md) - Convert video file to compact and efficient MP4 (Series).
     * [ks-mp4s-folder](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp4s-folder.md) - Convert videos from folder to MP4 format (Series).
-    * [ks-avi](https://github.com/q3aql/ks-tools/blob/main/doc/ks-avi.md) - Convert video file(s) to compact and efficient AVI (libxvid + mp3).
-    * [ks-vob](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob.md) - Convert videos to VOB (DVD splitet) format.
+    * [ks-avi](https://github.com/q3aql/ks-tools/blob/main/doc/ks-avi.md) - Convert video file to compact and efficient AVI (libxvid + mp3).
+    * [ks-vob](https://github.com/q3aql/ks-tools/blob/main/doc/ks-vob.md) - Convert video file to VOB (DVD splitet) format.
   
   * `Tools for convert audio:`
 
-    * [ks-oga](https://github.com/q3aql/ks-tools/blob/main/doc/ks-oga.md) - Convert video/audio file(s) to OGA (OGG Audio) Format.
+    * [ks-oga](https://github.com/q3aql/ks-tools/blob/main/doc/ks-oga.md) - Convert video/audio file to OGA (OGG Audio) Format.
     * [ks-oga-album](https://github.com/q3aql/ks-tools/blob/main/doc/ks-oga-album.md) - Convert folder album to OGA (OGG Audio) Format.
-    * [ks-mp3](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3.md) - Convert video/audio file(s) to MP3 Audio Format.
+    * [ks-mp3](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3.md) - Convert video/audio file to MP3 Audio Format.
     * [ks-mp3-album](https://github.com/q3aql/ks-tools/blob/main/doc/ks-mp3-album.md) - Convert folder album to MP3 Audio Format.
   
   * `Tools for crop/mix video/audio:`

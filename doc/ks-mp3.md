@@ -1,5 +1,5 @@
-ks-mp3 - Convert video/audio file(s) to MP3 (Audio) Format.
-===========================================================
+ks-mp3 - Convert video/audio file to MP3 (Audio) Format.
+========================================================
 
 ### Syntax:
 
