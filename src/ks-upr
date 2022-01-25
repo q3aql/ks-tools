@@ -145,6 +145,7 @@ function showFile() {
 function check_fingerprint() {
   fingerprint_host=$(cat ${HOME}/.ssh/known_hosts 2> /dev/null | grep -o "${2}")
   toolSelected=$(cat ${dirConfig}/ks-upload-tool | grep "rsa")
+  portSelected=$(cat ${dirConfig}/ks-upload-port)
   if [ -z "${fingerprint_host}" ] ; then
     # Run command for upload on Windows (Cygwin)
     if [ "${cygwin}" == "yes" ] ; then
@@ -152,13 +153,13 @@ function check_fingerprint() {
         echo "* INFO: First connection to a server requires saving the fingerprint."
         echo "* INFO: Only the first time you will have to enter the password."
         echo ""
-        /usr/bin/ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        /usr/bin/ssh -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
         OUTPUT=$?
       else
         echo "* INFO: First connection to a server requires saving the fingerprint."
         echo "* INFO: Only the first time you will have to enter the password."
         echo ""
-        /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
         OUTPUT=$?
       fi
       if [ ${OUTPUT} -ne 0 ] ; then
@@ -176,13 +177,13 @@ function check_fingerprint() {
         echo "* INFO: First connection to a server requires saving the fingerprint."
         echo "* INFO: Only the first time you will have to enter the password."
         echo ""
-        ssh ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        ssh -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
         OUTPUT=$?
       else
         echo "* INFO: First connection to a server requires saving the fingerprint."
         echo "* INFO: Only the first time you will have to enter the password."
         echo ""
-        ssh -o HostKeyAlgorithms=+ssh-rsa ${1}@${2} echo "* Connection successfuly" &> /dev/null
+        ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
         OUTPUT=$?
       fi
       if [ ${OUTPUT} -ne 0 ] ; then
@@ -202,46 +203,47 @@ function check_fingerprint() {
 # Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
 function sendFile() {
   toolSelected=$(cat ${dirConfig}/ks-upload-tool)
+  portSelected=$(cat ${dirConfig}/ks-upload-port)
   if [ "${cygwin}" == "yes" ] ; then
     if [ "${toolSelected}" == "rsync" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
-      /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
-      /usr/bin/sshpass -p ${1} /usr/bin/ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+      /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [ "${toolSelected}" == "rsync-rsa" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
-      /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
-      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+      /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [ "${toolSelected}" == "scp-rsa" ] ; then
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
-      /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     else
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
-      /usr/bin/sshpass -p ${1} /usr/bin/scp -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     fi
   # Run command for upload on Unix systems
   else
     if [ "${toolSelected}" == "rsync" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
-      rsync --progress -azL --rsh="sshpass -p ${1} ssh -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
-      sshpass -p ${1} ssh ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+      rsync --progress -azL --rsh="sshpass -p ${1} ssh -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
+      sshpass -p ${1} ssh -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [ "${toolSelected}" == "rsync-rsa" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
-      rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
-      sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+      rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
+      sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
     elif [ "${toolSelected}" == "scp-rsa" ] ; then
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
-      sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+      sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     else
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
-      sshpass -p ${1} scp -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+      sshpass -p ${1} scp -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
     fi
   fi
 }
@@ -354,6 +356,11 @@ function showConfig() {
     echo "- Upload Tool: ${showUpvTool}"
     configAvailable=1
   fi
+  if [ -f ${dirConfig}/ks-upload-port ] ; then
+    showUpvPort=$(cat ${dirConfig}/ks-upload-port)
+    echo "- Port Connection: ${showUpvPort}"
+    configAvailable=1
+  fi
   if [ ${configAvailable} -eq 0 ] ; then
     echo "* The configuration file does not exist!"
   fi
@@ -380,8 +387,11 @@ function editConfig() {
     editDirServer=$(cat ${dirConfig}/ks-upload-dirserver 2> /dev/null)
     editDirLocal=$(cat ${dirConfig}/ks-upload-dirlocal 2> /dev/null)
     editUpvTool=$(cat ${dirConfig}/ks-upload-tool 2> /dev/null)
+    editUpvPort=$(cat ${dirConfig}/ks-upload-port 2> /dev/null)
     echo ""
-    echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
+    echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+    echo ""
+    echo "+ Config: ${dirConfig}/ks-upload-*"
     echo ""
     echo " 1 - Edit User (${editUser})"
     echo " 2 - Edit Password (${editPassword})"
@@ -389,8 +399,9 @@ function editConfig() {
     echo " 4 - Edit Dest. Path (${editDirServer})"
     echo " 5 - Edit Local Path (${editDirLocal})"
     echo " 6 - Edit Upload Tool (${editUpvTool})"
+    echo " 7 - Edit Port Connection (${editUpvPort})"
     echo ""
-    echo " 7 - Exit"
+    echo " 8 - Exit"
     echo ""
     echo -n "* Choose an option: " ; read EDIT
     echo ""
@@ -438,6 +449,14 @@ function editConfig() {
       fi
       echo ${upvTool} > ${dirConfig}/ks-upload-tool
     elif [ "${EDIT}" == "7" ] ; then
+      echo -n "* [Default: 22] Type port connection: " ; read PORT
+      if [ -z "${PORT}" ] ; then
+        upvPort="22"
+      else
+        upvPort="${PORT}"
+      fi
+      echo ${upvPort} > ${dirConfig}/ks-upload-port
+    elif [ "${EDIT}" == "8" ] ; then
       editConfig=1
     else
       echo "+ Invalid option!"
@@ -500,7 +519,15 @@ function createConfig() {
   if [ -f ${dirConfig}/ks-upload-tool ] ; then
     echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upr -e' for edit)"
   else
+    echo "* Setting 'scp' as the default tool"
     echo "scp" > ${dirConfig}/ks-upload-tool
+  fi
+   # Configure port by default
+  if [ -f ${dirConfig}/ks-upload-port ] ; then
+    echo "+ The PORT configuration already exists (Use: 'ks-upr -e' for edit)"
+  else
+    echo "* Setting port 22 as the default port"
+    echo "22" > ${dirConfig}/ks-upload-port
   fi
   echo ""
 }
@@ -519,6 +546,8 @@ function showHelp() {
   echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
   echo "- Upload recursively file(s) to server with scp or rsync"
+  echo ""
+  echo "+ Config: ${dirConfig}/ks-upload-*"
   echo ""
   echo "+ Syntax:"
   echo ""
@@ -637,7 +666,8 @@ if [ "${1}" == "-r" ] ; then
     echo "+ Removing LOCAL PATH file configuration..."
     rm -rf ${dirConfig}/ks-upload-dirlocal
     echo "* Removed all configuration"
-    rm -f ${dirConfig}/ks-upload-tool
+    rm -rf ${dirConfig}/ks-upload-tool
+    rm -rf ${dirConfig}/ks-upload-port 
     echo ""
     exit
   else
