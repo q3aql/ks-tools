@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4s (ks-tools) - Convert video to MP4 format (Series)   #
-# Date: 22-01-2022                                            #
+# Date: 28-01-2022                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
-VERSION="8.2"
-M_DATE="220122"
+VERSION="8.3"
+M_DATE="280122"
 
 # Global parameters
 dirTemp="/tmp"

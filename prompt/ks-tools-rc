@@ -114,7 +114,7 @@ fi
 
 echo ""
 echo " #################################"
-echo " # ks-tools 8.2 (for Unix/Linux) #"
+echo " # ks-tools 8.3 (for Unix/Linux) #"
 echo " #################################"
 echo ""
 echo " * Available commands:"
