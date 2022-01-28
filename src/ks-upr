@@ -410,7 +410,7 @@ function editConfig() {
       user=${USER}
       echo ${user} > ${dirConfig}/ks-upload-user
     elif [ "${EDIT}" == "2" ] ; then
-      echo -n "* Enter the server key: " ; read PASS
+      echo -n "* Enter the server password: " ; read PASS
       raw_password_enter=${PASS}
       encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
       echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
