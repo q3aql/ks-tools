@@ -119,6 +119,8 @@ install-cygwin:
 	cp -rf doc /
 	cp -rf LICENSE.txt /
 	cp -rf README.md /
+	mkdir -p /home/
+	mkdir -p /tmp
 	
 compile:
 	mkdir -p build/
