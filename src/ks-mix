@@ -534,32 +534,77 @@ elif [ "${1}" == "-evti" ] ; then
       video_track="${video_track}"
     fi
     # Ask for hour to cut
-    echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
-    if [ -z "${hour_cut}" ] ; then
-      hourZero=$(zero_number "${hourCut}")
-      hourCut="${hourZero}"
-    else
-      hourZero=$(zero_number "${hour_cut}")
-      hourCut="${hourZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
+      expr 1 + ${hour_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${hour_cut}" ] ; then
+        hourZero=$(zero_number "${hourCut}")
+        hourCut="${hourZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${hour_cut} -le 99 ] ; then
+            hourZero=$(zero_number "${hour_cut}")
+            hourCut="${hourZero}"
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 99 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-99)"
+        fi
+      fi
+    done
     # Ask for minute to cut
-    echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
-    if [ -z "${minute_cut}" ] ; then
-      minuteZero=$(zero_number "${minuteCut}")
-      minuteCut="${minuteZero}"
-    else
-      minuteZero=$(zero_number "${minute_cut}")
-      minuteCut="${minuteZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
+      expr 1 + ${minute_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${minute_cut}" ] ; then
+        minuteZero=$(zero_number "${minuteCut}")
+        minuteCut="${minuteZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${minute_cut} -le 59 ] ; then
+            minuteZero=$(zero_number "${minute_cut}")
+            minuteCut="${minuteZero}"            
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 59 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-59)"
+        fi
+      fi
+    done
     # Ask for second to cut
-    echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
-    if [ -z "${second_cut}" ] ; then
-      secondZero=$(zero_number "${secondCut}")
-      secondCut="${secondZero}"
-    else
-      secondZero=$(zero_number "${second_cut}")
-      secondCut="${secondZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
+      expr 1 + ${second_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${second_cut}" ] ; then
+        secondZero=$(zero_number "${secondCut}")
+        secondCut="${secondZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${second_cut} -le 59 ] ; then
+            secondZero=$(zero_number "${second_cut}")
+            secondCut="${secondZero}"           
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 59 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-59)"
+        fi
+      fi
+    done
     echo -n "* (Default: n) Extract video from ${hourCut}:${minuteCut}:${secondCut} to end? (y/n): " ; read accept_extraction
     if [ "${accept_extraction}" == "y" ] ; then
       echo ""
@@ -579,32 +624,77 @@ elif [ "${1}" == "-evti" ] ; then
       secondCutAfter=0
       # Ask for hour to cut
       echo ""
-      echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
-      if [ -z "${hour_cutAfter}" ] ; then
-        hourZeroAfter=$(zero_number "${hourCutAfter}")
-        hourCutAfter="${hourZeroAfter}"
-      else
-        hourZeroAfter=$(zero_number "${hour_cutAfter}")
-        hourCutAfter="${hourZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
+        expr 1 + ${hour_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${hour_cutAfter}" ] ; then
+          hourZeroAfter=$(zero_number "${hourCutAfter}")
+          hourCutAfter="${hourZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${hour_cutAfter} -le 99 ] ; then
+              hourZeroAfter=$(zero_number "${hour_cutAfter}")
+              hourCutAfter="${hourZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 99 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-99)"
+          fi
+        fi
+      done
       # Ask for minute to cut
-      echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
-      if [ -z "${minute_cutAfter}" ] ; then
-        minuteZeroAfter=$(zero_number "${minuteCutAfter}")
-        minuteCutAfter="${minuteZeroAfter}"
-      else
-        minuteZeroAfter=$(zero_number "${minute_cutAfter}")
-        minuteCutAfter="${minuteZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
+        expr 1 + ${minute_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${minute_cutAfter}" ] ; then
+          minuteZeroAfter=$(zero_number "${minuteCutAfter}")
+          minuteCutAfter="${minuteZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${minute_cutAfter} -le 59 ] ; then
+              minuteZeroAfter=$(zero_number "${minute_cutAfter}")
+              minuteCutAfter="${minuteZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 59 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-59)"
+          fi
+        fi
+      done
       # Ask for second to cut
-      echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
-      if [ -z "${second_cutAfter}" ] ; then
-        secondZeroAfter=$(zero_number "${secondCutAfter}")
-        secondCutAfter="${secondZeroAfter}"
-      else
-        secondZeroAfter=$(zero_number "${second_cutAfter}")
-        secondCutAfter="${secondZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+        expr 1 + ${second_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${second_cutAfter}" ] ; then
+          secondZeroAfter=$(zero_number "${secondCutAfter}")
+          secondCutAfter="${secondZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${second_cutAfter} -le 59 ] ; then
+              secondZeroAfter=$(zero_number "${second_cutAfter}")
+              secondCutAfter="${secondZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 59 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-59)"
+          fi
+        fi
+      done
       hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
       minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
       secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
@@ -680,32 +770,77 @@ elif [ "${1}" == "-eati" ] ; then
       audio_track="${audio_track}"
     fi
     # Ask for hour to cut
-    echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
-    if [ -z "${hour_cut}" ] ; then
-      hourZero=$(zero_number "${hourCut}")
-      hourCut="${hourZero}"
-    else
-      hourZero=$(zero_number "${hour_cut}")
-      hourCut="${hourZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
+      expr 1 + ${hour_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${hour_cut}" ] ; then
+        hourZero=$(zero_number "${hourCut}")
+        hourCut="${hourZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${hour_cut} -le 99 ] ; then
+            hourZero=$(zero_number "${hour_cut}")
+            hourCut="${hourZero}"
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 99 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-99)"
+        fi
+      fi
+    done
     # Ask for minute to cut
-    echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
-    if [ -z "${minute_cut}" ] ; then
-      minuteZero=$(zero_number "${minuteCut}")
-      minuteCut="${minuteZero}"
-    else
-      minuteZero=$(zero_number "${minute_cut}")
-      minuteCut="${minuteZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
+      expr 1 + ${minute_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${minute_cut}" ] ; then
+        minuteZero=$(zero_number "${minuteCut}")
+        minuteCut="${minuteZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${minute_cut} -le 59 ] ; then
+            minuteZero=$(zero_number "${minute_cut}")
+            minuteCut="${minuteZero}"            
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 59 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-59)"
+        fi
+      fi
+    done
     # Ask for second to cut
-    echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
-    if [ -z "${second_cut}" ] ; then
-      secondZero=$(zero_number "${secondCut}")
-      secondCut="${secondZero}"
-    else
-      secondZero=$(zero_number "${second_cut}")
-      secondCut="${secondZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
+      expr 1 + ${second_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${second_cut}" ] ; then
+        secondZero=$(zero_number "${secondCut}")
+        secondCut="${secondZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${second_cut} -le 59 ] ; then
+            secondZero=$(zero_number "${second_cut}")
+            secondCut="${secondZero}"           
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 59 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-59)"
+        fi
+      fi
+    done
     echo -n "* (Default: n) Extract audio from ${hourCut}:${minuteCut}:${secondCut} to end? (y/n): " ; read accept_extraction
     if [ "${accept_extraction}" == "y" ] ; then
       echo ""
@@ -723,32 +858,77 @@ elif [ "${1}" == "-eati" ] ; then
       secondCutAfter=0
       # Ask for hour to cut
       echo ""
-      echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
-      if [ -z "${hour_cutAfter}" ] ; then
-        hourZeroAfter=$(zero_number "${hourCutAfter}")
-        hourCutAfter="${hourZeroAfter}"
-      else
-        hourZeroAfter=$(zero_number "${hour_cutAfter}")
-        hourCutAfter="${hourZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
+        expr 1 + ${hour_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${hour_cutAfter}" ] ; then
+          hourZeroAfter=$(zero_number "${hourCutAfter}")
+          hourCutAfter="${hourZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${hour_cutAfter} -le 99 ] ; then
+              hourZeroAfter=$(zero_number "${hour_cutAfter}")
+              hourCutAfter="${hourZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 99 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-99)"
+          fi
+        fi
+      done
       # Ask for minute to cut
-      echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
-      if [ -z "${minute_cutAfter}" ] ; then
-        minuteZeroAfter=$(zero_number "${minuteCutAfter}")
-        minuteCutAfter="${minuteZeroAfter}"
-      else
-        minuteZeroAfter=$(zero_number "${minute_cutAfter}")
-        minuteCutAfter="${minuteZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
+        expr 1 + ${minute_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${minute_cutAfter}" ] ; then
+          minuteZeroAfter=$(zero_number "${minuteCutAfter}")
+          minuteCutAfter="${minuteZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${minute_cutAfter} -le 59 ] ; then
+              minuteZeroAfter=$(zero_number "${minute_cutAfter}")
+              minuteCutAfter="${minuteZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 59 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-59)"
+          fi
+        fi
+      done
       # Ask for second to cut
-      echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
-      if [ -z "${second_cutAfter}" ] ; then
-        secondZeroAfter=$(zero_number "${secondCutAfter}")
-        secondCutAfter="${secondZeroAfter}"
-      else
-        secondZeroAfter=$(zero_number "${second_cutAfter}")
-        secondCutAfter="${secondZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+        expr 1 + ${second_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${second_cutAfter}" ] ; then
+          secondZeroAfter=$(zero_number "${secondCutAfter}")
+          secondCutAfter="${secondZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${second_cutAfter} -le 59 ] ; then
+              secondZeroAfter=$(zero_number "${second_cutAfter}")
+              secondCutAfter="${secondZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 59 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-59)"
+          fi
+        fi
+      done
       hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
       minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
       secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
@@ -844,32 +1024,77 @@ elif [ "${1}" == "-evat" ] ; then
       audio_track="${audio_track}"
     fi
     # Ask for hour to cut
-    echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
-    if [ -z "${hour_cut}" ] ; then
-      hourZero=$(zero_number "${hourCut}")
-      hourCut="${hourZero}"
-    else
-      hourZero=$(zero_number "${hour_cut}")
-      hourCut="${hourZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${hourCut}) Type the hour (0-99): " ; read hour_cut
+      expr 1 + ${hour_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${hour_cut}" ] ; then
+        hourZero=$(zero_number "${hourCut}")
+        hourCut="${hourZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${hour_cut} -le 99 ] ; then
+            hourZero=$(zero_number "${hour_cut}")
+            hourCut="${hourZero}"
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 99 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-99)"
+        fi
+      fi
+    done
     # Ask for minute to cut
-    echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
-    if [ -z "${minute_cut}" ] ; then
-      minuteZero=$(zero_number "${minuteCut}")
-      minuteCut="${minuteZero}"
-    else
-      minuteZero=$(zero_number "${minute_cut}")
-      minuteCut="${minuteZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${minuteCut}) Type the minute (0-59): " ; read minute_cut
+      expr 1 + ${minute_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${minute_cut}" ] ; then
+        minuteZero=$(zero_number "${minuteCut}")
+        minuteCut="${minuteZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${minute_cut} -le 59 ] ; then
+            minuteZero=$(zero_number "${minute_cut}")
+            minuteCut="${minuteZero}"            
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 59 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-59)"
+        fi
+      fi
+    done
     # Ask for second to cut
-    echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
-    if [ -z "${second_cut}" ] ; then
-      secondZero=$(zero_number "${secondCut}")
-      secondCut="${secondZero}"
-    else
-      secondZero=$(zero_number "${second_cut}")
-      secondCut="${secondZero}"
-    fi
+    valid_time=0
+    while [ ${valid_time} -eq 0 ] ; do
+      echo -n "* (Default: ${secondCut}) Type the second (0-59): " ; read second_cut
+      expr 1 + ${second_cut} &> /dev/null
+      error_time=$?
+      if [ -z "${second_cut}" ] ; then
+        secondZero=$(zero_number "${secondCut}")
+        secondCut="${secondZero}"
+        valid_time=1
+      else
+        if [ ${error_time} -eq 0 ] ; then
+          if [ ${second_cut} -le 59 ] ; then
+            secondZero=$(zero_number "${second_cut}")
+            secondCut="${secondZero}"           
+            valid_time=1
+          else
+            echo "+ Only numbers from 0 to 59 are allowed"
+          fi
+        else
+          echo "+ Only numbers are allowed (0-59)"
+        fi
+      fi
+    done
     echo -n "* (Default: n) Extract audio from ${hourCut}:${minuteCut}:${secondCut} to end? (y/n): " ; read accept_extraction
     if [ "${accept_extraction}" == "y" ] ; then
       echo ""
@@ -887,32 +1112,77 @@ elif [ "${1}" == "-evat" ] ; then
       secondCutAfter=0
       # Ask for hour to cut
       echo ""
-      echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
-      if [ -z "${hour_cutAfter}" ] ; then
-        hourZeroAfter=$(zero_number "${hourCutAfter}")
-        hourCutAfter="${hourZeroAfter}"
-      else
-        hourZeroAfter=$(zero_number "${hour_cutAfter}")
-        hourCutAfter="${hourZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${hourCutAfter}) Type how many hours from ${hourCut}:${minuteCut}:${secondCut} (0-99): " ; read hour_cutAfter
+        expr 1 + ${hour_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${hour_cutAfter}" ] ; then
+          hourZeroAfter=$(zero_number "${hourCutAfter}")
+          hourCutAfter="${hourZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${hour_cutAfter} -le 99 ] ; then
+              hourZeroAfter=$(zero_number "${hour_cutAfter}")
+              hourCutAfter="${hourZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 99 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-99)"
+          fi
+        fi
+      done
       # Ask for minute to cut
-      echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
-      if [ -z "${minute_cutAfter}" ] ; then
-        minuteZeroAfter=$(zero_number "${minuteCutAfter}")
-        minuteCutAfter="${minuteZeroAfter}"
-      else
-        minuteZeroAfter=$(zero_number "${minute_cutAfter}")
-        minuteCutAfter="${minuteZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${minuteCutAfter}) Type how many minutes from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read minute_cutAfter
+        expr 1 + ${minute_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${minute_cutAfter}" ] ; then
+          minuteZeroAfter=$(zero_number "${minuteCutAfter}")
+          minuteCutAfter="${minuteZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${minute_cutAfter} -le 59 ] ; then
+              minuteZeroAfter=$(zero_number "${minute_cutAfter}")
+              minuteCutAfter="${minuteZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 59 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-59)"
+          fi
+        fi
+      done
       # Ask for second to cut
-      echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
-      if [ -z "${second_cutAfter}" ] ; then
-        secondZeroAfter=$(zero_number "${secondCutAfter}")
-        secondCutAfter="${secondZeroAfter}"
-      else
-        secondZeroAfter=$(zero_number "${second_cutAfter}")
-        secondCutAfter="${secondZeroAfter}"
-      fi
+      valid_time=0
+      while [ ${valid_time} -eq 0 ] ; do
+        echo -n "* (Default: ${secondCutAfter}) Type how many seconds from ${hourCut}:${minuteCut}:${secondCut} (0-59): " ; read second_cutAfter
+        expr 1 + ${second_cutAfter} &> /dev/null
+        error_time=$?
+        if [ -z "${second_cutAfter}" ] ; then
+          secondZeroAfter=$(zero_number "${secondCutAfter}")
+          secondCutAfter="${secondZeroAfter}"
+          valid_time=1
+        else
+          if [ ${error_time} -eq 0 ] ; then
+            if [ ${second_cutAfter} -le 59 ] ; then
+              secondZeroAfter=$(zero_number "${second_cutAfter}")
+              secondCutAfter="${secondZeroAfter}"
+              valid_time=1
+            else
+              echo "+ Only numbers from 0 to 59 are allowed"
+            fi
+          else
+            echo "+ Only numbers are allowed (0-59)"
+          fi
+        fi
+      done
       hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
       minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
       secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
