@@ -698,6 +698,17 @@ elif [ "${1}" == "-evti" ] ; then
       hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
       minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
       secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
+      # Adjust time to display correctly
+      if [ ${secondPlusRaw} -ge 60 ] ; then
+        newSecondPlusRaw=$(expr ${secondPlusRaw} - 60)
+        secondPlusRaw=${newSecondPlusRaw}
+        minutePlusRaw=$(expr ${minutePlusRaw} + 1)
+      fi
+      if [ ${minutePlusRaw} -ge 60 ] ; then
+        newMinutePlusRaw=$(expr ${minutePlusRaw} - 60)
+        minutePlusRaw=${newMinutePlusRaw}
+        hourPlusRaw=$(expr ${hourPlusRaw} + 1)
+      fi
       # Convert time total
       hourPlus=$(zero_number "${hourPlusRaw}")
       minutePlus=$(zero_number "${minutePlusRaw}")
@@ -932,6 +943,17 @@ elif [ "${1}" == "-eati" ] ; then
       hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
       minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
       secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
+      # Adjust time to display correctly
+      if [ ${secondPlusRaw} -ge 60 ] ; then
+        newSecondPlusRaw=$(expr ${secondPlusRaw} - 60)
+        secondPlusRaw=${newSecondPlusRaw}
+        minutePlusRaw=$(expr ${minutePlusRaw} + 1)
+      fi
+      if [ ${minutePlusRaw} -ge 60 ] ; then
+        newMinutePlusRaw=$(expr ${minutePlusRaw} - 60)
+        minutePlusRaw=${newMinutePlusRaw}
+        hourPlusRaw=$(expr ${hourPlusRaw} + 1)
+      fi
       # Convert time total
       hourPlus=$(zero_number "${hourPlusRaw}")
       minutePlus=$(zero_number "${minutePlusRaw}")
@@ -1186,6 +1208,17 @@ elif [ "${1}" == "-evat" ] ; then
       hourPlusRaw=$(expr ${hourCut} + ${hourCutAfter})
       minutePlusRaw=$(expr ${minuteCut} + ${minuteCutAfter})
       secondPlusRaw=$(expr ${secondCut} + ${secondCutAfter})
+      # Adjust time to display correctly
+      if [ ${secondPlusRaw} -ge 60 ] ; then
+        newSecondPlusRaw=$(expr ${secondPlusRaw} - 60)
+        secondPlusRaw=${newSecondPlusRaw}
+        minutePlusRaw=$(expr ${minutePlusRaw} + 1)
+      fi
+      if [ ${minutePlusRaw} -ge 60 ] ; then
+        newMinutePlusRaw=$(expr ${minutePlusRaw} - 60)
+        minutePlusRaw=${newMinutePlusRaw}
+        hourPlusRaw=$(expr ${hourPlusRaw} + 1)
+      fi
       # Convert time total
       hourPlus=$(zero_number "${hourPlusRaw}")
       minutePlus=$(zero_number "${minutePlusRaw}")
