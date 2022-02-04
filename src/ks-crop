@@ -137,7 +137,8 @@ function errorReadingFile() {
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
 # f_conversion="-vsync 1 -async 1" # Deprecated method
-f_conversion="-vsync cfr -af aresample=async=1:min_hard_comp=0.100000:first_pts=0"
+f_conversion="-vsync cfr"
+f_conversion_crop="-vsync cfr -async 1"
 # Check if video input uses H265 (HEVC)
 codec_h265=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
 codec_hevc=$(${p_ffmpeg} "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
@@ -312,9 +313,9 @@ function crop_video() {
     fi
     echo "  # Crop '${inputFile}' from 4:3/IMAX to 16:9 (1.77:1)"
     if [ "${patch_thread}" == "y" ] ; then
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=iw:ih-${ih_size}\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
     fi
     # Execute commands for conversion
     echo ""
@@ -337,9 +338,9 @@ function crop_video() {
         fi
       fi
       if [ "${patch_thread}" == "y" ] ; then
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=iw:ih-${ih_size}" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
   elif [ "${modeCrop}" == "4:3-crop" ] ; then
@@ -351,9 +352,9 @@ function crop_video() {
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Crop '${inputFile}' from 16:9 to 4:3 (1.33:1)"
     if [ "${patch_thread}" == "y" ] ; then
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/3*4:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/3*4:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/3*4:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/3*4:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
     fi
     # Execute commands for conversion
     echo ""
@@ -362,9 +363,9 @@ function crop_video() {
       exit
     else
       if [ "${patch_thread}" == "y" ] ; then
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/3*4:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/3*4:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/3*4:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/3*4:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
   elif [ "${modeCrop}" == "5:4-crop" ] ; then
@@ -376,9 +377,9 @@ function crop_video() {
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Crop '${inputFile}' from 16:9 to 5:4 (1.25:1)"
     if [ "${patch_thread}" == "y" ] ; then
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/4*5:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/4*5:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/4*5:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/4*5:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
     fi
     # Execute commands for conversion
     echo ""
@@ -387,9 +388,9 @@ function crop_video() {
       exit
     else
       if [ "${patch_thread}" == "y" ] ; then
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/4*5:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/4*5:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/4*5:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/4*5:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
   elif [ "${modeCrop}" == "imax-crop" ] ; then
@@ -401,7 +402,7 @@ function crop_video() {
     echo "  # File detected with resolution" ${resolution_detected}
     echo "  # Crop '${inputFile}' from 16:9 to IMAX (1.43:1)"
     if [ "${patch_thread}" == "y" ] ; then
-      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/2.79*4:ih\" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/2.79*4:ih\" -s ${resolution} ${f_conversion_crop} ${p_ffmpeg_patched} \"${inputFileOut}-crop.${v_ext}\""
     else
       echo "  ${p_ffmpeg} \"${inputFile}\" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v \"crop=ih/2.79*4:ih\" -s ${resolution} ${p_conversion} \"${inputFileOut}-crop.${v_ext}\""
     fi
@@ -412,9 +413,9 @@ function crop_video() {
       exit
     else
       if [ "${patch_thread}" == "y" ] ; then
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/2.79*4:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/2.79*4:ih" -s ${resolution} ${p_conversion} ${p_ffmpeg_patched} "${inputFileOut}-crop.${v_ext}"
       else
-        ${p_ffmpeg} "${inputFile}" ${f_conversion} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/2.79*4:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
+        ${p_ffmpeg} "${inputFile}" ${f_conversion_crop} -map ${video_track} -map ${audio_track} -filter:v "crop=ih/2.79*4:ih" -s ${resolution} ${p_conversion} "${inputFileOut}-crop.${v_ext}"
       fi
     fi
   elif [ "${modeCrop}" == "16:9-aspect" ] ; then
