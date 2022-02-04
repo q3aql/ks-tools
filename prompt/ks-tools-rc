@@ -113,9 +113,9 @@ if ! shopt -oq posix; then
 fi
 
 echo ""
-echo " #################################"
-echo " # ks-tools 8.3 (for Unix/Linux) #"
-echo " #################################"
+echo " ###################################"
+echo " # ks-tools 8.3.1 (for Unix/Linux) #"
+echo " ###################################"
 echo ""
 echo " * Available commands:"
 echo ""

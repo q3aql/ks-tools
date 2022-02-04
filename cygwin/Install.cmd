@@ -1,10 +1,10 @@
 @echo off
 
-set VERSION=8.3
+set VERSION=8.3.1
 echo.
-echo  #####################################
+echo  #######################################
 echo  # Welcome to ks-tools installer %VERSION% #
-echo  #####################################
+echo  #######################################
 echo.
 echo  - This installer simply creates a shortcut to the 
 echo    application on your desktop. We recommend that 
