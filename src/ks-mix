@@ -135,7 +135,7 @@ elif [ "${1}" == "-evid" ] ; then
     echo -n "* Starting extract video track (${2}) "
     sleep 3
     ffmpeg -y -i "${2}" -map ${video_track} -c:v copy "${current_dir}/seeing.mp4"
-    ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+    ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
     echo ""
     echo -n "* Extracted video into ${video_file_dir}"
     sleep 2
@@ -221,7 +221,7 @@ elif [ "${1}" == "-ev25" ] ; then
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -234,7 +234,7 @@ elif [ "${1}" == "-ev25" ] ; then
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -247,7 +247,7 @@ elif [ "${1}" == "-ev25" ] ; then
       ffmpeg -y -i "${current_dir}/temp-mpeg4.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-mpeg4.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -329,7 +329,7 @@ elif [ "${1}" == "-evpf" ] ; then
     if [ "${codec_encoded}" == "h264_encoded" ] ; then
       ffmpeg -y -i "${2}" -map ${video_track} -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -342,7 +342,7 @@ elif [ "${1}" == "-evpf" ] ; then
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -355,7 +355,7 @@ elif [ "${1}" == "-evpf" ] ; then
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -368,7 +368,7 @@ elif [ "${1}" == "-evpf" ] ; then
       ffmpeg -y -i "${current_dir}/temp-mpeg4.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-mpeg4.mkv"
       ffmpeg -y -r ${frames_default} -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir} (25 fps)"
       sleep 2
@@ -611,7 +611,7 @@ elif [ "${1}" == "-evti" ] ; then
       echo -n "* Starting extract video track (${2}) "
       sleep 3
       ffmpeg -y -i "${2}" -map ${video_track} -c:v copy -ss ${hourCut}:${minuteCut}:${secondCut} "${current_dir}/seeing.mp4"
-      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+      ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
       echo ""
       echo -n "* Extracted video into ${video_file_dir}"
       sleep 2
@@ -721,7 +721,7 @@ elif [ "${1}" == "-evti" ] ; then
         echo -n "* Starting extract video track (${2}) "
         sleep 3
         ffmpeg -y -i "${2}" -map ${video_track} -c:v copy -ss ${hourCut}:${minuteCut}:${secondCut} -t ${hourCutAfter}:${minuteCutAfter}:${secondCutAfter} "${current_dir}/seeing.mp4"
-        ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync 1 -c:v copy "${video_file_dir}"
+        ffmpeg -y -i "${current_dir}/seeing.mp4" -map 0:0 -vsync cfr -c:v copy "${video_file_dir}"
         echo ""
         echo -n "* Extracted video into ${video_file_dir}"
         sleep 2
