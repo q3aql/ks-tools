@@ -48,5 +48,5 @@ $ ks-mp4s-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 720x480 "My video" 2
     
 ### Back to README.md
     
-* [Go back](https://github.com/q3aql/ks-tools/blob/main/README.md)
+* [Go back](../README.md)
   

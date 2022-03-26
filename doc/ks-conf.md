@@ -67,5 +67,5 @@ $ ks-conf
     
 ### Back to README.md
     
-* [Go back](https://github.com/q3aql/ks-tools/blob/main/README.md)
+* [Go back](../README.md)
   

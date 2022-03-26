@@ -120,5 +120,5 @@ _Note: Output file name will be `Example-aspect.mkv`_
     
 ### Back to README.md
     
-* [Go back](https://github.com/q3aql/ks-tools/blob/main/README.md)
+* [Go back](../README.md)
   
