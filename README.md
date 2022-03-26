@@ -40,11 +40,12 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-conf](doc/ks-conf.md) - Tool for create and modify all configuration files. 
     
 ### Downloads:
-  * [ks-tools-8.3.1-040222-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-Linux-en.tar.gz) - Unix/Linux package.
-  * [ks-tools-8.3.1-040222-Windows-en-x86.zip](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-Windows-en-x86.zip) - Windows 32-bit package (with cygwin).
-  * [ks-tools-8.3.1-040222-Windows-en-x86-64.zip](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-Windows-en-x86-64.zip) - Windows 64-bit package (with cygwin).
-  * [ks-tools-8.3.1-040222-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-en-all.deb) - Debian based package.
-  * [ks-tools-8.3.1-040222-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-en-all.rpm) - Red Hat based package.
+  * [ks-tools-8.3.1-040222-Linux-en.tar.gz](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-Linux-en.tar.gz) (Generic Unix/Linux)
+  * [ks-tools-8.3.1-040222-Windows-en-x86.zip](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-Windows-en-x86.zip) (Windows/Cygwin x86)
+  * [ks-tools-8.3.1-040222-Windows-en-x86-64.zip](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-Windows-en-x86-64.zip) (Windows/Cygwin x86_64)
+  * [ks-tools-8.3.1-040222-en-all.deb](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-en-all.deb) (Debian/Ubuntu)
+  * [ks-tools-8.3.1-040222-en-all.rpm](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-en-all.rpm) (RedHat/Fedora)
+  * [ks-tools-8.3.1-040222-en-all.pkg.tar.zst](https://github.com/q3aql/ks-tools/releases/download/v8.3.1/ks-tools-8.3.1-040222-en-all.pkg.tar.zst) (Arch Linux)
  
 _Dependencies: `bash`, `coreutils`, `openssh-server`, `openssh-client`, `sshpass`, `rsync`, `ffmpeg`, `grep`_
 
