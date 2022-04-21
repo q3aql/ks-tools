@@ -198,7 +198,8 @@ fi
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
 # f_conversion="-vsync 1 -async 1" # Deprecated method
-f_conversion="-vsync cfr -af aresample=async=1:min_hard_comp=0.100000:first_pts=0"
+#f_conversion="-vsync cfr -af aresample=async=1:min_hard_comp=0.100000:first_pts=0"
+f_conversion="-vsync cfr -af aresample=async=1"
 # Check if video input uses H265 (HEVC)
 codec_h265=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "h265")
 codec_hevc=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | grep "hevc")
