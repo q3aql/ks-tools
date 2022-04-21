@@ -5,6 +5,8 @@
 PREFIX=/usr
 
 install:
+	cp -rf src/ks-tools-ffmpeg-av.sh $(PREFIX)/bin/ks-tools-ffmpeg-av.sh
+	chmod +x $(PREFIX)/bin/ks-tools-ffmpeg-av.sh
 	cp -rf src/ks-upv $(PREFIX)/bin/ks-upv
 	chmod +x $(PREFIX)/bin/ks-upv
 	cp -rf src/ks-upa $(PREFIX)/bin/ks-upa
@@ -340,6 +342,7 @@ compile-clean:
 	rm -rf build/ks-vob-wrapper
 	
 uninstall:
+	rm -rf $(PREFIX)/bin/ks-tools-ffmpeg-av.sh
 	rm -rf $(PREFIX)/bin/ks-upv
 	rm -rf $(PREFIX)/bin/ks-upa
 	rm -rf $(PREFIX)/bin/ks-upf
